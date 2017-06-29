@@ -1,0 +1,278 @@
+{
+    "info": "In Ruckus AP R500",
+    "wireless": {
+        "country": {
+            "key": "countrycode",
+            "default": "CN"
+        },
+        "radio": [
+            {
+                "antennacount" : {
+                    "key" : "antennacount",
+                    "default" : 2
+                },
+                "ifname": {
+                    "key": "ifname",
+                    "default": "wifi0"
+                },
+                "ifindex": {
+                    "key": "ifindex",
+                    "default": 0
+                },
+                "enabled": {
+                    "key": "enabled",
+                    "default": true
+                },
+                "maxssid": {
+                    "key": "maxssid",
+                    "default": 8
+                },
+                "frequence": {
+                    "key": "frequence",
+                    "default": "2.4G"
+                },
+                "ieeemode": {
+                    "key": "ieeemode",
+                    "list":[
+                        "802.11n",
+                        "802.11bgn"
+                    ],
+                    "default": "802.11n"
+                },
+                "channel": {
+                    "key": "channel",
+                    "default": 10
+                },
+                "htmode": {
+                    "key": "htmode",
+                    "list": [
+                        "20",
+                        "40",
+                        "80"
+                    ],
+                    "default": "20"
+                },
+                "antennagain": {
+                    "key": "antennagain",
+                    "default": 9
+                },
+                "board_power": {
+                    "key": "board_power",
+                    "range" :{
+                        "min" : 1,
+                        "max" : 26
+                    },
+                    "default": 20
+                },
+                "advance" :{
+                    "key" : "advance",
+                    "visible" : false,
+                    "default" : true
+                },
+                "fragmentation": {
+                    "key": "fragmentation",
+                    "type" : "object",
+                    "range" :{
+                        "min" : 1,
+                        "max" : 2346
+                    },
+                    "default" : {
+                      "enabled" : false,
+                      "size": 256
+                    }
+                },
+                "rts": {
+                    "key": "rts",
+                    "type" : "object",
+                    "range" :{
+                        "min" : 1,
+                        "max" : 2346
+                    },
+                    "default" : {
+                      "enabled" : false,
+                      "size": 256
+                    }
+                },
+                "acktimeout": {
+                    "key": "acktimeout",
+                    "range" :{
+                        "min" : 64,
+                        "max" : 512
+                    },
+                    "default": 100
+                },
+                "atpc": {
+                    "key": "atpc",
+                    "default": true
+                },
+                "bawinsize": {
+                    "key": "bawinsize",
+                    "range" :{
+                        "min" : 1,
+                        "max" : 64
+                    },
+                    "default": 10
+                },
+                "prohibited": {
+                    "key": "prohibited",
+                    "default": false
+                },
+                "amsdu": {
+                    "key": "amsdu",
+                    "default": true
+                },
+                "wjet": {
+                    "key": "wjet",
+                    "type" : "object",
+                     "list": [
+                        "auto",
+                        "ipollv2",
+                        "ipollv3"
+                    ],
+                    "default" : {
+                      "enabled" : false,
+                      "version": "auto"
+                    }
+                },
+                "dfs": {
+                    "key": "dfs",
+                    "default": false
+                }
+            },
+            {
+                "antennacount" : {
+                    "key" : "antennacount",
+                    "default" : 2
+                },
+                "ifname": {
+                    "key": "ifname",
+                    "default": "wifi3"
+                },
+                "ifindex": {
+                    "key": "ifindex",
+                    "default": 1
+                },
+                "enabled": {
+                    "key": "enabled",
+                    "default": true
+                },
+                "maxssid": {
+                    "key": "maxssid",
+                    "default": 8
+                },
+                "frequence": {
+                    "key": "frequence",
+                    "default": "5.8G"
+                },
+                "ieeemode": {
+                    "key": "ieeemode",
+                    "list":[
+                        "802.11a",
+                        "802.11ac"
+                    ],
+                    "default": "802.11a"
+                },
+                "channel": {
+                    "key": "channel",
+                    "default": 36
+                },
+                "htmode": {
+                    "key": "htmode",
+                    "list": [
+                        "20",
+                        "40+",
+                        "40-"
+                    ],
+                    "default": "20"
+                },
+                "antennagain": {
+                    "key": "antennagain",
+                    "default": 9
+                },
+                "board_power": {
+                    "key": "board_power",
+                    "range" :{
+                        "min" : 1,
+                        "max" : 26
+                    },
+                    "default": 18
+                },
+                "advance" :{
+                    "key" : "advance",
+                    "visible" : false,
+                    "default" : true
+                },
+                "fragmentation": {
+                    "key": "fragmentation",
+                    "type" : "object",
+                    "range" :{
+                        "min" : 1,
+                        "max" : 2346
+                    },
+                    "default" : {
+                      "enabled" : false,
+                      "size": 256
+                    }
+                },
+                "rts": {
+                    "key": "rts",
+                    "type" : "object",
+                    "range" :{
+                        "min" : 1,
+                        "max" : 2346
+                    },
+                    "default" : {
+                      "enabled" : false,
+                      "size": 256
+                    }
+                },
+                "acktimeout": {
+                    "key": "acktimeout",
+                    "range" :{
+                        "min" : 64,
+                        "max" : 512
+                    },
+                    "default": 100
+                },
+                "atpc": {
+                    "key": "atpc",
+                    "default": true
+                },
+                "bawinsize": {
+                    "key": "bawinsize",
+                    "range" :{
+                        "min" : 1,
+                        "max" : 64
+                    },
+                    "default": 10
+                },
+                "prohibited": {
+                    "key": "prohibited",
+                    "default": false
+                },
+                "amsdu": {
+                    "key": "amsdu",
+                    "default": true
+                },
+                "wjet": {
+                    "key": "wjet",
+                    "type" : "object",
+                     "list": [
+                        "auto",
+                        "ipollv2",
+                        "ipollv3"
+                    ],
+                    "default" : {
+                      "enabled" : false,
+                      "version": "auto"
+                    }
+                },
+                "dfs": {
+                    "key": "dfs",
+                    "default": false
+                }
+            }
+        ]
+    },
+    "interface": {}
+}

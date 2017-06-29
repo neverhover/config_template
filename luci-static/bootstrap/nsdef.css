@@ -1,0 +1,21 @@
+/* add by zhangly */
+h2 a {
+	color: #28b779;
+}
+
+#search{
+	right: 30px;
+}
+.console-title #page-title {
+	display: inline-block;
+	text-indent: 8px;
+	border-left:2px solid #88B7E0;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	margin-right: 8px;
+	margin-left: 0px;
+}
+
+[v-cloak] {
+  display: none !important;;
+}

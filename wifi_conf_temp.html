@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NatShell</title>
+    <!--[if lt IE 9]><script src="/luci-static/bootstrap/html5.js"></script><![endif]-->
+    <meta name="viewport" content="initial-scale=1.0">
+    <link rel="stylesheet" href="/luci-static/bootstrap/cascade.css">
+    <link rel="stylesheet" media="only screen and (max-device-width: 854px)" href="/luci-static/bootstrap/mobile.css" type="text/css" />
+    <link rel="shortcut icon" href="/luci-static/bootstrap/favicon.ico">
+    <script src="/luci-static/resources/xhr.js"></script>
+
+    <link rel="stylesheet" href="/luci-static/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/luci-static/bootstrap/css/bootstrap-responsive.min.css" />
+    <link rel="stylesheet" href="/luci-static/bootstrap/css/fullcalendar.css" />
+    <link rel="stylesheet" href="/luci-static/bootstrap/css/matrix-style.css" />
+    <link rel="stylesheet" href="/luci-static/bootstrap/css/matrix-media.css" />
+
+    <link rel="stylesheet" href="/luci-static/bootstrap/font-awesome/css/font-awesome.css" />
+    <link rel="stylesheet" href="/luci-static/bootstrap/nsdef.css" />
+    <link rel="stylesheet" href="/luci-static/bootstrap/css/animate.min.css" />
+    <script src="/luci-static/bootstrap/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/vue/vue.js"></script>
+    <script type="text/javascript" src="/vue/vue-i18n.min.js"></script>
+    <script type="text/javascript" src="/vue/content_International.js"></script>
+    <script type="text/javascript" src="/vue/verify_International.js"></script>
+    <script type="text/javascript" src="/vue/vue-router.min.js"></script>
+    <script src="/vue/vuex.min.js"></script>
+    <script type="text/javascript" src="/vue/vee-validate.min.js"></script>
+  </head>
+
+  <body>
+    <div id="content">
+      <div id="content-header">
+        <div id="breadcrumb">
+          <a href="/cgi-bin/luci/;stok=97cadb5a22ab589cde119db50cc5d45a/admin/status/overview" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a>
+        </div>
+      </div>
+
+      <div class="container-fluid">
+
+        <div class="row-fluid">
+          <div class="span12">
+
+            <!-- 页面主体 -->
+            <div class="cbi-map console-title" id="cbi-wireless">
+              <h5><a id="page-title" name="page-title">设备模版</a></h5>
+              <div class="cbi-map-descr">配置一个设备模版</div>
+              <div class="widget-box" id="cbi-system-_dummy">
+                <div class="widget-title">
+                  <span class="icon">
+          <i class="icon-align-justify"></i>
+          </span>
+                  <h5>AAAAA</h5>
+                </div>
+                <!-- 内容正文 -->
+                <div class="widget-content nopadding">
+                  <form action="#">
+                    <fieldset class="cbi-section-node">
+                      <div>
+                        <div id="templ_info">
+                          <!-- @@配置名称 -->
+                          <div class="cbi-value">
+                            <label class="cbi-value-title" v-cloak>{{$t('message.templName')}}</label>
+                            <div class="cbi-value-field">
+                              <input type="text" class="cbi-input-text"
+                                v-model.trim="templ_info.templName"
+                                v-validate.initial :data-vv-rules="templ_name_rule"
+                                :data-vv-as="$t('message.templName')"
+                                name="templName"
+                              >
+                              <div class="text-error" v-show="errors.has('templName')" v-cloak>
+                                {{ errors.first('templName') }}
+                              </div>
+                            </div>
+                          </div>
+                          <!-- @@产品型号 -->
+                          <div class="cbi-value">
+                            <label class="cbi-value-title" v-cloak>{{$t("message.productModel")}}</label>
+                            <div v-if="templ_info.editable" class="cbi-value-field">
+                              <select class="cbi-input-select" v-model="selProduct" name="productModel" v-cloak>
+                                <option v-for="el in templ_info.proList" v-bind:value="el" v-cloak>{{el}}</option>
+                              </select>
+                              <span class="form_error"> </span>
+                            </div>
+                            <div v-if="!templ_info.editable" class="cbi-value-field">
+                              <input type="text" class="cbi-input-text" v-model="templ_info.proSelected" readonly="true">
+                              <span class="form_error"> </span>
+                            </div>
+                          </div>
+                          <!-- @@国家 -->
+                          <div class="row-fluid" v-if="pro_model[0].wireless">
+                            <div class="span12 cbi-value">
+                              <label class="cbi-value-title" v-cloak>{{$t("message.countryCode")}}</label>
+                              <div class="cbi-value-field">
+
+                                <select class="cbi-input-select" v-model="selCountry" name="countryCode" v-cloak>
+                                  <option v-for="el in templ_info.countries" :value="el.alpha2">{{el.name}}</option>
+                                </select>
+                                <span class="form_error"> </span>
+                              </div>
+                            </div>
+                          </div>
+
+                        </div>
+                        <div class="container-fluid" style="margin-top: -20px;">
+                          <!-- 左右布局主体-->
+                          <div class="row-fluid tabbable tabs-left" style="border-color: rgb(221, 221, 221); border-style: solid; border-width: 1px; padding-top: 5px; padding-right: 5px; padding-left: 5px;padding-bottom: 5px;border-radius: 4px 0 0 4px;">
+
+                            <div id="cfg_menu" class="tabs-left">
+                              <!-- 左侧列表 -->
+                              <ns-accfg-menu :menus=left_menu.menus :cur_active=left_menu.cur_idx v-on:menu_idx_change="menuIdxChanged">
+                              </ns-accfg-menu>
+                            </div>
+
+                            <!--正文-->
+                            <div class="tab-content" id="cfg_body">
+                              <ns-accfg-network :cur_active="left_menu.cur_idx == 'network'" :data_obj.sync="pro_model[0].network">
+                              </ns-accfg-network>
+
+                              <ns-accfg-wireless :cur_active="left_menu.cur_idx == 'wireless'" :data_obj.sync="pro_model[0].wireless" :templ_info=templ_info :ssid_arr.sync=ssid_arr :cur_ssid_list.sync=sel_ssid_list ref="wifi_sec">
+                              </ns-accfg-wireless>
+
+                              <ns-accfg-system :cur_active="left_menu.cur_idx == 'system'" :data_obj.sync="pro_model[0].system">
+                              </ns-accfg-system>
+
+                            </div>
+                          </div>
+                        </div>
+
+                    </fieldset>
+                  </form>
+                  </div>
+
+                </div>
+
+              </div>
+              <!-- 页脚保存按钮-->
+              <div class="cbi-page-actions" id="cfg_submit">
+                <input class="btn btn-info" type="button" :value="$t('message.save')" v-on:click="submit_save" />&nbsp;&nbsp;&nbsp;&nbsp;
+                <input class="btn btn-warning" type="button" :value="$t('message.return')" onclick="location.href='/cgi-bin/luci/;stok=97cadb5a22ab589cde119db50cc5d45a/admin/ac_nac/dev_config'" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--end of all -->
+      </div>
+      <script type="text/javascript" src="/luci-static/resources/channel.js"></script>
+      <script type="text/javascript" src="/luci-static/bootstrap/js/avalon.js"></script>
+
+      <script type="text/javascript" src="/vue/vue2-filters.min.js"></script>
+      <script type="text/javascript" src="/vue/vue-resource.min.js"></script>
+      <script type="text/javascript" src="/vue/vue_tool.js"></script>
+      <script type="text/javascript" src="/vue/vue-mybus.js"></script>
+
+      <script type="text/javascript" src="/vue/component/table.js"></script>
+      <script type="text/javascript" src="/vue/component/system.js"></script>
+      <script type="text/javascript" src="/vue/component/network_interface.js"></script>
+      <script type="text/javascript" src="/vue/component/network_switch.js"></script>
+      <script type="text/javascript" src="/vue/component/network.js"></script>
+      <script type="text/javascript" src="/vue/component/wireless.js"></script>
+      <script type="text/javascript" src="/vue/component/menu.js"></script>
+      <script type="text/javascript">
+        vue_set_language('zh_CN')
+        vue_validate_set_language('zh_CN')
+        /* 当前页特性 */
+        var pro_slist = {
+          "list": ["TEST_DEV", "R300", "plc_m", "plc_s"]
+        }
+        var act = "new"
+        var cfg_id = ""
+        var cur_editable = act == "edit" ? false : true
+        var cur_selected = "" ? "" : pro_slist.list[0];
+        var cur_proname = "" ? "" : ""
+
+        //接口配置ssid的列表
+        var config_interface_list =
+        [
+          {
+              "if_type": 0,
+              "phy": 1,
+              "vap": 100,
+              "ssid": "free_ssid",
+              "is_portal": 1,
+              "portal_id": 1,
+              "radauth_id": 2,
+              "radacct_id": 3,
+              "is_acct": 1,
+              "is_mac_auth": 1,
+              "sta_quota_session": 0,
+              "sta_quota_bytes": 0,
+              "sta_quota_input_rate": 0,
+              "sta_quota_output_rate": 0,
+              "sta_quota_input_burst": 0,
+              "sta_quota_output_burst": 0
+          }
+        ]
+        var config_interface_template = {
+            "if_type": 0,
+            "phy": 0,
+            "vap": 0,
+            "ssid": "free_ssid",
+            "is_portal": 0,
+            "portal_id": 0,
+            "radauth_id": 0,
+            "radacct_id": 0,
+            "is_acct": 0,
+            "is_mac_auth": 0,
+            "sta_quota_session": 0,
+            "sta_quota_bytes": 0,
+            "sta_quota_input_rate": 0,
+            "sta_quota_output_rate": 0,
+            "sta_quota_input_burst": 0,
+            "sta_quota_output_burst": 0
+        }
+
+        var portal_server_list = [
+            {
+                "id": "1",
+                "ip": "192.168.1.1",
+                "descr": "server_abc"
+            },
+            {
+                "id": "2",
+                "ip": "192.168.2.1",
+                "descr": "server_aaaabc"
+            },
+            {
+                "id": "3",
+                "ip": "192.168.3.1",
+                "descr": "server_aaabbcc"
+            }
+        ]
+
+        var rad_auth_server_list = [
+            {
+                "id": "10",
+                "ip": "192.168.10.1",
+                "descr": "server_abc"
+            },
+            {
+                "id": "20",
+                "ip": "192.168.20.1",
+                "descr": "dddddddd"
+            },
+            {
+                "id": "30",
+                "ip": "192.168.33.1",
+                "descr": "zzzzzzz"
+            }
+        ]
+
+        var rad_account_server_list = [
+            {
+                "id": "5",
+                "ip": "192.168.10.1",
+                "descr": "server_abc"
+            },
+            {
+                "id": "10",
+                "ip": "192.168.20.1",
+                "descr": "server_aaaabc"
+            },
+            {
+                "id": "100",
+                "ip": "192.168.30.1",
+                "descr": "server_aaabbcc"
+            }
+        ]
+
+
+
+        //所有产品的索引列表
+
+        //当前选择产品的数据内容，包含wireless,system,network信息
+        // var cur_config = {} ? {} : {}
+        var cur_ssid = [] ? [] : []
+        var ssid_list = [] ? [] : []
+
+        var cur_config = {"boardname":"9558_HD","info":"In TEST_DEV","wireless":{"bandsteering":{"enabled":false,"mode":"balanced"},"countrycode":"US","radio":[{"fragmentation":{"enabled":false,"size":256},"bawinsize":10,"maxssid":8,"ieeemode":"802.11n","acktimeout":100,"rts":{"enabled":false,"size":256},"htmode":"20","antennacount":2,"enabled":true,"amsdu":true,"advance":true,"antennagain":9,"board_power":20,"frequence":"2.4G","requiremode":"n","ifname":"wifi0","prohibited":false,"vap":[],"atpc":true,"channel":10,"dfs":false,"ifindex":0,"wjet":{"enabled":false,"version":"auto"},"basic_rate":0},{"fragmentation":{"enabled":false,"size":256},"bawinsize":10,"maxssid":8,"ieeemode":"802.11a","acktimeout":100,"rts":{"enabled":false,"size":256},"htmode":"20","antennacount":2,"enabled":true,"amsdu":true,"advance":true,"antennagain":9,"board_power":17,"frequence":"5.8G","requiremode":"n","ifname":"wifi3","prohibited":false,"vap":[],"atpc":true,"channel":36,"dfs":false,"ifindex":1,"wjet":{"enabled":false,"version":"auto"},"basic_rate":0}],"scenario":"ptmp"},"network":{"trafficcontrol":[],"route":[],"ethernet":[{"enable":true,"ifname":"eth0","uplink":true,"ifindex":0},{"enable":true,"ifname":"eth1","uplink":false,"ifindex":1}],"switch":[{"mtu":2,"mode":"system","name":"1","vport":[{"portname":"11","ssid":"","radio_index":0,"is_wifi":false,"vlan_id":"22"},{"portname":"22","ssid":"","radio_index":0,"is_wifi":false,"vlan_id":"33"}]}],"interface":[]},"system":{"tun_syslog":{"enabled":false,"port":514,"ipaddr":"127.0.0.1"},"sys_syslog":{"enabled":false,"port":514,"ipaddr":"127.0.0.1","level":"info"}}} ? {"boardname":"9558_HD","info":"In TEST_DEV","wireless":{"bandsteering":{"enabled":false,"mode":"balanced"},"countrycode":"US","radio":[{"fragmentation":{"enabled":false,"size":256},"bawinsize":10,"maxssid":8,"ieeemode":"802.11n","acktimeout":100,"rts":{"enabled":false,"size":256},"htmode":"20","antennacount":2,"enabled":true,"amsdu":true,"advance":true,"antennagain":9,"board_power":20,"frequence":"2.4G","requiremode":"n","ifname":"wifi0","prohibited":false,"vap":[],"atpc":true,"channel":10,"dfs":false,"ifindex":0,"wjet":{"enabled":false,"version":"auto"},"basic_rate":0},{"fragmentation":{"enabled":false,"size":256},"bawinsize":10,"maxssid":8,"ieeemode":"802.11a","acktimeout":100,"rts":{"enabled":false,"size":256},"htmode":"20","antennacount":2,"enabled":true,"amsdu":true,"advance":true,"antennagain":9,"board_power":17,"frequence":"5.8G","requiremode":"n","ifname":"wifi3","prohibited":false,"vap":[],"atpc":true,"channel":36,"dfs":false,"ifindex":1,"wjet":{"enabled":false,"version":"auto"},"basic_rate":0}],"scenario":"ptmp"},"network":{"trafficcontrol":[],"route":[],"ethernet":[{"enable":true,"ifname":"eth0","uplink":true,"ifindex":0},{"enable":true,"ifname":"eth1","uplink":false,"ifindex":1}],"switch":[{"mtu":2,"mode":"system","name":"1","vport":[{"portname":"11","ssid":"","radio_index":0,"is_wifi":false,"vlan_id":"22"},{"portname":"22","ssid":"","radio_index":0,"is_wifi":false,"vlan_id":"33"}]}],"interface":[]},"system":{"tun_syslog":{"enabled":false,"port":514,"ipaddr":"127.0.0.1"},"sys_syslog":{"enabled":false,"port":514,"ipaddr":"127.0.0.1","level":"info"}}} : {}
+
+        //测试用
+        var local_debug = true
+        if(local_debug) {
+          ssid_list = [{
+            "ssidcfgname": "1111",
+            "essid": "SSID_1",
+            "enabled": "true",
+            "hidden": 1,
+            "wlan_id": 1,
+            "portal_enable": 1
+          }, {
+            "ssidcfgname": "222",
+            "essid": "SSID_15",
+            "enabled": "false",
+            "hidden": 1,
+            "wlan_id": 2,
+            "portal_enable": 0
+          }, {
+            "ssidcfgname": "3333",
+            "essid": "SSID_22",
+            "enabled": "false",
+            "hidden": 1,
+            "wlan_id": 3,
+            "portal_enable": 1
+          }, {
+            "ssidcfgname": "aa",
+            "essid": "SSID_22",
+            "enabled": "false",
+            "hidden": 1,
+            "wlan_id": 3,
+            "portal_enable": 1
+          }, {
+            "ssidcfgname": "bb",
+            "essid": "SSID_22",
+            "enabled": "false",
+            "hidden": 1,
+            "wlan_id": 3,
+            "portal_enable": 1
+          }, {
+            "ssidcfgname": "cc",
+            "essid": "SSID_22",
+            "enabled": "false",
+            "hidden": 1,
+            "wlan_id": 3,
+            "portal_enable": 1
+          }, {
+            "ssidcfgname": "dd",
+            "essid": "SSID_22",
+            "enabled": "false",
+            "hidden": 1,
+            "wlan_id": 3,
+            "portal_enable": 1
+          }, {
+            "ssidcfgname": "ee",
+            "essid": "SSID_22",
+            "enabled": "false",
+            "hidden": 1,
+            "wlan_id": 3,
+            "portal_enable": 1
+          }, {
+            "ssidcfgname": "ff",
+            "essid": "SSID_22",
+            "enabled": "false",
+            "hidden": 1,
+            "wlan_id": 3,
+            "portal_enable": 1
+          }, {
+            "ssidcfgname": "gg",
+            "essid": "SSID_22",
+            "enabled": "false",
+            "hidden": 1,
+            "wlan_id": 3,
+            "portal_enable": 1
+          }, {
+            "ssidcfgname": "hh11",
+            "essid": "SSID_22",
+            "enabled": "false",
+            "hidden": 1,
+            "wlan_id": 3,
+            "portal_enable": 1
+          }, {
+            "ssidcfgname": "gg12",
+            "essid": "SSID_22",
+            "enabled": "false",
+            "hidden": 1,
+            "wlan_id": 3,
+            "portal_enable": 1
+          }, {
+            "ssidcfgname": "gg13",
+            "essid": "SSID_22",
+            "enabled": "false",
+            "hidden": 1,
+            "wlan_id": 3,
+            "portal_enable": 1
+          }, {
+            "ssidcfgname": "gg14",
+            "essid": "SSID_22",
+            "enabled": "false",
+            "hidden": 1,
+            "wlan_id": 3,
+            "portal_enable": 1
+          }]
+          cur_ssid = {
+            // 0: ["1111", "222"],
+            // 1: ["222", "3333"]
+          }
+
+          cur_config = {
+              "boardname": "9558_HD",
+              "info": "In TEST_DEV",
+              "wireless": {
+                  "bandsteering": {
+                      "enabled": false,
+                      "mode": "balanced"
+                  },
+                  "countrycode": "US",
+                  "radio": [
+                      {
+                          "fragmentation": {
+                              "enabled": false,
+                              "size": 256
+                          },
+                          "bawinsize": 10,
+                          "maxssid": 8,
+                          "ieeemode": "802.11n",
+                          "acktimeout": 100,
+                          "rts": {
+                              "enabled": false,
+                              "size": 256
+                          },
+                          "htmode": "20",
+                          "antennacount": 2,
+                          "enabled": true,
+                          "amsdu": true,
+                          "advance": true,
+                          "antennagain": 9,
+                          "board_power": 20,
+                          "frequence": "2.4G",
+                          "requiremode": "n",
+                          "ifname": "wifi0",
+                          "prohibited": false,
+                          "vap": [],
+                          "atpc": true,
+                          "channel": 10,
+                          "dfs": false,
+                          "ifindex": 0,
+                          "wjet": {
+                              "enabled": false,
+                              "version": "auto"
+                          },
+                          "basic_rate": 0
+                      },
+                      {
+                          "fragmentation": {
+                              "enabled": false,
+                              "size": 256
+                          },
+                          "bawinsize": 10,
+                          "maxssid": 8,
+                          "ieeemode": "802.11a",
+                          "acktimeout": 100,
+                          "rts": {
+                              "enabled": false,
+                              "size": 256
+                          },
+                          "htmode": "20",
+                          "antennacount": 2,
+                          "enabled": true,
+                          "amsdu": true,
+                          "advance": true,
+                          "antennagain": 9,
+                          "board_power": 17,
+                          "frequence": "5.8G",
+                          "requiremode": "n",
+                          "ifname": "wifi3",
+                          "prohibited": false,
+                          "vap": [],
+                          "atpc": true,
+                          "channel": 36,
+                          "dfs": false,
+                          "ifindex": 1,
+                          "wjet": {
+                              "enabled": false,
+                              "version": "auto"
+                          },
+                          "basic_rate": 0
+                      }
+                  ],
+                  "scenario": "ptmp"
+              },
+              "network": {
+                  "trafficcontrol": [
+                      {
+                          "egress": {
+                              "speed": "2"
+                          },
+                          "enabled": false,
+                          "ingress": {
+                              "speed": "3"
+                          },
+                          "interface": "1"
+                      }
+                  ],
+                  "route": [
+                      {
+                          "enabled": false,
+                          "interface": "2",
+                          "name": "1",
+                          "mtu": "7",
+                          "metric": "6",
+                          "netmask": "4",
+                          "gateway": "0.0.0.0",
+                          "dstnet": "3"
+                      }
+                  ],
+                  "ethernet": [
+                      {
+                          "enable": true,
+                          "ifname": "eth0",
+                          "uplink": true,
+                          "ifindex": 0
+                      },
+                      {
+                          "enable": true,
+                          "ifname": "eth1",
+                          "uplink": false,
+                          "ifindex": 1
+                      }
+                  ],
+                  "switch": [
+                      {
+                          "mtu": 2,
+                          "mode": "system",
+                          "name": "1",
+                          "vport": [
+                              {
+                                  "portname": "11",
+                                  "ssid": "",
+                                  "radio_index": 0,
+                                  "is_wifi": false,
+                                  "vlan_id": "22"
+                              },
+                              {
+                                  "portname": "22",
+                                  "ssid": "",
+                                  "radio_index": 0,
+                                  "is_wifi": false,
+                                  "vlan_id": "33"
+                              }
+                          ]
+                      },
+                      {
+                          "mtu": 222,
+                          "mode": "ovs",
+                          "name": "222",
+                          "vport": [
+                              {
+                                  "portnumber": 44,
+                                  "port_type": "default",
+                                  "vlan_id": "0",
+                                  "portname": "333",
+                                  "is_wifi": false,
+                                  "vlan_type": "trunk"
+                              }
+                          ]
+                      }
+                  ],
+                  "interface": [
+                   {
+                "iftype": "ethernet",
+                "ifname": "eth1",
+                "enabled": true,
+                "phy_index": 0,
+                "vlanid": 0,
+                "ssid_name" : "free_ssid",
+                "ssid2vlan": {
+                    "enabled": true,
+                    "id": 10
+                },
+                "agentargs": {
+                    "enabled": false,
+                    "iftype": 0,
+                    "idletimeout": 3600,
+                    "accttimeout": 600,
+                    "portal": {
+                        "nasaddr": "",
+                        "prtipaddr": "",
+                        "prturl": ""
+                    },
+                    "acl": {
+                        "free": {
+                            "ipa4": [],
+                            "host": []
+                        },
+                        "deny": {
+                            "ipa4": [],
+                            "host": []
+                        }
+                    }
+                }
+            },
+            {
+                "iftype": "ethernet",
+                "ifname": "eth1.100",
+                "enabled": true,
+                "phy_index": 1,
+                "vlanid": 100,
+                "ssid_name" : "free_ssid",
+                "ssid2vlan": {
+                    "enabled": true,
+                    "id": 100
+                },
+                "agentargs": {
+                    "enabled": true,
+                    "iftype": 0,
+                    "idletimeout": 3600,
+                    "accttimeout": 600,
+                    "portal": {
+                        "nasaddr": "",
+                        "prtipaddr": "",
+                        "prturl": ""
+                    },
+                    "acl": {
+                        "free": {
+                            "ipa4": [],
+                            "host": []
+                        },
+                        "deny": {
+                            "ipa4": [],
+                            "host": []
+                        }
+                    }
+                }
+            }
+                  ]
+              },
+              "system": {
+                  "tun_syslog": {
+                      "enabled": false,
+                      "port": 514,
+                      "ipaddr": "127.0.0.1"
+                  },
+                  "sys_syslog": {
+                      "enabled": false,
+                      "port": 514,
+                      "ipaddr": "127.0.0.1",
+                      "level": "info"
+                  }
+              }
+          }
+
+        }
+        Vue.config.devtools = true
+        Vue.config.debug = true
+
+        function make_templ_info() {
+          var templ = {}
+          templ.templName = cur_proname
+          templ.proSelected = cur_selected
+          templ.proList = pro_slist.list
+          templ.editable = cur_editable
+          templ.countries = country_list
+          templ.countrySelected = ""
+          templ.channelList = []
+          return templ
+        }
+        //遍历各个radio
+        function channel_init() {
+          var r_obj = {}
+          var country = templ_info.countrySelected
+          pro_model[0].wireless.countrycode = country
+          avalon.each(pro_model[0].wireless.radio, function(index, r_obj) {
+            if(typeof(r_obj) != 'function') {
+
+              var freq = r_obj.frequence.value
+              var ch_str = ""
+              if(freq == "2.4G") {
+                ch_str = "2g"
+              } else if(freq == "5.8G") {
+                ch_str = "5g"
+              }
+
+              for(var j = 0; j < country_list.length; j++) {
+                var one_con = country_list[j]
+                if(one_con.alpha2 == country) {
+                  templ_info.channelList[index] = one_con[ch_str]
+
+                }
+              }
+
+              //重新渲染channel,会引起视图变化
+              var orgin = pro_model[0].wireless.radio[index].channel.value
+              pro_model[0].wireless.radio[index].channel.value = "-1"
+              pro_model[0].wireless.radio[index].channel.value = orgin
+                //通知到关注该时间的组件
+              Bus.$emit('channel-change', pro_model[0].wireless.radio[index], "channel_init")
+              console.log("Chennel changed event emit done.Radio index:" + index + " in function channel_init")
+            }
+          })
+
+        }
+
+        //构建产品信息
+        var templ_info = make_templ_info()
+
+        //产品模版及混合配置信息
+        var pro_model = [{}]
+
+        function set_pro_model(pro) {
+          pro_model[0] = pro
+        }
+
+        function get_pro_model() {
+          return pro_model[0]
+        }
+        //用于组件见数据交互，后期再使用Vuex
+
+        //公共的布局
+        var obj_menu = {
+
+          menus: [
+            // {"name":"wireless","label":"无线_test"},
+            // {"name":"system","label":"系统_test"},
+            // {"name":"network","label":"网络_test"}
+          ],
+          cur_idx: "",
+          resetMenus: function(objs) {
+            var tmp_menu = []
+            if(!isEmptyObject(objs.system)) {
+              tmp_menu.push({
+                "name": "system",
+                "label": Vue.t('message.system')
+              })
+            }
+            if(!isEmptyObject(objs.wireless)) {
+              tmp_menu.push({
+                "name": "wireless",
+                "label": Vue.t('message.wireless')
+              })
+            }
+            if(!isEmptyObject(objs.network)) {
+              tmp_menu.push({
+                "name": "network",
+                "label": Vue.t('message.network')
+              })
+            }
+            this.setMenus(tmp_menu)
+          },
+          getMenus: function() {
+            return this.menus
+          },
+          setMenus: function(new_menus) {
+            obj_menu.menus = new_menus
+            obj_menu.cur_idx = obj_menu.menus[0].name
+          }
+        }
+
+        //state
+        var mystore = new Vuex.Store({
+          state: {
+            pro_model: pro_model,
+            config_intf: {
+              "template": config_interface_template,
+              "list": config_interface_list
+            },
+            server_list: {
+              "portal": portal_server_list,
+              "rad_acct": rad_account_server_list,
+              "rad_auth": rad_account_server_list
+            }
+          },
+          mutations: {
+            interfaceRowUpdate(state, payload) {
+              //更新及新建或者删除
+              //查找key是否存在，如果不存在，则添加
+              var idx_key = payload.key
+              switch(payload.action) {
+                case "delete":
+                  if(!state.pro_model[0].network.interface[idx_key]) {
+                    console.log("some wrong")
+                    return false
+                  }
+                  break;
+                case "update":
+                case "new":
+                  break;
+                default:
+                  console.log("错误的action in interfaceRowUpdate")
+                  break;
+              }
+
+              console.log("尝试编辑或新建规则或删除,键值为: " + idx_key)
+              console.log(payload.value)
+              var new_obj = {
+                "action": payload.action,
+                "key": payload.key,
+                "value": payload.value
+              }
+              var ret = []
+              ret = resetVueRows(state.pro_model[0].network.interface, new_obj)
+
+              Vue.set(state.pro_model[0].network, "interface", ret)
+
+            },
+            tcRowUpdate(state, payload) {
+              //更新及新建或者删除
+              //查找key是否存在，如果不存在，则添加
+              var idx_key = payload.key
+              switch(payload.action) {
+                case "delete":
+                  if(!state.pro_model[0].network.trafficcontrol[idx_key]) {
+                    console.log("some wrong")
+                    return false
+                  }
+                  break;
+                case "update":
+                case "new":
+                  break;
+                default:
+                  console.log("错误的action in tcRowUpdate")
+                  break;
+              }
+
+              console.log("尝试编辑或新建规则或删除,键值为: " + idx_key)
+              console.log(payload.value)
+              var new_obj = {
+                "action": payload.action,
+                "key": payload.key,
+                "value": payload.value
+              }
+              var ret = []
+              ret = resetVueRows(state.pro_model[0].network.trafficcontrol, new_obj)
+
+              Vue.set(state.pro_model[0].network, "trafficcontrol", ret)
+
+            },
+            routeRowUpdate(state, payload) {
+              //更新及新建或者删除
+              //查找key是否存在，如果不存在，则添加
+              var idx_key = payload.key
+              switch(payload.action) {
+                case "delete":
+                  if(!state.pro_model[0].network.route[idx_key]) {
+                    console.log("some wrong")
+                    return false
+                  }
+                  break;
+                case "update":
+                case "new":
+                  break;
+                default:
+                  console.log("错误的action in routeRowUpdate")
+                  break;
+              }
+
+              console.log("尝试编辑或新建规则或删除,键值为: " + idx_key)
+              console.log(payload.value)
+              var new_obj = {
+                "action": payload.action,
+                "key": payload.key,
+                "value": payload.value
+              }
+              var ret = []
+              ret = resetVueRows(state.pro_model[0].network.route, new_obj)
+
+              Vue.set(state.pro_model[0].network, "route", ret)
+
+            },
+            switchRowUpdate(state, payload) {
+              //更新及新建或者删除
+              //查找key是否存在，如果不存在，则添加
+              var idx_key = payload.key
+              switch(payload.action) {
+                case "delete":
+                  if(!state.pro_model[0].network.switch[idx_key]) {
+                    console.log("some wrong")
+                    return false
+                  }
+                  break;
+                case "update":
+                case "new":
+                  break;
+                default:
+                  console.log("错误的action in switchRowUpdate")
+                  break;
+              }
+
+              console.log("尝试编辑或新建规则或删除,键值为: " + idx_key)
+              console.log(payload.value)
+              var new_obj = {
+                "action": payload.action,
+                "key": payload.key,
+                "value": payload.value
+              }
+              var ret = []
+              ret = resetVueRows(state.pro_model[0].network.switch, new_obj)
+
+              Vue.set(state.pro_model[0].network, "switch", ret)
+
+            }
+          },
+          getters: {
+            network: function(state) {
+              return state.pro_model[0].network
+            },
+            config_intf: function(state) {
+              return state.config_intf.list
+            },
+            config_intf_temp: function(state) {
+              return state.config_intf.template
+            },
+            portal_list: function(state) {
+              return state.server_list.portal
+            },
+            auth_list : function(state) {
+              return state.server_list.rad_auth
+            },
+            acct_list: function(state) {
+              return state.server_list.rad_acct
+            }
+          }
+        })
+
+        //产品container
+        var vm_proinfo = new Vue({
+          el: '#templ_info',
+          data: {
+            debug: true,
+            cur_cfg: cur_config,
+            templ_info: templ_info,
+            pro_model: pro_model,
+            sec_list: obj_menu,
+            templ_name_rule: "required"
+          },
+          created: function() {
+            //触发模版选择
+            this.selProduct = cur_selected
+          },
+          methods: {
+
+          },
+          computed: {
+
+            selProduct: {
+              get: function() {
+                return this.templ_info.proSelected
+              },
+              set: function(sel_pro) {
+                this.templ_info.proSelected = sel_pro
+                  //选择的产品发生变化
+                this.debug && console.log("Now. select templ is:" + sel_pro)
+                  //获得该产品的模版
+                jQuery.ajax({
+                  type: "get",
+                  url: '/product_json' + '/' + sel_pro + '.json',
+                  success: function(data) {
+                    var pro_json = {}
+                    if(typeof(data) == 'object'){
+                      pro_json = myclone(data)
+                    }else{
+                      pro_json = myclone(JSON.parse(data))
+                    }
+
+                    console.log(pro_json)
+                    mix_object(pro_json, cur_config, {})
+                    //同步共享数据
+                    set_pro_model(pro_json)
+
+                    //初始化所选ssid列表
+                    if(pro_json.wireless){
+                      rd = pro_json.wireless.radio
+                      var r_index = 0
+                      if(typeof(rd) != 'undefined'){
+                        for(var i in rd){
+
+                          if (rd.hasOwnProperty(i)) {
+
+                            console.log(i)
+                            if(typeof(cur_ssid[r_index.toString()]) == 'undefined'){
+                              cur_ssid[r_index] = []
+                            }
+                            r_index +=1
+                          }
+
+                        }
+                      }
+                    }
+
+                      //更新实例内状态，并触发事件
+                    Vue.set(vm_proinfo.pro_model, 0, pro_json)
+                      //                      Vue.set(Bus.pro_model,0, pro_json)
+
+                    //设置新的menus
+                    vm_proinfo.sec_list.resetMenus(pro_json)
+                      // vm_proinfo.debug && console.log(vm_proinfo.sec_list.getMenus())
+                      //https://cn.vuejs.org/v2/guide/reactivity.html
+                      //TODO: 动态初始化正文内容
+
+                    //TODO: 设置国家的值
+                    if(vm_proinfo.pro_model[0].wireless) {
+                      vm_proinfo.selCountry = vm_proinfo.pro_model[0].wireless.country.value
+                    }
+
+                  }
+                })
+              }
+            },
+            selCountry: {
+              get: function() {
+                return templ_info.countrySelected == "" ? templ_info.countries[0].alpha2 : templ_info.countrySelected
+              },
+              set: function(sel_country) {
+                this.debug && console.log("Now. select country is:" + sel_country)
+                templ_info.countrySelected = sel_country
+                  //TODO:国家发生变化,引起其他变化
+                channel_init()
+                this.debug && console.log("Channel reset done after coutnry set to:" + sel_country)
+              }
+            }
+          }
+        })
+
+        //主体菜单
+        var vm_menu = new Vue({
+            el: '#cfg_menu',
+            data: {
+              debug: false,
+              left_menu: obj_menu,
+              pro_model: pro_model
+            },
+            methods: {
+              menuIdxChanged: function(id) {
+                this.debug && console.log("parent recive changed to" + id)
+                this.left_menu.cur_idx = id
+              }
+            }
+          })
+          //主体正文
+        var vm_body = new Vue({
+          el: '#cfg_body',
+          data: {
+            debug: false,
+            left_menu: obj_menu,
+            pro_model: pro_model,
+            templ_info: templ_info,
+            ssid_arr: ssid_list,
+            sel_ssid_list: cur_ssid
+          },
+          store: mystore,
+          created: function() {
+            // Bus.$on('ssid-sel-change', this.change_sel_ssid)
+          },
+          router: network_router,
+          methods: {
+            change_sel_ssid: function(nv, eid, com) {
+              //交互方式二
+              // // cur_ssid = nv
+              // cur_ssid[eid]=nv
+              // // Vue.set(cur_ssid, eid, nv)
+              console.log(com)
+            }
+          }
+        })
+
+        var vm_submit = new Vue({
+          el: '#cfg_submit',
+          data: {
+            submit_ssids: cur_ssid,
+            templ_info: templ_info
+          },
+          methods: {
+            submit_save: function() {
+              //提交到指定的URI
+              var data = pro_model[0]
+              //触发验证所有vue实例
+              var instance_list = []
+              var noErrors = true
+              instance_list.push(vm_proinfo)
+              instance_list.push(vm_body)
+              for(var i in instance_list){
+                instance_list[i].$validator.validateAll()
+                console.log(i+"错误了嘛？"+ instance_list[i].errors.any())
+                noErrors = noErrors && (!instance_list[i].errors.any())
+              }
+              console.log("有错误吗："+noErrors);
+              if(!noErrors){
+                alert( Vue.t('message.haveError') );
+                e.preventDefault();
+                return false
+              }
+              //然后查看是否有错误
+        //data = new Object(data)
+              console.log(JSON.stringify(clone_cfg(data, {})))
+              console.log(JSON.stringify(this.submit_ssids))
+              console.log("action:" + act + " cfg_id:" + cfg_id + " pro_name:" + this.templ_info.proSelected + " config_name:" + this.templ_info.templName)
+
+              if(window.JSON) {
+
+                console.log(JSON.stringify(clone_cfg(data, {})))
+                console.log(JSON.stringify(this.submit_ssids))
+                console.log(JSON.stringify(config_interface_list))
+                // return false
+                jQuery.ajax({
+                  type: "post",
+                  url: '/cgi-bin/luci/;stok=97cadb5a22ab589cde119db50cc5d45a/admin/ac_nac/product_json_action',
+                  data: {
+                    "config_name": this.templ_info.templName,
+                    "pro_name": this.templ_info.proSelected,
+                    "radio": JSON.stringify(clone_cfg(data, {})),
+                    "ssid": JSON.stringify(this.submit_ssids),
+                    "intf_list": JSON.stringify(config_interface_list),
+                    "action": act,
+                    "cfg_id": cfg_id
+                  },
+                  success: function(data) {
+
+                    alert( Vue.t('message.saveFinish'))
+                    // location.href='/cgi-bin/luci/;stok=97cadb5a22ab589cde119db50cc5d45a/admin/ac_nac/dev_config'
+                  }
+                })
+              }
+            }
+          }
+        })
+
+
+      </script>
+  </body>
+
+</html>
