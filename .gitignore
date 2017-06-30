@@ -1,3 +1,4 @@
 server.exe
-pro_config.sublime-project
-pro_config.sublime-workspace
+*.sublime-project
+*.sublime-workspace
+bin

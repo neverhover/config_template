@@ -4,22 +4,22 @@ Vue.component('ns-accfg-wireless',{
 		<div v-bind:class="[cur_active ? 'tab-pane active' : 'tab-pane']" v-if="isRender">
 			<!-- @@创建tabs的button -->
 			<ul class="cbi-tabmenu" >
-				
-				<li v-for="(item, idx) in data_obj.radio" 
-					v-on:click="changeRadioTab(idx)" 
-					v-bind:class="[isShowRadioTab(idx)? 'cbi-tab' : 'cbi-tab-disabled']" 
+
+				<li v-for="(item, idx) in data_obj.radio"
+					v-on:click="changeRadioTab(idx)"
+					v-bind:class="[isShowRadioTab(idx)? 'cbi-tab' : 'cbi-tab-disabled']"
 					>
 					<a href="javascript:void(0);">{{$t("message.wrelessTit")}}-{{item.frequence.value}}(Radio{{idx}})</a>
 				</li>
 			</ul>
 			<!-- @@创建tabs的pannels -->
-			
+
 			<div class="cbi-section-node cbi-section-node-tabbed">
 				<div class="cbi-tabcontainer"  v-if="nodeExist(el)" v-for="(el,radio_idx) in data_obj.radio" v-show="isShowRadioTab(radio_idx)" >
 					<!-- @@放置所有的wifi模版 -->
 					<!-- @@基础配置 -->
 					<!-- @@使能开关 -->
-				 <div class="row-fluid" v-if="nodeExist(el.enabled)" v-show="nodeShow(el.enabled)">
+				  <div class="row-fluid" v-if="nodeExist(el.enabled)" v-show="nodeShow(el.enabled)">
 						<div class="span6 cbi-value">
 							<label class="cbi-value-title" v-bind:for="el.enabled.key + radio_idx">{{$t("message.startUsingRadio")}}</label>
 							<div class="cbi-value-field">
@@ -33,59 +33,58 @@ Vue.component('ns-accfg-wireless',{
 						<div class="span6"></div>
 					</div>
 					<!-- @@IEEE模式 -->
-				<div class="row-fluid" v-if="nodeExist(el.ieeemode)" v-show="nodeShow(el.ieeemode)">
+				  <div class="row-fluid" v-if="nodeExist(el.ieeemode)" v-show="nodeShow(el.ieeemode)">
 						<div class="span6 cbi-value">
 							<label class="cbi-value-title">{{$t("message.IEEEPattern")}}</label>
 							<div class="cbi-value-field">
 								<select class="cbi-input-select" v-model="el.ieeemode.value">
 									<option v-for="etext in el.ieeemode.list" >{{etext}}</option>
 								</select>
-								
+
 								<span class="form_error"> </span>
 							</div>
 						</div>
 						<div class="span6"></div>
 					</div>
 					<!-- @@信道及频宽 -->
-				<div class="row-fluid" v-if="nodeExist(el.channel)" v-show="nodeShow(el.channel)">
-					<div class="row-fluid">
+				  <div class="row-fluid" v-if="nodeExist(el.channel)" v-show="nodeShow(el.channel)">
 						<div class="span5 cbi-value">
 							<label class="cbi-value-title" v-bind:for="'channel'+ radio_idx">信道:</label>
 							<div class="cbi-value-field">
-								<select style="width:80%" class="cbi-input-select" 
-								v-bind:id="'channel'+ radio_idx" 
-								v-model="el.channel.value" 
+								<select style="width:80%" class="cbi-input-select"
+								v-bind:id="'channel'+ radio_idx"
+								v-model="el.channel.value"
 								v-on:change="channelChanged(el, $event)"
 								>
-									<option v-for="etext in templ_info.channelList[radio_idx]" 
+									<option v-for="etext in templ_info.channelList[radio_idx]"
 									v-bind:value="etext.val">{{etext.text}}</option>
 								</select>
-								
+
 								<span class="form_error"> </span>
 							</div>
 						</div>
 						<div class="span5 cbi-value">
 							<label class="cbi-value-title" v-bind:for="el.htmode.key + radio_idx">频宽:</label>
 							<div class="cbi-value-field">
-								<select style="width:50%" class="cbi-input-select" v-model="el.htmode.value" 
+								<select style="width:50%" class="cbi-input-select" v-model="el.htmode.value"
 									v-bind:id="el.htmode.key + radio_idx" >
 									<option v-for="etext in el.htmode.list" >{{etext}}</option>
 								</select>
-								
+
 								<span class="form_error"> </span>
 							</div>
 						</div>
 					</div>
 					<!-- @@功率 -->
-				 <div class="row-fluid" v-if="nodeExist(el.txpower)" v-show="nodeShow(el.txpower)">
+				  <div class="row-fluid" v-if="nodeExist(el.txpower)" v-show="nodeShow(el.txpower)">
 						<div class="span6 cbi-value">
 							<label class="cbi-value-title" v-bind:for="el.txpower.key + radio_idx">发射功率(dbm):</label>
 							<div class="cbi-value-field">
-								<input type="text" style="width:80%" class="cbi-input-text" 
+								<input type="text" style="width:80%" class="cbi-input-text"
 									v-validate.initial :data-vv-rules="nodeValidate(el.txpower)"
 									 :data-vv-as="$t('message.transmittedPo')" v-bind:name="el.txpower.key + radio_idx"
-								v-model="el.txpower.value" 
-								v-bind:id="el.txpower.key + radio_idx" 
+								v-model="el.txpower.value"
+								v-bind:id="el.txpower.key + radio_idx"
 								/>
 							 <div class="text-error" v-show="errors.has(el.txpower.key + radio_idx)">
 							 	{{ errors.first(el.txpower.key + radio_idx) }}
@@ -106,16 +105,16 @@ Vue.component('ns-accfg-wireless',{
 					<!-- @@高级配置panel -->
 					<div class="row-fluid" v-show="el.advance.visible">
 						<div class="span12">
-							<!-- @@bawinsize -->
+						 <!-- @@bawinsize -->
 						 <div class="row-fluid" v-if="nodeExist(el.bawinsize)" v-show="nodeShow(el.bawinsize)">
 								<div class="span8 cbi-value">
-									<label class="cbi-value-title" 
+									<label class="cbi-value-title"
 										v-bind:for="el.bawinsize.key + radio_idx">
 										bawinsize :
 									</label>
 									<div class="cbi-value-field">
 										<input type="text" class="cbi-input-text"
-										v-bind:id="el.bawinsize.key + radio_idx" 
+										v-bind:id="el.bawinsize.key + radio_idx"
 										v-model.number="el.bawinsize.value"
 										v-validate.initial :data-vv-rules="nodeValidate(el.bawinsize)"
 											 :data-vv-as="el.acktimeout.key" v-bind:name="el.bawinsize.key + radio_idx"
@@ -126,45 +125,42 @@ Vue.component('ns-accfg-wireless',{
 									</div>
 								</div>
 								<div class="span4"></div>
-							</div>
-							<!-- @@fragmentation -->
+						 </div>
+						 <!-- @@fragmentation -->
 						 <div class="row-fluid" v-if="nodeExist(el.fragmentation)" v-show="nodeShow(el.fragmentation)">
-							<div class="row-fluid">
 								<div class="span5 cbi-value">
-									<label class="cbi-value-title" 
+									<label class="cbi-value-title"
 									v-bind:for="el.fragmentation.key + radio_idx">
 									fragmentation :</label>
 									<div class="cbi-value-field">
-										<select style="width:80%" class="cbi-input-select" 
-										v-model="el.fragmentation.value.enabled" 
+										<select style="width:80%" class="cbi-input-select"
+										v-model="el.fragmentation.value.enabled"
 										v-bind:id="el.fragmentation.key + radio_idx">
 											 <option v-bind:value="true">{{$t("message.startUsing")}}</option>
 											 <option v-bind:value="false">{{$t("message.endUsing")}}</option>
 										</select>
-										
+
 									</div>
 								</div>
 								<div  style="width:50%" class="span5 cbi-value" v-show="el.fragmentation.value.enabled">
-									<label class="cbi-value-title" 
+									<label class="cbi-value-title"
 									v-bind:for="el.fragmentation.key + radio_idx + 'vv'">
 									fragmentation size :</label>
 									<input style="width:10%" type="text" class="cbi-input-text"
 											v-validate.initial :data-vv-rules="nodeValidate(el.fragmentation)"
 											 :data-vv-as="$t('message.fragmentationSize')" v-bind:name="el.fragmentation.key + radio_idx"
-										v-bind:id="el.fragmentation.key + radio_idx + 'vv'" 
-										v-model.number="el.fragmentation.value.size.value" 
+										v-bind:id="el.fragmentation.key + radio_idx + 'vv'"
+										v-model.number="el.fragmentation.value.size.value"
 									/>
 									 <div class="text-error" v-show="errors.has('fragmentation'+ radio_idx)">
 											 {{ errors.first('fragmentation'+ radio_idx) }}
 									 </div>
 								</div>
-							</div>
-							<!-- @@rts -->
+						 </div>
+						 <!-- @@rts -->
 						 <div class="row-fluid" v-if="nodeExist(el.rts)" v-show="nodeShow(el.rts)">
-							<div class="row-fluid">
 								<div class="span5 cbi-value">
-									<label class="cbi-value-title" 
-									v-bind:for="el.rts.key + radio_idx">
+									<label class="cbi-value-title" v-bind:for="el.rts.key + radio_idx">
 									rts :</label>
 									<div class="cbi-value-field">
 										<select style="width:80%" class="cbi-input-select" v-model="el.rts.value.enabled">
@@ -174,47 +170,44 @@ Vue.component('ns-accfg-wireless',{
 									</div>
 								</div>
 								<div style="width:50%" class="span5 cbi-value" v-show="el.rts.value.enabled">
-									<label class="cbi-value-title" 
+									<label class="cbi-value-title"
 									v-bind:for="el.rts.key + radio_idx + 'vv'">
 									rts size :</label>
 									<input style="width:10%" type="text" class="cbi-input-text"
 											v-validate.initial :data-vv-rules="nodeValidate(el.rts)"
 											 :data-vv-as="el.rts.value.size.key" name="rts"
-										v-bind:id="el.rts.key + radio_idx + 'vv'" 
-										v-model.number="el.rts.value.size.value" 
-										
+										v-bind:id="el.rts.key + radio_idx + 'vv'"
+										v-model.number="el.rts.value.size.value"
+
 										/>
 									<div class="text-error" v-show="errors.has('rts')">
 										 {{ errors.first('rts') }}
 									</div>
 								</div>
-							</div>
-							<!-- @@acktimeout -->
+						 </div>
+						 <!-- @@acktimeout -->
 						 <div class="row-fluid" v-if="nodeExist(el.acktimeout)" v-show="nodeShow(el.acktimeout)">
 								<div class="span6 cbi-value">
-									<label class="cbi-value-title" 
-									v-bind:for="el.acktimeout.key + radio_idx">
+									<label class="cbi-value-title" v-bind:for="el.acktimeout.key + radio_idx">
 									acktimeout :</label>
 									<div class="cbi-value-field">
 										<input style="width:80%" type="text" class="cbi-input-text"
 											v-validate.initial :data-vv-rules="nodeValidate(el.acktimeout)"
-											 :data-vv-as="el.acktimeout.key" v-bind:name="el.acktimeout.key + radio_idx"
-										v-bind:for="el.acktimeout.key + radio_idx" 
-										v-model.number="el.acktimeout.value" 
+											:data-vv-as="el.acktimeout.key" v-bind:name="el.acktimeout.key + radio_idx"
+  										v-bind:for="el.acktimeout.key + radio_idx"
+  										v-model.number="el.acktimeout.value"
 										 />
-									 <div class="text-error" v-show="errors.has(el.acktimeout.key + radio_idx)">
-										 {{ errors.first(el.acktimeout.key + radio_idx) }}
-									 </div>
+									  <div class="text-error" v-show="errors.has(el.acktimeout.key + radio_idx)">
+                      {{ errors.first(el.acktimeout.key + radio_idx) }}
+									  </div>
 									</div>
 								</div>
 								<div class="span6"></div>
-							</div>
-							<!-- @@atpc -->
+						 </div>
+						 <!-- @@atpc -->
 						 <div class="row-fluid" v-if="nodeExist(el.atpc)" v-show="nodeShow(el.atpc)">
 								<div class="span5 cbi-value">
-									<label class="cbi-value-title" 
-									v-bind:for="el.atpc.key + radio_idx">
-									atpc :</label>
+									<label class="cbi-value-title" v-bind:for="el.atpc.key + radio_idx"> atpc :</label>
 									<div class="cbi-value-field">
 										<select style="width:80%" class="cbi-input-select" v-model="el.atpc.value">
 										 <option v-bind:value="true">{{$t("message.startUsing")}}</option>
@@ -223,13 +216,11 @@ Vue.component('ns-accfg-wireless',{
 									</div>
 								</div>
 								<div class="span5"></div>
-							</div>
-							<!-- @@prohibited -->
+						 </div>
+						 <!-- @@prohibited -->
 						 <div class="row-fluid" v-if="nodeExist(el.prohibited)" v-show="nodeShow(el.prohibited)">
 								<div class="span5 cbi-value">
-									<label class="cbi-value-title" 
-									v-bind:for="el.prohibited.key + radio_idx">
-									prohibited :</label>
+									<label class="cbi-value-title" v-bind:for="el.prohibited.key + radio_idx"> prohibited :</label>
 									<div class="cbi-value-field">
 										<select style="width:80%" class="cbi-input-select" v-model="el.prohibited.value">
 										 <option v-bind:value="true">{{$t("message.startUsing")}}</option>
@@ -239,112 +230,102 @@ Vue.component('ns-accfg-wireless',{
 								</div>
 								<div class="span5">
 								</div>
-							</div>
-							<!-- @@AMSDU -->
+						 </div>
+						 <!-- @@AMSDU -->
 						 <div class="row-fluid" v-if="nodeExist(el.amsdu)" v-show="nodeShow(el.amsdu)">
 								<div class="span5 cbi-value">
-									<label class="cbi-value-title" 
-									v-bind:for="el.amsdu.key + radio_idx">
-									AMSDU :</label>
+									<label class="cbi-value-title" v-bind:for="el.amsdu.key + radio_idx"> AMSDU :</label>
 									<div class="cbi-value-field">
 										<select style="width:80%" class="cbi-input-select" v-model="el.amsdu.value">
-										<option v-bind:value="true">{{$t("message.startUsing")}}</option>
-										<option v-bind:value="false">{{$t("message.endUsing")}}</option>
+  										<option v-bind:value="true">{{$t("message.startUsing")}}</option>
+  										<option v-bind:value="false">{{$t("message.endUsing")}}</option>
 										</select>
 									</div>
 								</div>
 								<div class="span5">
-									
 								</div>
-							</div>
-							<!-- @@wjet -->
-							<div class="row-fluid">
-								<div class="span5 cbi-value">
-									<label class="cbi-value-title" 
-									v-bind:for="el.wjet.key + radio_idx">
-									wjet :</label>
-									<div class="cbi-value-field">
-										<select style="width:80%" class="cbi-input-select" v-model="el.wjet.value.enabled">
-											<option v-bind:value="true">启用</option>
-											<option v-bind:value="false">禁用</option>
-										</select>
-										
-									</div>
-								</div>
-								<div class="span6 cbi-value" v-if="el.wjet" v-show="el.wjet.value.enabled">
-									<label class="cbi-value-title" 
-										v-bind:for="el.wjet.key + radio_idx + 'vv'">
-											{{$t("message.wjetAgreement")}}
-									</label>
-									<select style="50%" class="cbi-input-select"
-										v-bind:id="el.wjet.key + radio_idx + 'vv'"
-										 v-model="el.wjet.value.version" >
-										<option v-for="etxt in el.wjet.list">{{etxt}}</option>
-									</select>
-								</div>
-							</div>
-							<!-- @@dfs -->
+						 </div>
+						 <!-- @@wjet -->
+  					 <div class="row-fluid">
+  							<div class="span5 cbi-value">
+  								<label class="cbi-value-title" v-bind:for="el.wjet.key + radio_idx"> wjet :</label>
+  								<div class="cbi-value-field">
+  									<select style="width:80%" class="cbi-input-select" v-model="el.wjet.value.enabled">
+  										<option v-bind:value="true">启用</option>
+  										<option v-bind:value="false">禁用</option>
+  									</select>
+  								</div>
+  							</div>
+  							<div class="span6 cbi-value" v-if="el.wjet" v-show="el.wjet.value.enabled">
+  								<label class="cbi-value-title" v-bind:for="el.wjet.key + radio_idx + 'vv'">
+  									{{$t("message.wjetAgreement")}}
+  								</label>
+  								<select style="50%" class="cbi-input-select"
+  									v-bind:id="el.wjet.key + radio_idx + 'vv'"
+  									v-model="el.wjet.value.version" >
+  									<option v-for="etxt in el.wjet.list">{{etxt}}</option>
+  								</select>
+  							</div>
+  					 </div>
+						 <!-- @@dfs -->
 						 <div class="row-fluid" v-if="nodeExist(el.dfs)" v-show="nodeShow(el.dfs)">
 								<div class="span5 cbi-value">
-									<label class="cbi-value-title" 
-									v-bind:for="el.dfs.key + radio_idx">
-									DFS :</label>
+									<label class="cbi-value-title" v-bind:for="el.dfs.key + radio_idx"> DFS :</label>
 									<div class="cbi-value-field">
 										<select style="width:80%" class="cbi-input-select" v-model="el.dfs.value">
-									 <option v-bind:value="true">{{$t("message.startUsing")}}</option>
-									 <option v-bind:value="false">{{$t("message.endUsing")}}</option>
+  									 <option v-bind:value="true">{{$t("message.startUsing")}}</option>
+  									 <option v-bind:value="false">{{$t("message.endUsing")}}</option>
 										</select>
 									</div>
 								</div>
 								<div class="span5">
-									
-								</div>
-							</div>
+                </div>
+						 </div>
 						</div>
-					</div>
-					<!-- @@无线AP配置 -->
-					<div class="row-fluid">
-						<div class="span12">
-							<div class="widget-box">
-								<div class="widget-title" data-toggle="collapse" >
-									<span class="icon">
-									<i class="icon-align-justify"></i>
-									</span>
-								 <h5>{{$t("message.SSIDCon")}}</h5>
-								</div>
-								<div class="widget-content nopadding" >
-									<ns-accfg-grid
-										:table-id=getTableId(radio_idx)
-										:header=ssid_header
-										:rows.sync=ssid_arr
-										:check-key=checkKey
-										:checked-arr=cur_ssid_list[radio_idx] 
-										:col-callback=colCallbacks
-										:rows-start=pStart
-										:rows-limit=pLimit
-										v-bind:ref=getRefTableId(radio_idx)
-									>
-										<ns-accfg-pager
-												slot="pager" 
-												:show-pager=true
-												:total-page=pTotal
-												:show-items=4
-												:ref-tableid=getTableId(radio_idx)
-												v-bind:ref=getRefPagerId(radio_idx)
-											>
-										</ns-accfg-pager>
-									</ns-accfg-grid>
-									
-								</div>
-							</div>
-						</div>
-					</div>
+					</div><!-- end of @@高级配置pannel -->
+          <!-- @@无线AP配置 -->
+          <div class="row-fluid">
+            <div class="span12">
+              <div class="widget-box">
+                <div class="widget-title" data-toggle="collapse" >
+                  <span class="icon">
+                  <i class="icon-align-justify"></i>
+                  </span>
+                 <h5>Radio{{radio_sel}} {{$t("message.SSIDCon")}}</h5>
+                </div>
+                <div class="widget-content nopadding" >
+                  <ns-accfg-grid
+                    :table-id=getTableId(radio_idx)
+                    :header=ssid_header
+                    :rows.sync=ssid_arr
+                    :check-key=checkKey
+                    :checked-arr=cur_ssid_list[radio_idx]
+                    :col-callback=colCallbacks
+                    :rows-start=pStart
+                    :rows-limit=pLimit
+                    v-bind:ref=getRefTableId(radio_idx)
+                  >
+                    <ns-accfg-pager
+                        slot="pager"
+                        :show-pager=true
+                        :total-page=pTotal
+                        :show-items=4
+                        :ref-tableid=getTableId(radio_idx)
+                        v-bind:ref=getRefPagerId(radio_idx)
+                      >
+                    </ns-accfg-pager>
+                  </ns-accfg-grid>
+
+                </div>
+              </div>
+            </div>
+          </div>
 				</div>
 			</div>
 		</div>
 		<div v-else v-bind:class="[cur_active ? 'tab-pane active' : 'tab-pane']">
 			{{null_msg}}
-			
+
 		</div>
 		*/
 	}),
@@ -380,7 +361,7 @@ Vue.component('ns-accfg-wireless',{
 			colCallbacks: {
 				"portal_enable":{
 					cb:function(key,obj,val){
-						
+
 		        		if(obj[key] == 1){
 		        			return Vue.t('message.startUsing')
 		        		}else{
@@ -390,7 +371,7 @@ Vue.component('ns-accfg-wireless',{
 				},
 				"hidden":{
 					cb:function(key,obj,val){
-						
+
 		        		if(obj[key] == 1){
 		        			return Vue.t('message.right')
 		        		}else{
@@ -400,7 +381,7 @@ Vue.component('ns-accfg-wireless',{
 				},
 				"enabled":{
 					cb:function(key,obj,val){
-						
+
 		        		if(obj[key] == 1){
 		        			return Vue.t('message.startUsing')
 		        		}else{
@@ -444,7 +425,7 @@ Vue.component('ns-accfg-wireless',{
 		},
 		channelChanged: function(radio_obj, ev){
 			//信道变化将会引起其他连锁反应
-			
+
 			if(typeof(ev) == 'string'){
 				console.log( Vue.t('message.externalEvent') )
 			}else if(typeof(ev) == 'object'){
@@ -453,13 +434,13 @@ Vue.component('ns-accfg-wireless',{
 			//用于计算最大功率，最大功率不应该超过该channel的max_eirp,也不能超过最大板子的功率
 			this.debug && console.log("current channel changed to  " + radio_obj.channel.value)
 			el = radio_obj
-			
+
 			var cur_channel = el.channel.value
 			var cur_txpower = el.txpower.value
 			var max_txpower = 0
 			var cur_antenna_count = el.antennacount.value
 			var max_bw = 20
-			
+
 			//保存原始最大主板功率
 			if(typeof(el.board_power.spec.range["max_const"]) == 'undefined'){
 				el.board_power.spec.range["max_const"] = el.board_power.spec.range.max
@@ -474,10 +455,10 @@ Vue.component('ns-accfg-wireless',{
 					max_bw = el.max_bw
 				}
 			});
-			// console.log(index+":channel为"+ cur_channel+"\n" + "当前发射功率为" 
-			// 	+ cur_txpower + "\n天线增益为" 
+			// console.log(index+":channel为"+ cur_channel+"\n" + "当前发射功率为"
+			// 	+ cur_txpower + "\n天线增益为"
 			// 	+ antennagain + "\ncur_antenna_count为" + cur_antenna_count
-			// 	+ "\n最大功率" + max_eirp_power 
+			// 	+ "\n最大功率" + max_eirp_power
 			// 	+ "\n板子功率" + max_board_power)
 			if(max_eirp_power == 0){
 				return false
@@ -500,7 +481,7 @@ Vue.component('ns-accfg-wireless',{
 			// if(cur_channel <= 14){
 			// 	max_bw = 40
 			// }
-			
+
 		},
 		change_sel_ssid: function(nv, eid, com){
 			// Bus.$emit('ssid-sel-change', nv, this.getRadioId(eid), "select ssid changed")
@@ -592,7 +573,7 @@ Vue.component('ns-accfg-wireless',{
 
 			}else{//判断是否存在必填项
 				if( typeof(el.spec.required) != 'undefined'){
-					
+
 					if( ! is_first){
 						myRule +="|"
 					}else{
@@ -610,7 +591,7 @@ Vue.component('ns-accfg-wireless',{
 		//监听事件
 		this.pTotal = Math.ceil(this.ssid_arr.length / this.pLimit)
 		console.log("总共:" + this.pTotal +"页，每页:" + this.pLimit)
-		
+
 		Bus.$on('channel-change', this.channelChanged)
 		Bus.$on('grid-checkedArr-change', this.change_sel_ssid)
 	},
