@@ -28,6 +28,8 @@
     <script type="text/javascript" src="/vue/vue-router.min.js"></script>
     <script src="/vue/vuex.min.js"></script>
     <script type="text/javascript" src="/vue/vee-validate.min.js"></script>
+
+
   </head>
 
   <body>
@@ -37,6 +39,8 @@
           <a href="/cgi-bin/luci/;stok=97cadb5a22ab589cde119db50cc5d45a/admin/status/overview" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a>
         </div>
       </div>
+
+
 
       <div class="container-fluid">
 
@@ -50,16 +54,27 @@
               <div class="widget-box" id="cbi-system-_dummy">
                 <div class="widget-title">
                   <span class="icon">
-          <i class="icon-align-justify"></i>
-          </span>
+                    <i class="icon-align-justify"></i>
+                  </span>
                   <h5>AAAAA</h5>
                 </div>
                 <!-- 内容正文 -->
                 <div class="widget-content nopadding">
+
                   <form action="#">
                     <fieldset class="cbi-section-node">
                       <div>
                         <div id="templ_info">
+
+                          <button id="show-modal" @click="showModal = true">Show Modal</button>
+                          <modal v-if="showModal" @close="showModal = false">
+                              <h3 slot="header">custom header</h3>
+                              <div slot="body">
+                                ssid配置表单
+                                <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+                                ssid配置表单
+                              </div>
+                          </modal>
                           <!-- @@配置名称 -->
                           <div class="cbi-value">
                             <label class="cbi-value-title" v-cloak>{{$t('message.templName')}}</label>
@@ -128,7 +143,7 @@
                             </div>
                           </div>
                         </div>
-
+                      <br>
                     </fieldset>
                   </form>
                   </div>
@@ -154,6 +169,7 @@
       <script type="text/javascript" src="/vue/vue_tool.js"></script>
       <script type="text/javascript" src="/vue/vue-mybus.js"></script>
 
+      <script type="text/javascript" src="/vue/component/modal.js"></script>
       <script type="text/javascript" src="/vue/component/table.js"></script>
       <script type="text/javascript" src="/vue/component/system.js"></script>
       <script type="text/javascript" src="/vue/component/network_interface.js"></script>
@@ -162,6 +178,7 @@
       <script type="text/javascript" src="/vue/component/wireless.js"></script>
       <script type="text/javascript" src="/vue/component/menu.js"></script>
       <script type="text/javascript">
+
         vue_set_language('zh_CN')
         vue_validate_set_language('zh_CN')
         /* 当前页特性 */
@@ -175,26 +192,7 @@
         var cur_proname = "" ? "" : ""
 
         //接口配置ssid的列表
-        var config_interface_list =
-        [
-          {
-              "if_type": 0,
-              "phy": 1,
-              "vap": 100,
-              "ssid": "free_ssid",
-              "is_portal": 1,
-              "portal_id": 1,
-              "radauth_id": 2,
-              "radacct_id": 3,
-              "is_acct": 1,
-              "is_mac_auth": 1,
-              "sta_quota_session": 0,
-              "sta_quota_bytes": 0,
-              "sta_quota_input_rate": 0,
-              "sta_quota_output_rate": 0,
-              "sta_quota_input_burst": 0,
-              "sta_quota_output_burst": 0
-          }
+        var config_interface_list = [
         ]
         var config_interface_template = {
             "if_type": 0,
@@ -216,57 +214,12 @@
         }
 
         var portal_server_list = [
-            {
-                "id": "1",
-                "ip": "192.168.1.1",
-                "descr": "server_abc"
-            },
-            {
-                "id": "2",
-                "ip": "192.168.2.1",
-                "descr": "server_aaaabc"
-            },
-            {
-                "id": "3",
-                "ip": "192.168.3.1",
-                "descr": "server_aaabbcc"
-            }
         ]
 
         var rad_auth_server_list = [
-            {
-                "id": "10",
-                "ip": "192.168.10.1",
-                "descr": "server_abc"
-            },
-            {
-                "id": "20",
-                "ip": "192.168.20.1",
-                "descr": "dddddddd"
-            },
-            {
-                "id": "30",
-                "ip": "192.168.33.1",
-                "descr": "zzzzzzz"
-            }
         ]
 
         var rad_account_server_list = [
-            {
-                "id": "5",
-                "ip": "192.168.10.1",
-                "descr": "server_abc"
-            },
-            {
-                "id": "10",
-                "ip": "192.168.20.1",
-                "descr": "server_aaaabc"
-            },
-            {
-                "id": "100",
-                "ip": "192.168.30.1",
-                "descr": "server_aaabbcc"
-            }
         ]
 
 
@@ -283,6 +236,83 @@
         //测试用
         var local_debug = true
         if(local_debug) {
+
+          config_interface_list = [
+            {
+                "if_type": 0,
+                "phy": 1,
+                "vap": 100,
+                "ssid": "free_ssid",
+                "is_portal": 1,
+                "portal_id": 1,
+                "radauth_id": 2,
+                "radacct_id": 3,
+                "is_acct": 1,
+                "is_mac_auth": 1,
+                "sta_quota_session": 0,
+                "sta_quota_bytes": 0,
+                "sta_quota_input_rate": 0,
+                "sta_quota_output_rate": 0,
+                "sta_quota_input_burst": 0,
+                "sta_quota_output_burst": 0
+            }
+          ]
+
+          portal_server_list = [
+              {
+                  "id": "1",
+                  "ip": "192.168.1.1",
+                  "descr": "server_abc"
+              },
+              {
+                  "id": "2",
+                  "ip": "192.168.2.1",
+                  "descr": "server_aaaabc"
+              },
+              {
+                  "id": "3",
+                  "ip": "192.168.3.1",
+                  "descr": "server_aaabbcc"
+              }
+          ]
+
+          rad_auth_server_list = [
+              {
+                  "id": "10",
+                  "ip": "192.168.10.1",
+                  "descr": "server_abc"
+              },
+              {
+                  "id": "20",
+                  "ip": "192.168.20.1",
+                  "descr": "dddddddd"
+              },
+              {
+                  "id": "30",
+                  "ip": "192.168.33.1",
+                  "descr": "zzzzzzz"
+              }
+          ]
+
+          rad_account_server_list = [
+              {
+                  "id": "5",
+                  "ip": "192.168.10.1",
+                  "descr": "server_abc"
+              },
+              {
+                  "id": "10",
+                  "ip": "192.168.20.1",
+                  "descr": "server_aaaabc"
+              },
+              {
+                  "id": "100",
+                  "ip": "192.168.30.1",
+                  "descr": "server_aaabbcc"
+              }
+          ]
+
+
           ssid_list = [{
             "ssidcfgname": "1111",
             "essid": "SSID_1",
@@ -903,10 +933,29 @@
           }
         })
 
+        const ModalComponent1 = {
+            name: 'inside-modal-1',
+            props: ['example'],
+            methods: {
+                openModal() {
+                    this.$emit('vuedals:new', {
+                        title: 'Modal in modal!  wow!',
+                        component: ModalComponent2
+                    });
+                }
+            },
+            template: `<div>
+                <p>This is a component inside the modal, you can pass some props by using a "props" options.</p>
+                <blockquote>{{ example }}</blockquote>
+                <span class="btn btn-primary" @click="openModal()">Open another modal</span>
+            </div>`
+        };
+
         //产品container
         var vm_proinfo = new Vue({
           el: '#templ_info',
           data: {
+            showModal: false,
             debug: true,
             cur_cfg: cur_config,
             templ_info: templ_info,
@@ -919,7 +968,18 @@
             this.selProduct = cur_selected
           },
           methods: {
-
+            gogogo () {
+              this.$modal.show('hello-world');
+            },
+            openModal() {
+              vuedal_bus.$emit('new', {
+                title: 'New modal window',
+                component: ModalComponent1,
+                props: {
+                    example: 'This text for example, comes from a prop'
+                }
+              });
+            }
           },
           computed: {
 
