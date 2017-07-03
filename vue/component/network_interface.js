@@ -802,6 +802,7 @@ var interface_templ = function() {
       },
       search_config_intf: function(cur_tmp_obj){
         let res = this.$store.getters.config_intf_temp
+        // 1为无线,0为有线
         let i_type = 1
         let i_idx = -1
         if(cur_tmp_obj.iftype == "ethernet"){

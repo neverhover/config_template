@@ -11,7 +11,7 @@ Vue.component('ns-accfg-grid',{
 		<thead class="cbi-section-table-titles">
 			<tr >
 				<th v-if="multiSelect && checkKey" style="text-align: left;">
-					<input type="checkbox" 
+					<input type="checkbox"
 						v-bind:id="checkAllId"
 						@change="setCurAll"
 						v-model="selCurAll"
@@ -26,16 +26,16 @@ Vue.component('ns-accfg-grid',{
 			</tr>
 		</thead>
 		<tbody v-if="isEmptyRows">
-			<tr v-for="(row, index) in limitBy(rows, rowsLimit, rowsStart)">
+			<tr v-for="(row, index) in limitBy(dataRows, rowsLimit, rowsStart)">
 				<td v-if="multiSelect && checkKey" style="text-align: left;">
-					<input type="checkbox" 
+					<input type="checkbox"
 						v-bind:value="checkRowGetValue(row)"
 						v-model="selArr"
 					>
-					
+
 				</td>
 				<td v-for="vtd in header.keys" v-html="resetPage_td(vtd,row,row[vtd])">
-					
+
 				</td>
 				<td v-if="header.ops">
 					<template v-if="header.ops.edit">
@@ -46,7 +46,7 @@ Vue.component('ns-accfg-grid',{
 							<i class="icon icon-pencil"></i>{{header.ops.edit.text}}
 						</button>
 					</template>
-					
+
 					&nbsp;&nbsp;
 					<button v-if="header.ops.delete" type="button"  v-bind:class="header.ops.delete.class" v-on:click.stop.prevent="rowDelete(header.ops.delete, row, index)">
 						<i class="icon icon-remove"></i>{{header.ops.delete.text}}
@@ -82,7 +82,7 @@ Vue.component('ns-accfg-grid',{
 					'text':[]
 				}
 			}
-				 
+
 		},
 		'rows': [Array,Object],
 		'rowsStart': {
@@ -107,12 +107,14 @@ Vue.component('ns-accfg-grid',{
 			'allChecked': false,
 			'curArr':[],
 			'selArr':this.checkedArr,
-			'selCurAll': false
+			'selCurAll': false,
+      'dataRows':{}
 		}
 	},
 	created: function(){
 		// this.selArr = this.checkedArr
 		Bus.$on("pager-current-changed", this.currentPageChanged)
+    this.dataRows = this.rows
 		//创建checkbox数组
 	},
 	computed: {
@@ -123,25 +125,25 @@ Vue.component('ns-accfg-grid',{
 			}else{
 				return false
 			}
-			
+
 		},
 		colCount: function(){
 			return this.header.keys.length + (this.header.ops ? 1 : 0) + (this.multiSelect ? 1 : 0)
 		},
 		checkAllId: function(){
-			return "grid_checkAll_"+this.tableId 
+			return "grid_checkAll_"+this.tableId
 		}
 	},
 	methods: {
 		setCurAll: function(e){
 			var cur = this.selCurAll
-			
+
 			//勾选所有时，判断，当前页面所有的rows是否在大的arr中，如果没有，则添加或者删除。
 			var com= this
 			var cur_rows = this.limitBy(this.rows, this.rowsLimit, this.rowsStart)
 			var isall_checked = true
 			var copy_selArr = this.selArr.slice()
-			
+
 			var result= {}
 			var check_val = {}
 			cur_rows.forEach(function(row,index){
@@ -155,11 +157,11 @@ Vue.component('ns-accfg-grid',{
 					if(result.found){
 						com.debug && console.log("###反勾选,并找到了"+ check_val + ",索引号:" + result.index + ",删除后的索引为:"+ in_array(check_val, copy_selArr).index)
 						copy_selArr.splice( in_array(check_val, copy_selArr).index, 1)
-						
+
 					}
 				}
-				
-				
+
+
 			})
 			this.selArr = copy_selArr
 		},
@@ -181,7 +183,7 @@ Vue.component('ns-accfg-grid',{
 					tmp_obj[tmp_key] = one_row[tmp_key]
 				}
 				return tmp_obj
-			} 
+			}
 		},
 		rowCheckId: function(idx){
 			return "grid_row_check_"+this.tableId+'_'+ (this.rowsStart+idx)
@@ -211,14 +213,14 @@ Vue.component('ns-accfg-grid',{
 					tmp_v = tmp_v[tmp_k]
 				}
 				key_name = key.join(".")
-				
+
 				if( this.colCallback[key_name]  && typeof(this.colCallback[key_name].cb) == 'function' ){
 					return this.colCallback[key_name].cb(key_name, obj, tmp_v)
 				}else{
 					return tmp_v
 				}
-				
-				
+
+
 			}else if ( typeof(this.colCallback[key].cb) == 'function' ){
 				return this.colCallback[key].cb(key,obj,val)
 			}
@@ -229,7 +231,7 @@ Vue.component('ns-accfg-grid',{
 				this.rowsStart = (new_page -1 ) * this.rowsLimit
 				this.setCurrSelAll()
         	}
-			
+
 		},
 		setCurrSelAll : function(){
 			if(typeof(this.selArr) == 'undefined'){
@@ -242,7 +244,7 @@ Vue.component('ns-accfg-grid',{
 				if(! (in_array(com.checkRowGetValue(row), com.selArr).found) ){
 					isall_checked = false
 				}
-				
+
 			})
 			this.debug &&  console.log("当前表格当前页面的全选为: " + isall_checked)
 			this.selCurAll = isall_checked
@@ -259,15 +261,16 @@ Vue.component('ns-accfg-grid',{
 		},
 		rowDelete: function(param,row,index){
 			if(confirm("确认要删除该条 记录吗?")){
-				console.log("delete-row" +  index)
+				console.log("delete-row " +  index)
 				Bus.$emit('grid-row-delete', this.tableId, param, row, index)
+        this.$emit('grid-row-delete', this.tableId, param, row, index)
 			}
-			
+
 		},
 		rowEdit: function(param,row,index){
-			console.log("edit-row" +  index)
+			console.log("edit-row " +  index)
 			Bus.$emit('grid-row-edit', this.tableId, param, row, index)
-			
+      this.$emit('grid-row-edit', this.tableId, param, row, index)
 		}
 	},
 	watch:{
@@ -281,7 +284,10 @@ Vue.component('ns-accfg-grid',{
 		},
 		selCurAll: function(val){
 			this.debug &&  console.log("当前表格当前页面的全选 changed to "+ val)
-		}
+		},
+    rows: function(){
+      this.dataRows = this.rows
+    }
 	}
 })
 
@@ -291,14 +297,14 @@ Vue.component('ns-accfg-pager',{
 	template: heredoc(function(){
 /*
 <div>
-  
+
     <div class="pagination pagination-right" style="margin-right: 20px;">
-    	<div v-if="showJump" v-show="totalPage > 1" class="pager-jump"> 
+    	<div v-if="showJump" v-show="totalPage > 1" class="pager-jump">
             <span>{{$t("message.total")}}<em class="jump-total">{{totalPage}}</em></em>{{$t("message.pageNum")}}</span>
 	    <span> &nbsp;{{$t("message.jumpPage")}} &nbsp;</span>
-            <input type="number" min="1" v-bind:max="totalPage" v-model="jumpPage" class="jump-input" size="2"> 
-            <span>{{$t("message.pageNum")}}</span> 
-            <button @click="cbProxy($event,jumpPage)">{{$t("message.sureBtn")}}</button> 
+            <input type="number" min="1" v-bind:max="totalPage" v-model="jumpPage" class="jump-input" size="2">
+            <span>{{$t("message.pageNum")}}</span>
+            <button @click="cbProxy($event,jumpPage)">{{$t("message.sureBtn")}}</button>
         </div>
 	    <ul  v-show='showPager'>
 			<li  v-bind:class="[isDisabled('first', 1)? 'first disabled' : 'first']" >
@@ -337,7 +343,7 @@ Vue.component('ns-accfg-pager',{
 	        	</a>
 	    	</li>
 		</ul>
-		
+
 	</div>
 </div>
 */
@@ -415,7 +421,7 @@ Vue.component('ns-accfg-pager',{
 		        start = 1;
 		        end = show;
 		    }
-		    
+
 		    // this.debug && console.log("after start:"+start + " end:"+ end + " show:" + show + " total:" + total)
 		    if (end >= total) {
 		    	start = total - show + 1
@@ -426,13 +432,13 @@ Vue.component('ns-accfg-pager',{
 		    }
 
 
-			for(i = start; i <= end; i++) { 
-			    show_pages.push(i) 
-			} 
+			for(i = start; i <= end; i++) {
+			    show_pages.push(i)
+			}
 			// this.debug && console.log(show_pages)
 			return show_pages
 		}
-		
+
 	},
 	created: function(){
 		this.debug &&  console.log("totalPage in component:" + this.totalPage)
@@ -460,7 +466,7 @@ Vue.component('ns-accfg-pager',{
 				default:
 					return p
 			}
-		}, 
+		},
 		getHref: function (a) {
 			return '#page-' + this.toPage(a)
 		},
@@ -479,7 +485,7 @@ Vue.component('ns-accfg-pager',{
             }
             this.currentPage = this.toPage(p)
             this.debug &&  console.log("click: currentPage changed to "+ this.currentPage)
-           
+
         }
 
 	},

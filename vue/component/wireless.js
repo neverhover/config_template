@@ -12,8 +12,13 @@ Vue.component('ns-accfg-wireless',{
 					<a href="javascript:void(0);">{{$t("message.wrelessTit")}}-{{item.frequence.value}}(Radio{{idx}})</a>
 				</li>
 			</ul>
+      <!-- @@ssid pannel -->
+      <ns-accfg-ssid ref="modal_ssid_list"
+          :radio_obj.sync="data_obj.radio[radio_sel]"
+          :radio_idx="radio_sel"
+          @ssidSave="vapSave"
+      />
 			<!-- @@创建tabs的pannels -->
-
 			<div class="cbi-section-node cbi-section-node-tabbed">
 				<div class="cbi-tabcontainer"  v-if="nodeExist(el)" v-for="(el,radio_idx) in data_obj.radio" v-show="isShowRadioTab(radio_idx)" >
 					<!-- @@放置所有的wifi模版 -->
@@ -283,27 +288,36 @@ Vue.component('ns-accfg-wireless',{
 						 </div>
 						</div>
 					</div><!-- end of @@高级配置pannel -->
+
           <!-- @@无线AP配置 -->
           <div class="row-fluid">
             <div class="span12">
               <div class="widget-box">
                 <div class="widget-title" data-toggle="collapse" >
                   <span class="icon">
-                  <i class="icon-align-justify"></i>
+                    <i class="icon-align-justify"></i>
                   </span>
-                 <h5>Radio{{radio_sel}} {{$t("message.SSIDCon")}}</h5>
+                  <div class="pull-left">
+                    <h5>Radio{{radio_sel}} {{$t("message.SSIDCon")}}</h5>
+                  </div>
+                  <div class="pull-right">
+                    <button class="btn btn-info" type="button" title="Add a vap" @click="ssidModalAction('new')">
+                      <i class="icon icon-plus"></i>
+                        Add vap
+                    </button>
+                  </div>
                 </div>
                 <div class="widget-content nopadding" >
                   <ns-accfg-grid
                     :table-id=getTableId(radio_idx)
                     :header=ssid_header
-                    :rows.sync=ssid_arr
-                    :check-key=checkKey
-                    :checked-arr=cur_ssid_list[radio_idx]
+                    :rows=curVaps_arr
                     :col-callback=colCallbacks
                     :rows-start=pStart
                     :rows-limit=pLimit
                     v-bind:ref=getRefTableId(radio_idx)
+                    @grid-row-delete="vapDel"
+                    @grid-row-edit="vapUpdateClick"
                   >
                     <ns-accfg-pager
                         slot="pager"
@@ -332,9 +346,7 @@ Vue.component('ns-accfg-wireless',{
 	props: {
 		'data_obj' : Object,
 		'cur_active': Boolean,
-		'templ_info' : Object,
-		'ssid_arr' : Array,
-		'cur_ssid_list' : Object
+		'templ_info' : Object
 	},
 	data:function () {
 		return {
@@ -343,32 +355,31 @@ Vue.component('ns-accfg-wireless',{
 			debug : false,
 			ssid_header:{
 				keys:[
-					"ssidcfgname",
 					"essid",
 					"enabled",
-					"hidden",
-					"portal_enable"
+					"hidden"
 				],
 				text:[
-					Vue.t('message.SSIDConName'),
 					Vue.t('message.SSIDName'),
 					Vue.t('message.whetherEnable'),
-					Vue.t('message.whetherHide'),
-					Vue.t('message.whetherEnablePortal')
-				]
+					Vue.t('message.whetherHide')
+				],
+        ops: {
+            "edit":{
+              "event": 'net_interface_edit',
+              "text": Vue.t('message.redact'),
+              "class": "btn btn-primary"
+            },
+            "delete":{
+              "text": Vue.t('message.delete'),
+              "params": [
+              ],
+              "class": "btn btn-danger"
+            }
+          },
+          opsText: Vue.t('message.handle')
 			},
-			checkKey: "ssidcfgname",
 			colCallbacks: {
-				"portal_enable":{
-					cb:function(key,obj,val){
-
-		        		if(obj[key] == 1){
-		        			return Vue.t('message.startUsing')
-		        		}else{
-		        			return Vue.t('message.endUsing')
-				        }
-					}
-				},
 				"hidden":{
 					cb:function(key,obj,val){
 
@@ -398,9 +409,126 @@ Vue.component('ns-accfg-wireless',{
 	computed: {
 		isRender: function(){
 			return !isEmptyObject(this.data_obj)
-		}
+		},
+    curVaps: function(){
+      return this.data_obj.radio[this.radio_sel].vap
+    },
+    curVaps_arr: function(){
+      let tmp_obj = myclone(this.curVaps)
+      if(tmp_obj == null){
+        return []
+      }
+      delete tmp_obj[0]
+      return convertArray(tmp_obj)
+    }
 	},
 	methods: {
+    vapDel: function(tableId, param, row, index){
+      console.info("deeeeeeeeee")
+      console.info(row)
+      //index为table中的索引，从0开始，故需要加1(0为template)
+      //删除table内记录,这里是违反原则的做法！！
+      //因为不能在父组件中直接修改子组件的props内的属性
+      let  t = this.$refs[this.getRefTableId(this.radio_sel)]
+      t[0].dataRows.splice(index,1)
+      //最正确的删除
+      //this.curVaps_arr.splice(index, 1)
+      //从vap真实列表中删除,注意索引号
+      //以下方法也不好，不应该修改props内的属性
+      let real_idx = -1
+      let arr_num = 0
+      arrayEach(this.curVaps, function(obj_key, obj){
+        if(arr_num == index +1 ){
+          real_idx = obj_key
+          return false
+        }
+        arr_num += 1
+
+
+      })
+      if(real_idx > 0){
+        Vue.delete(this.curVaps, real_idx)
+      }
+
+
+    },
+    vapSave: function(new_vap, old_row, index, action){
+      console.info("uuuuuuuuuuuuu")
+
+      if( action == "new"){
+        let  t = this.$refs[this.getRefTableId(this.radio_sel)]
+        t[0].dataRows.push(new_vap)
+
+        // this.curVaps_arr.push(new_vap)
+        //总是找到vap类对象的索引的最大一个
+        let real_idx = -1
+        arrayEach(this.curVaps, function(obj_key, obj){
+          real_idx = obj_key
+        })
+        this.$set(this.curVaps, parseInt(real_idx)+1, new_vap)
+      }else{
+        let  t = this.$refs[this.getRefTableId(this.radio_sel)]
+        this.$set(t[0].dataRows, index, new_vap)
+
+
+        //找到数组中对应的vap索引，非顺序的哟
+        let real_idx = -1
+        let arr_num = 0
+        arrayEach(this.curVaps, function(obj_key, obj){
+          if(arr_num == index + 1){
+            real_idx = obj_key
+            return false
+          }
+          arr_num += 1
+
+
+        })
+        console.log("read idx is " + real_idx)
+        if(real_idx > 0){
+          this.$set(this.curVaps, parseInt(real_idx), new_vap)
+        }
+
+
+      }
+
+
+
+
+    },
+    vapUpdateClick: function(tableId, param, row, index){
+      console.warn("yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy")
+      console.warn(row)
+      console.warn("yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy")
+      this.ssidModalAction('update', index, row)
+    },
+    getVaps: function(idx){
+
+
+      // this.pTotal = Math.ceil(this.ssid_arr.length / this.pLimit)
+      // console.log("总共:" + this.pTotal +"页，每页:" + this.pLimit)
+    },
+    ssidModalAction: function(action, vap_idx, obj){
+      //控制modal的展示与否
+      console.warn(this.radio_sel)
+      console.info(obj)
+       console.warn("zzzzzzzz")
+      if(action == "new"){
+        this.$refs.modal_ssid_list.modalOpen({
+          'title': '',
+          'action': 'new',
+          'vap_idx': this.curVaps_arr.length -1,
+          'vap_obj': null
+        })
+      }else{
+        this.$refs.modal_ssid_list.modalOpen({
+          'title': '',
+          'action': 'update',
+          'vap_idx': vap_idx,
+          'vap_obj': obj
+        })
+      }
+
+    },
 		getRefTableId: function(radio_idx){
 			return "ref_"+this.getTableId(radio_idx)
 		},
@@ -415,7 +543,7 @@ Vue.component('ns-accfg-wireless',{
 		},
 		changeRadioTab: function(cur_tab){
 			console.log("change raio idx to:" + cur_tab)
-			this.radio_sel = cur_tab
+			this.radio_sel = parseInt(cur_tab)
 		},
 		isShowRadioTab: function(cur_tab){
 			return this.radio_sel == cur_tab
@@ -482,12 +610,6 @@ Vue.component('ns-accfg-wireless',{
 			// 	max_bw = 40
 			// }
 
-		},
-		change_sel_ssid: function(nv, eid, com){
-			// Bus.$emit('ssid-sel-change', nv, this.getRadioId(eid), "select ssid changed")
-			// Vue.set(this.cur_ssid_list, this.getRadioId(eid), nv)
-			this.cur_ssid_list[this.getRadioId(eid)] = nv
-			// console.log(this.cur_ssid_list)
 		},
 
 		// v-if=" nodeExist(el.sys_syslog.level) "
@@ -589,9 +711,7 @@ Vue.component('ns-accfg-wireless',{
 	},
 	created: function(){
 		//监听事件
-		this.pTotal = Math.ceil(this.ssid_arr.length / this.pLimit)
-		console.log("总共:" + this.pTotal +"页，每页:" + this.pLimit)
-
+    this.allRadio = this.data_obj
 		Bus.$on('channel-change', this.channelChanged)
 		Bus.$on('grid-checkedArr-change', this.change_sel_ssid)
 	},

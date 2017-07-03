@@ -232,7 +232,117 @@
           "spec":{
             "show":true
           }
-        }
+        },
+        "vap": [
+          {
+            "$template": true,
+            "enabled": {
+              "key": "enabled",
+              "default": true,
+                "spec":{
+                  "show" : true
+                }
+            },
+            "vlanid": {
+              "key": "vlanid",
+              "type": "number",
+              "default": 0,
+              "spec": {
+                "range": {
+                  "min": 0,
+                  "max": 4095
+                }
+              }
+            },
+            "pre_ifname" : {
+              "key": "pre_ifname",
+              "default": "ath",
+              "type": "string",
+              "spec":{
+                "show" : true,
+                "required":false,
+                "readonly": true,
+                "range": {
+                  "min": 1,
+                  "max": 6
+                }
+              }
+            },
+            "mode":{
+              "key": "mode",
+              "default": "ap",
+              "type": "string",
+              "list": [
+                "ap",
+                "sta",
+                "monitor"
+              ],
+              "spec":{
+                "show":true
+              }
+            },
+            "wds": {
+              "key": "wds",
+              "default": false,
+                "spec":{
+                  "show" : false
+                }
+            },
+            "essid": {
+              "key": "essid",
+              "type": "string",
+              "default": "Infinity",
+              "spec":{
+                "show": true,
+                "required": true,
+                "range": {
+                  "min": 1,
+                  "max": 32
+                }
+              }
+            },
+            "broadcast_ssid": {
+              "key": "hidden",
+              "default": false,
+                "spec":{
+                  "show" : true,
+                  "required": true
+                }
+            },
+            "bssid": {
+              "key": "bssid",
+              "type": "object",
+              "default": {
+                "enabled": false,
+                "value": {
+                  "key": "value",
+                  "type": "mac_address",
+                  "default": "00:00:00:00:00:00"
+                }
+              },
+              "spec":{
+                "show":true,
+                "required":true
+              }
+            },
+            "macaddr": {
+              "key": "macaddr",
+              "type": "object",
+              "default": {
+                "enabled": false,
+                "value": {
+                  "key": "value",
+                  "type": "mac_address",
+                  "default": "00:00:00:00:00:00"
+                }
+              },
+              "spec":{
+                "show":true,
+                "required":true
+              }
+            }
+          }
+        ]
       }, {
         "antennacount": {
           "key": "antennacount",
@@ -451,7 +561,117 @@
           "spec":{
             "show":true
           }
-        }
+        },
+        "vap": [
+          {
+            "$template": true,
+            "enabled": {
+              "key": "enabled",
+              "default": false,
+                "spec":{
+                  "show" : true
+                }
+            },
+            "vlanid": {
+              "key": "vlanid",
+              "type": "number",
+              "default": 0,
+              "spec": {
+                "range": {
+                  "min": 0,
+                  "max": 4095
+                }
+              }
+            },
+            "pre_ifname" : {
+              "key": "pre_ifname",
+              "default": "ath",
+              "type": "string",
+              "spec":{
+                "show" : true,
+                "required":false,
+                "readonly": true,
+                "range": {
+                  "min": 1,
+                  "max": 6
+                }
+              }
+            },
+            "mode":{
+              "key": "mode",
+              "default": "ap",
+              "type": "string",
+              "list": [
+                "ap",
+                "sta",
+                "monitor"
+              ],
+              "spec":{
+                "show":true
+              }
+            },
+            "wds": {
+              "key": "wds",
+              "default": false,
+                "spec":{
+                  "show" : false
+                }
+            },
+            "essid": {
+              "key": "essid",
+              "type": "string",
+              "default": "Infinity",
+              "spec":{
+                "show": true,
+                "required": true,
+                "range": {
+                  "min": 1,
+                  "max": 32
+                }
+              }
+            },
+            "broadcast_ssid": {
+              "key": "hidden",
+              "default": false,
+                "spec":{
+                  "show" : true,
+                  "required": true
+                }
+            },
+            "bssid": {
+              "key": "bssid",
+              "type": "object",
+              "default": {
+                "enabled": false,
+                "value": {
+                  "key": "value",
+                  "type": "mac_address",
+                  "default": "00:00:00:00:00:00"
+                }
+              },
+              "spec":{
+                "show":true,
+                "required":true
+              }
+            },
+            "macaddr": {
+              "key": "macaddr",
+              "type": "object",
+              "default": {
+                "enabled": false,
+                "value": {
+                  "key": "value",
+                  "type": "mac_address",
+                  "default": "00:00:00:00:00:00"
+                }
+              },
+              "spec":{
+                "show":true,
+                "required":true
+              }
+            }
+          }
+        ]
       }
     ]
   },

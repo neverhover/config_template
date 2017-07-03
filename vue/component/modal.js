@@ -19,10 +19,8 @@ Vue.component('modal', {
 
               <div class="modal-footer">
                 <slot name="footer">
-                  default footer
-                  <button class="modal-default-button" @click="$emit('close')">
-                    OK
-                  </button>
+                  <input class="btn btn-info" type="button" :value="$t('message.save')"  @click="$emit('save')" />&nbsp;&nbsp;&nbsp;&nbsp;
+                  <input class="btn btn-warning" type="button" :value="$t('message.return')" @click="$emit('close')" />
                 </slot>
               </div>
             </div>

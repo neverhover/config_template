@@ -66,15 +66,6 @@
                       <div>
                         <div id="templ_info">
 
-                          <button id="show-modal" @click="showModal = true">Show Modal</button>
-                          <modal v-if="showModal" @close="showModal = false">
-                              <h3 slot="header">custom header</h3>
-                              <div slot="body">
-                                ssid配置表单
-                                <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-                                ssid配置表单
-                              </div>
-                          </modal>
                           <!-- @@配置名称 -->
                           <div class="cbi-value">
                             <label class="cbi-value-title" v-cloak>{{$t('message.templName')}}</label>
@@ -134,7 +125,7 @@
                               <ns-accfg-network :cur_active="left_menu.cur_idx == 'network'" :data_obj.sync="pro_model[0].network">
                               </ns-accfg-network>
 
-                              <ns-accfg-wireless :cur_active="left_menu.cur_idx == 'wireless'" :data_obj.sync="pro_model[0].wireless" :templ_info=templ_info :ssid_arr.sync=ssid_arr :cur_ssid_list.sync=sel_ssid_list ref="wifi_sec">
+                              <ns-accfg-wireless :cur_active="left_menu.cur_idx == 'wireless'" :data_obj.sync="pro_model[0].wireless" :templ_info=templ_info ref="wifi_sec">
                               </ns-accfg-wireless>
 
                               <ns-accfg-system :cur_active="left_menu.cur_idx == 'system'" :data_obj.sync="pro_model[0].system">
@@ -175,6 +166,7 @@
       <script type="text/javascript" src="/vue/component/network_interface.js"></script>
       <script type="text/javascript" src="/vue/component/network_switch.js"></script>
       <script type="text/javascript" src="/vue/component/network.js"></script>
+      <script type="text/javascript" src="/vue/component/wireless_ssid.js"></script>
       <script type="text/javascript" src="/vue/component/wireless.js"></script>
       <script type="text/javascript" src="/vue/component/menu.js"></script>
       <script type="text/javascript">
@@ -228,8 +220,6 @@
 
         //当前选择产品的数据内容，包含wireless,system,network信息
         // var cur_config = {} ? {} : {}
-        var cur_ssid = [] ? [] : []
-        var ssid_list = [] ? [] : []
 
         var cur_config = {"boardname":"9558_HD","info":"In TEST_DEV","wireless":{"bandsteering":{"enabled":false,"mode":"balanced"},"countrycode":"US","radio":[{"fragmentation":{"enabled":false,"size":256},"bawinsize":10,"maxssid":8,"ieeemode":"802.11n","acktimeout":100,"rts":{"enabled":false,"size":256},"htmode":"20","antennacount":2,"enabled":true,"amsdu":true,"advance":true,"antennagain":9,"board_power":20,"frequence":"2.4G","requiremode":"n","ifname":"wifi0","prohibited":false,"vap":[],"atpc":true,"channel":10,"dfs":false,"ifindex":0,"wjet":{"enabled":false,"version":"auto"},"basic_rate":0},{"fragmentation":{"enabled":false,"size":256},"bawinsize":10,"maxssid":8,"ieeemode":"802.11a","acktimeout":100,"rts":{"enabled":false,"size":256},"htmode":"20","antennacount":2,"enabled":true,"amsdu":true,"advance":true,"antennagain":9,"board_power":17,"frequence":"5.8G","requiremode":"n","ifname":"wifi3","prohibited":false,"vap":[],"atpc":true,"channel":36,"dfs":false,"ifindex":1,"wjet":{"enabled":false,"version":"auto"},"basic_rate":0}],"scenario":"ptmp"},"network":{"trafficcontrol":[],"route":[],"ethernet":[{"enable":true,"ifname":"eth0","uplink":true,"ifindex":0},{"enable":true,"ifname":"eth1","uplink":false,"ifindex":1}],"switch":[{"mtu":2,"mode":"system","name":"1","vport":[{"portname":"11","ssid":"","radio_index":0,"is_wifi":false,"vlan_id":"22"},{"portname":"22","ssid":"","radio_index":0,"is_wifi":false,"vlan_id":"33"}]}],"interface":[]},"system":{"tun_syslog":{"enabled":false,"port":514,"ipaddr":"127.0.0.1"},"sys_syslog":{"enabled":false,"port":514,"ipaddr":"127.0.0.1","level":"info"}}} ? {"boardname":"9558_HD","info":"In TEST_DEV","wireless":{"bandsteering":{"enabled":false,"mode":"balanced"},"countrycode":"US","radio":[{"fragmentation":{"enabled":false,"size":256},"bawinsize":10,"maxssid":8,"ieeemode":"802.11n","acktimeout":100,"rts":{"enabled":false,"size":256},"htmode":"20","antennacount":2,"enabled":true,"amsdu":true,"advance":true,"antennagain":9,"board_power":20,"frequence":"2.4G","requiremode":"n","ifname":"wifi0","prohibited":false,"vap":[],"atpc":true,"channel":10,"dfs":false,"ifindex":0,"wjet":{"enabled":false,"version":"auto"},"basic_rate":0},{"fragmentation":{"enabled":false,"size":256},"bawinsize":10,"maxssid":8,"ieeemode":"802.11a","acktimeout":100,"rts":{"enabled":false,"size":256},"htmode":"20","antennacount":2,"enabled":true,"amsdu":true,"advance":true,"antennagain":9,"board_power":17,"frequence":"5.8G","requiremode":"n","ifname":"wifi3","prohibited":false,"vap":[],"atpc":true,"channel":36,"dfs":false,"ifindex":1,"wjet":{"enabled":false,"version":"auto"},"basic_rate":0}],"scenario":"ptmp"},"network":{"trafficcontrol":[],"route":[],"ethernet":[{"enable":true,"ifname":"eth0","uplink":true,"ifindex":0},{"enable":true,"ifname":"eth1","uplink":false,"ifindex":1}],"switch":[{"mtu":2,"mode":"system","name":"1","vport":[{"portname":"11","ssid":"","radio_index":0,"is_wifi":false,"vlan_id":"22"},{"portname":"22","ssid":"","radio_index":0,"is_wifi":false,"vlan_id":"33"}]}],"interface":[]},"system":{"tun_syslog":{"enabled":false,"port":514,"ipaddr":"127.0.0.1"},"sys_syslog":{"enabled":false,"port":514,"ipaddr":"127.0.0.1","level":"info"}}} : {}
 
@@ -312,111 +302,6 @@
               }
           ]
 
-
-          ssid_list = [{
-            "ssidcfgname": "1111",
-            "essid": "SSID_1",
-            "enabled": "true",
-            "hidden": 1,
-            "wlan_id": 1,
-            "portal_enable": 1
-          }, {
-            "ssidcfgname": "222",
-            "essid": "SSID_15",
-            "enabled": "false",
-            "hidden": 1,
-            "wlan_id": 2,
-            "portal_enable": 0
-          }, {
-            "ssidcfgname": "3333",
-            "essid": "SSID_22",
-            "enabled": "false",
-            "hidden": 1,
-            "wlan_id": 3,
-            "portal_enable": 1
-          }, {
-            "ssidcfgname": "aa",
-            "essid": "SSID_22",
-            "enabled": "false",
-            "hidden": 1,
-            "wlan_id": 3,
-            "portal_enable": 1
-          }, {
-            "ssidcfgname": "bb",
-            "essid": "SSID_22",
-            "enabled": "false",
-            "hidden": 1,
-            "wlan_id": 3,
-            "portal_enable": 1
-          }, {
-            "ssidcfgname": "cc",
-            "essid": "SSID_22",
-            "enabled": "false",
-            "hidden": 1,
-            "wlan_id": 3,
-            "portal_enable": 1
-          }, {
-            "ssidcfgname": "dd",
-            "essid": "SSID_22",
-            "enabled": "false",
-            "hidden": 1,
-            "wlan_id": 3,
-            "portal_enable": 1
-          }, {
-            "ssidcfgname": "ee",
-            "essid": "SSID_22",
-            "enabled": "false",
-            "hidden": 1,
-            "wlan_id": 3,
-            "portal_enable": 1
-          }, {
-            "ssidcfgname": "ff",
-            "essid": "SSID_22",
-            "enabled": "false",
-            "hidden": 1,
-            "wlan_id": 3,
-            "portal_enable": 1
-          }, {
-            "ssidcfgname": "gg",
-            "essid": "SSID_22",
-            "enabled": "false",
-            "hidden": 1,
-            "wlan_id": 3,
-            "portal_enable": 1
-          }, {
-            "ssidcfgname": "hh11",
-            "essid": "SSID_22",
-            "enabled": "false",
-            "hidden": 1,
-            "wlan_id": 3,
-            "portal_enable": 1
-          }, {
-            "ssidcfgname": "gg12",
-            "essid": "SSID_22",
-            "enabled": "false",
-            "hidden": 1,
-            "wlan_id": 3,
-            "portal_enable": 1
-          }, {
-            "ssidcfgname": "gg13",
-            "essid": "SSID_22",
-            "enabled": "false",
-            "hidden": 1,
-            "wlan_id": 3,
-            "portal_enable": 1
-          }, {
-            "ssidcfgname": "gg14",
-            "essid": "SSID_22",
-            "enabled": "false",
-            "hidden": 1,
-            "wlan_id": 3,
-            "portal_enable": 1
-          }]
-          cur_ssid = {
-            // 0: ["1111", "222"],
-            // 1: ["222", "3333"]
-          }
-
           cur_config = {
               "boardname": "9558_HD",
               "info": "In TEST_DEV",
@@ -451,7 +336,18 @@
                           "requiremode": "n",
                           "ifname": "wifi0",
                           "prohibited": false,
-                          "vap": [],
+                          "vap": [
+                            {
+                              "mode": "ap",
+                              "wds": false,
+                              "index": 0,
+                              "ifname": "ath0",
+                              "enabled": false,
+                              "essid": "Lintest2222222",
+                              "hidden": false
+                            }
+
+                          ],
                           "atpc": true,
                           "channel": 10,
                           "dfs": false,
@@ -486,7 +382,17 @@
                           "requiremode": "n",
                           "ifname": "wifi3",
                           "prohibited": false,
-                          "vap": [],
+                          "vap": [
+                            {
+                              "mode": "ap",
+                              "wds": false,
+                              "index": 1,
+                              "ifname": "ath1",
+                              "enabled": false,
+                              "essid": "Lintest58222222",
+                              "hidden": false
+                            }
+                          ],
                           "atpc": true,
                           "channel": 36,
                           "dfs": false,
@@ -706,7 +612,7 @@
               pro_model[0].wireless.radio[index].channel.value = orgin
                 //通知到关注该时间的组件
               Bus.$emit('channel-change', pro_model[0].wireless.radio[index], "channel_init")
-              console.log("Chennel changed event emit done.Radio index:" + index + " in function channel_init")
+              console.warn("Chennel changed event emit done.Radio index:" + index + " in function channel_init")
             }
           })
 
@@ -778,7 +684,7 @@
             server_list: {
               "portal": portal_server_list,
               "rad_acct": rad_account_server_list,
-              "rad_auth": rad_account_server_list
+              "rad_auth": rad_auth_server_list
             }
           },
           mutations: {
@@ -912,6 +818,9 @@
             }
           },
           getters: {
+            wireless: function(state) {
+              return state.pro_model[0].wireless
+            },
             network: function(state) {
               return state.pro_model[0].network
             },
@@ -933,23 +842,6 @@
           }
         })
 
-        const ModalComponent1 = {
-            name: 'inside-modal-1',
-            props: ['example'],
-            methods: {
-                openModal() {
-                    this.$emit('vuedals:new', {
-                        title: 'Modal in modal!  wow!',
-                        component: ModalComponent2
-                    });
-                }
-            },
-            template: `<div>
-                <p>This is a component inside the modal, you can pass some props by using a "props" options.</p>
-                <blockquote>{{ example }}</blockquote>
-                <span class="btn btn-primary" @click="openModal()">Open another modal</span>
-            </div>`
-        };
 
         //产品container
         var vm_proinfo = new Vue({
@@ -1008,26 +900,6 @@
                     //同步共享数据
                     set_pro_model(pro_json)
 
-                    //初始化所选ssid列表
-                    if(pro_json.wireless){
-                      rd = pro_json.wireless.radio
-                      var r_index = 0
-                      if(typeof(rd) != 'undefined'){
-                        for(var i in rd){
-
-                          if (rd.hasOwnProperty(i)) {
-
-                            console.log(i)
-                            if(typeof(cur_ssid[r_index.toString()]) == 'undefined'){
-                              cur_ssid[r_index] = []
-                            }
-                            r_index +=1
-                          }
-
-                        }
-                      }
-                    }
-
                       //更新实例内状态，并触发事件
                     Vue.set(vm_proinfo.pro_model, 0, pro_json)
                       //                      Vue.set(Bus.pro_model,0, pro_json)
@@ -1085,8 +957,6 @@
             left_menu: obj_menu,
             pro_model: pro_model,
             templ_info: templ_info,
-            ssid_arr: ssid_list,
-            sel_ssid_list: cur_ssid
           },
           store: mystore,
           created: function() {
@@ -1095,10 +965,7 @@
           router: network_router,
           methods: {
             change_sel_ssid: function(nv, eid, com) {
-              //交互方式二
-              // // cur_ssid = nv
-              // cur_ssid[eid]=nv
-              // // Vue.set(cur_ssid, eid, nv)
+
               console.log(com)
             }
           }
@@ -1107,11 +974,10 @@
         var vm_submit = new Vue({
           el: '#cfg_submit',
           data: {
-            submit_ssids: cur_ssid,
             templ_info: templ_info
           },
           methods: {
-            submit_save: function() {
+            submit_save: function(e) {
               //提交到指定的URI
               var data = pro_model[0]
               //触发验证所有vue实例
@@ -1131,7 +997,7 @@
                 return false
               }
               //然后查看是否有错误
-        //data = new Object(data)
+
               console.log(JSON.stringify(clone_cfg(data, {})))
               console.log(JSON.stringify(this.submit_ssids))
               console.log("action:" + act + " cfg_id:" + cfg_id + " pro_name:" + this.templ_info.proSelected + " config_name:" + this.templ_info.templName)

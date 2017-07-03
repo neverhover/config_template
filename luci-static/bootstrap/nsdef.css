@@ -38,7 +38,7 @@ h2 a {
 }
 
 .modal-container {
-  width: 50%;
+  width: 65%;
   margin: 0px auto;
   padding: 20px 30px;
   background-color: #fff;
@@ -82,4 +82,11 @@ h2 a {
 .modal-leave-active .modal-container {
   -webkit-transform: scale(1.1);
   transform: scale(1.1);
+}
+
+.modal-body > input {
+  width: auto;
+}
+.modal-body > select {
+  width: auto;
 }

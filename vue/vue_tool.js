@@ -256,7 +256,7 @@ function clone_cfg(base_obj, new_obj){
 //	console.log(typeof(base_obj))
 //	console.log("\\\\\\\\\\\\\\\\\\")
 	for (var i in base_obj) {
-//		 console.log("base_obj key="+ i)
+		 // console.info("base_obj key="+ i)
 
 		if(typeof(base_obj[i]) == 'object' && base_obj[i].key != null && base_obj[i].type != 'object'){
 			//表示该对象是我们想找的对象，那么赋值给它
@@ -264,7 +264,7 @@ function clone_cfg(base_obj, new_obj){
 //			 console.log("开始加入键:"+want_key + " 值:"+base_obj[i].value)
 			new_obj[want_key] = base_obj[i].value
 		}else if(typeof(base_obj[i]) == 'object' && base_obj[i].key != null && base_obj[i].type == 'object'){
-//			console.log("嵌套对象组合:"+i + " 打算进入其子对象")
+			// console.log("嵌套对象组合:"+i + " 打算进入其子对象")
 			var val_obj = {}
 			if(this_isArray(base_obj[i])){
 				new_obj[i] = new Array();
@@ -279,18 +279,76 @@ function clone_cfg(base_obj, new_obj){
 		}else if(typeof(base_obj[i]) == 'object' &&  (base_obj[i].key == null || typeof(base_obj[i].key) == 'undefined') && base_obj[i].isview == true ){
 //			console.log("view 忽略属性:"+ i)
 		}else if(typeof(base_obj[i]) == 'object'  && base_obj[i].$template == true ){
-//			console.log("view 忽略对象:"+ i)
-			new_obj[i] = {}
+			// console.warn("view 忽略对象:"+ i)
+			new_obj[i] = null
 		}else{
 //			 console.log("打算进入一下层 键:"+i + " 当前对象是否为数组:" + this_isArray(base_obj[i]))
 			var val_obj = {}
-			if(this_isArray(base_obj[i])){
-				new_obj[i] = new Array();
-			}else{
-				new_obj[i] = new Object();
-			}
-			val_obj = new_obj[i]
-			console.log(val_obj)
+
+      // if(! isNaN(parseInt(i,10))){
+      //   for(j=0; j< parseInt(i); j++ ){
+      //     console.warn("key is " + i + " , now is j " + j)
+      //     // if( (new_obj[j] == null ) || ( typeof(new_obj[j]) == 'undefined' ) ){
+      //     //   console.warn("key %d is null", j)
+      //     //   if(this_isArray(base_obj[i])){
+      //     //     new_obj[j] = new Array();
+      //     //   }else{
+      //     //     new_obj[j] = new Object();
+      //     //   }
+      //     //   val_obj = new_obj[j]
+      //     //   break;
+      //     // }
+      //   }
+      // }else{
+      //   if(this_isArray(base_obj[i])){
+      //     new_obj[i] = new Array();
+      //   }else{
+      //     new_obj[i] = new Object();
+      //   }
+      //   val_obj = new_obj[i]
+      // }
+      let is_created = false
+      let insert_idx = i
+      if(! isNaN(parseInt(i,10))){
+
+        for(j=0; j< parseInt(i); j++ ){
+          // console.warn("key is " + i + " , now is j " + j)
+
+          if( ! base_obj.hasOwnProperty(j) ){
+            // console.warn("key %d is null", j)
+            insert_idx = j
+            break;
+          }else{
+            // console.log("key %d在base_obj中存在", j)
+            // console.log(base_obj[j])
+            // console.log(new_obj[j])
+            if( new_obj[j]  == null ){
+              insert_idx = j
+              break;
+            }
+
+          }
+        }
+
+        if(!is_created){
+          if(this_isArray(base_obj[i])){
+              new_obj[insert_idx] = new Array();
+            }else{
+              new_obj[insert_idx] = new Object();
+            }
+            val_obj = new_obj[insert_idx]
+        }
+      }else{
+        if(this_isArray(base_obj[i])){
+          new_obj[i] = new Array();
+        }else{
+          new_obj[i] = new Object();
+        }
+        val_obj = new_obj[i]
+      }
+
+      // console.warn("进入下一次: i=" + i+" " +val_obj)
+			// console.log(val_obj)
 			clone_cfg(base_obj[i], val_obj)
 		}
 	}
