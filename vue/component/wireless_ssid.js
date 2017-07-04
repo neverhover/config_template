@@ -52,7 +52,64 @@ Vue.component('ns-accfg-ssid', {
             </div>
           </a>
           <br>
-           <!-- @@ 安全选项-->
+          <!-- @@ 安全选项-->
+          <div class="row-fluid" v-show="visible.security">
+            <div class="span12">
+              <!-- @@ 安全list -->
+              <div class="row-fluid" v-if="nodeExist(templ_obj.security)" v-show="nodeShow(templ_obj.security)">
+                <div class="span6 cbi-value">
+                  <label class="cbi-value-title" >安全<!--:TODO --></label>
+                  <div class="cbi-value-field">
+                    <select class="cbi-input-select" v-model="cur_obj.security.mode">
+                      <option v-for="etext in templ_obj.security.default.mode.list" >{{etext}}</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="span6"></div>
+              </div>
+
+              <!-- @@ 认证类型 -->
+              <div class="row-fluid" v-if="isExistNode(templ_obj.security.default.wpacomb, cur_obj.security)">
+                <div class="span6 cbi-value">
+                  <label class="cbi-value-title" >安全<!--:TODO --></label>
+                  <div class="cbi-value-field">
+                    <select class="cbi-input-select" v-model="cur_obj.security.wpacomb">
+                      <option v-for="etext in templ_obj.security.default.wpacomb.list" >{{etext}}</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="span6"></div>
+              </div>
+              <!-- @@ 加密算法 -->
+              <div class="row-fluid" v-if="isExistNode(templ_obj.security.default.encryption, cur_obj.security)">
+                <div class="span6 cbi-value">
+                  <label class="cbi-value-title" >加密算法<!--:TODO --></label>
+                  <div class="cbi-value-field">
+                    <select class="cbi-input-select" v-model="cur_obj.security.encryption">
+                      <option v-for="etext in templ_obj.security.default.encryption.list" >{{etext}}</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="span6"></div>
+              </div>
+              <!-- @@ 密码 -->
+              <div class="row-fluid" v-if="isExistNode(templ_obj.security.default.wpapsk, cur_obj.security)">
+                <div class="span6 cbi-value">
+                  <label class="cbi-value-title" >密码<!--:TODO --></label>
+                  <div class="cbi-value-field">
+                    <input type="text"  class="cbi-input-text" name="templ_security_wpapsk_passphrase"
+                      v-model="cur_obj.security.wpapsk.passphrase" />
+                    <div class="text-error" v-show="errors.has('templ_security_wpapsk_passphrase')">
+                       {{ errors.first('templ_security_wpapsk_passphrase') }}
+                    </div>
+
+                  </div>
+                </div>
+                <div class="span6"></div>
+              </div>
+
+            </div><!-- @@安全选项-->
+          </div>
 
           <!-- @@带宽 settings  -->
           <a href="javascript:void(0);" v-on:click="changeVisible('bandwidth')">
@@ -781,6 +838,10 @@ Vue.component('ns-accfg-ssid', {
         "mac_list" : "",
         "always_portal":{
           "ip4": ""
+        },
+        "security": {
+          "account": {},
+          "auth": {}
         }
       }
     }
@@ -894,6 +955,38 @@ Vue.component('ns-accfg-ssid', {
       tmp_row.agentargs.acl.free.ip4 = convertArray(tmp_row.agentargs.acl.free.ip4)
       tmp_row.agentargs.acl.free.host = convertArray(tmp_row.agentargs.acl.free.host)
       tmp_row.macacl.mac_list = convertArray(tmp_row.macacl.mac_list)
+
+      //以下代码为历史原因，实际这个Server只有一个，不需要放到数组中
+      //虽然openwrt中支持多个server...
+      //非常之丑陋的代码..
+      if(this.cur_mode == "new"){
+        let tmp_server = {}
+        tmp_server=clone_cfg(tmp_row.security.wpaenterprise.accounting.servers,{})
+        tmp_row.security.wpaenterprise.accounting.servers = []
+        tmp_row.security.wpaenterprise.accounting.servers.push(tmp_server)
+
+        //翻译默认配置
+        let tmp_server2 = {}
+        tmp_server2=clone_cfg(tmp_row.security.wpaenterprise.authentication.servers,{})
+        tmp_row.security.wpaenterprise.authentication.servers = []
+        tmp_row.security.wpaenterprise.authentication.servers.push(tmp_server2)
+      }else{
+        //翻译默认配置
+        let tmp_server = {}
+        tmp_server=clone_cfg(tmp_row.security.wpaenterprise.accounting.servers,{})
+        tmp_row.security.wpaenterprise.accounting.servers = []
+        //只push第一个server
+        tmp_row.security.wpaenterprise.accounting.servers.push(tmp_server[0])
+
+        let tmp_server2 = {}
+        tmp_server2=clone_cfg(tmp_row.security.wpaenterprise.authentication.servers,{})
+        tmp_row.security.wpaenterprise.authentication.servers = []
+        tmp_row.security.wpaenterprise.authentication.servers.push(tmp_server2[0])
+      }
+
+
+
+
       //从list中查找
       this.search_config_intf(tmp_row)
 
@@ -1065,17 +1158,55 @@ Vue.component('ns-accfg-ssid', {
             this.cur_obj.macacl.mac_list = []
           }
         }
-      },
-      acl_rm_one: function(item, arr_name){
-        this.acl_arr_act(arr_name, "rm", item)
-      },
-      acl_rm_all: function(arr_name){
-        this.acl_arr_act(arr_name, "rm_all")
+    },
+    acl_rm_one: function(item, arr_name){
+      this.acl_arr_act(arr_name, "rm", item)
+    },
+    acl_rm_all: function(arr_name){
+      this.acl_arr_act(arr_name, "rm_all")
 
-      },
-      acl_add_one: function(item, arr_name){
-        this.acl_arr_act(arr_name, "add", item)
-      },
+    },
+    acl_add_one: function(item, arr_name){
+      this.acl_arr_act(arr_name, "add", item)
+    },
+    getParentValue: function(obj, parent){
+      //返回上一层的值,逻辑存在,非物理上下级.用树的关系来描述if-else关系
+      var p_key = obj["$parent"]
+      var p_value = ""
+      console.warn(p_key)
+      console.warn(parent)
+      console.warn("KKKKKKKKKKKKKKKKKKK")
+      if(parent[p_key]){
+
+      }else{
+          alert( Vue.t('message.noParentValue') )
+          throw "parent node not found"
+      }
+      if(this.cur_mode == "new"){
+          p_value = parent[p_key]
+      }else{
+          p_value = parent[p_key]
+      }
+
+      return p_value
+    },
+    isExistNode: function(obj, parenet){
+
+      let value = this.getParentValue(obj, parenet)
+      let eq = false
+      if(typeof(obj.$selector) == 'object'){
+        arrayEach(obj.$selector, function(idx, obj){
+          if( obj == value){
+            eq = true
+            return false
+          }
+        })
+        return eq
+      }else{
+        return obj.$selector === value
+      }
+
+    },
     nodeExist: function(cur_obj){
         //判断cur_obj是否存在，不存在返回false，存在不做任何操作
         var exist= true ;

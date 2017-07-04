@@ -261,7 +261,11 @@ function clone_cfg(base_obj, new_obj){
 		if(typeof(base_obj[i]) == 'object' && base_obj[i].key != null && base_obj[i].type != 'object'){
 			//表示该对象是我们想找的对象，那么赋值给它
 			var want_key = base_obj[i].key
-//			 console.log("开始加入键:"+want_key + " 值:"+base_obj[i].value)
+			 console.warn("开始加入键:"+want_key + " 值:"+base_obj[i].value)
+      if(typeof(base_obj[i].value) == "undefined"){
+        console.warn("sssssss")
+        base_obj[i].value = base_obj[i].default
+      }
 			new_obj[want_key] = base_obj[i].value
 		}else if(typeof(base_obj[i]) == 'object' && base_obj[i].key != null && base_obj[i].type == 'object'){
 			// console.log("嵌套对象组合:"+i + " 打算进入其子对象")

@@ -344,7 +344,52 @@
                               "ifname": "ath0",
                               "enabled": false,
                               "essid": "Lintest2222222",
-                              "hidden": false
+                              "hidden": false,
+                              "security": {
+                                  "mode": "open",
+                                  "wpacomb": "",
+                                  "encryption": "",
+                                  "wpaenterprise": {
+                                      "authentication": {
+                                          "servers": [
+                                              {
+                                                  "secret": "",
+                                                  "port": 1812,
+                                                  "address": "1.1.1.1"
+                                              }
+                                          ]
+                                      },
+                                      "accounting": {
+                                          "servers": [
+                                              {
+                                                  "secret": "",
+                                                  "port": 1812,
+                                                  "address": "2.2.2.2"
+                                              }
+                                          ],
+                                          "enabled": true
+                                      },
+                                      "das": {
+                                          "secret": "",
+                                          "enabled": false,
+                                          "clientip": "0.0.0.0",
+                                          "port": 1812
+                                      },
+                                      "eap": {
+                                          "method": "",
+                                          "identity": "",
+                                          "password": ""
+                                      }
+                                  },
+                                  "wpapsk": {
+                                      "passphrase": ""
+                                  },
+                                  "wep": {
+                                      "length": 0,
+                                      "index": 0,
+                                      "key": ""
+                                  }
+                              }
                             }
 
                           ],

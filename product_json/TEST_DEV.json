@@ -420,14 +420,14 @@
                         "default":{
                           "ip4":{
                             "key" : "ip4",
-                            "type": "arrary",
+                            "type": "array",
                             "item_type": "ipv4_address",
                             "maxitems": 64,
                             "default": []
                           },
                           "host":{
                             "key" : "host",
-                            "type": "arrary",
+                            "type": "array",
                             "item_type": "string",
                             "maxitems": 16,
                             "default": []
@@ -440,7 +440,7 @@
                         "default":{
                           "ip4":{
                             "key" : "ip4",
-                            "type": "arrary",
+                            "type": "array",
                             "item_type": "ipv4_address",
                             "maxitems": 64,
                             "default": [
@@ -450,7 +450,7 @@
                           },
                           "host":{
                             "key" : "host",
-                            "type": "arrary",
+                            "type": "array",
                             "item_type": "string",
                             "maxitems": 16,
                             "default": []
@@ -700,7 +700,7 @@
                 },
                 "mac_list":{
                   "key": "mac_list",
-                  "type": "arrary",
+                  "type": "array",
                   "item_type": "mac_address",
                   "maxitems": 64,
                   "default": []
@@ -709,6 +709,270 @@
               "spec":{
                 "show":true
               }
+            },
+            "security": {
+              "key": "security",
+              "type": "object",
+              "spec":{
+                "show" : true
+              },
+              "default": {
+                "mode": {
+                  "key": "mode",
+                  "default": "open",
+                  "spec":{
+                    "show" : true
+                  },
+                  "list": [ "open", "wep", "psk", "enterprise" ]
+                },
+                "wpacomb": {
+                  "key": "wpacomb",
+                  "type": "string",
+                  "$parent" : "mode",
+                  "$selector": ["psk", "enterprise"],
+                  "default": "",
+                  "spec":{
+                    "show":true
+                  },
+                  "list":["" , "wpa" , "wpa2" , "mixed" ]
+                },
+                "encryption": {
+                  "key": "encryption",
+                  "type": "string",
+                  "$parent" : "mode",
+                  "$selector": ["psk", "enterprise"],
+                  "default": "",
+                  "spec":{
+                    "show":true
+                  },
+                  "list":["" , "auto" , "tkip" , "aes", "mixed" ]
+                },
+                "wpapsk": {
+                  "key": "encryption",
+                  "type": "object",
+                  "$parent" : "mode",
+                  "$selector": "psk",
+                  "default": {
+                    "passphrase": {
+                      "key": "passphrase",
+                      "type": "string",
+                      "default": "",
+                      "spec":{
+                        "range":{
+                          "min": 8,
+                          "max": 63
+                        }
+                      }
+                    }
+                  }
+                },
+                "wep": {
+                  "key": "wep",
+                  "type": "object",
+                  "$parent" : "mode",
+                  "$selector": "wep",
+                  "default": {
+                     "length": {
+                      "key": "length",
+                      "type": "string",
+                      "default": "",
+                      "spec": {
+                        "show": false
+                      }
+                    },
+                    "index": {
+                      "key": "index",
+                      "type": "number",
+                      "default": 1,
+                      "spec": {
+                        "show": false,
+                        "range": {
+                          "min": 1,
+                          "max": 4
+                        }
+                      }
+                    },
+                    "key": {
+                      "key": "key",
+                      "type": "string",
+                      "default": "",
+                      "spec": {
+                        "show": false,
+                        "range": {
+                          "min": 1,
+                          "max": 32
+                        }
+                      }
+                    }
+                  }
+                },
+                "wpaenterprise": {
+                  "key": "wpaenterprise",
+                  "type": "object",
+                  "$parent" : "mode",
+                  "$selector": "enterprise",
+                  "default": {
+                    "authentication": {
+                      "key": "authentication",
+                      "type": "object",
+                      "default": {
+                        "servers": {
+                          "key": "servers",
+                          "type": "array",
+                          "item_type": "object",
+                          "default": {
+                            "secret" : {
+                              "key" : "secret",
+                              "type": "string",
+                              "default": "",
+                              "spec": {
+                                "range":{
+                                  "min": 1,
+                                  "max": 16
+                                }
+                              }
+                            },
+                            "port" : {
+                              "key" : "port",
+                              "type": "number",
+                              "default": 1812,
+                              "spec": {
+                                "range":{
+                                  "min": 1,
+                                  "max": 65535
+                                }
+                              }
+                            },
+                            "address" : {
+                              "key" : "address",
+                              "type": "ipv4_address",
+                              "default": "",
+                              "spec": {
+                                "show": true
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "accounting": {
+                      "key": "accounting",
+                      "type": "object",
+                      "default": {
+                        "servers": {
+                          "key": "servers",
+                          "type": "array",
+                          "item_type": "object",
+                          "default": {
+                            "secret" : {
+                              "key" : "secret",
+                              "type": "string",
+                              "default": "",
+                              "spec": {
+                                "range":{
+                                  "min": 1,
+                                  "max": 16
+                                }
+                              }
+                            },
+                            "port" : {
+                              "key" : "port",
+                              "type": "number",
+                              "default": 1813,
+                              "spec": {
+                                "range":{
+                                  "min": 1,
+                                  "max": 65535
+                                }
+                              }
+                            },
+                            "address" : {
+                              "key" : "address",
+                              "type": "ipv4_address",
+                              "default": "",
+                              "spec": {
+                                "show": true
+                              }
+                            }
+                          }
+                        },
+                        "enabled": {
+                          "key": "enabled",
+                          "type": "bool",
+                          "default": false
+                        }
+                      }
+                    },
+                    "das": {
+                      "key" : "das",
+                      "type": "object",
+                      "default": {
+                        "enabled": {
+                          "key": "enabled",
+                          "type": "boolean",
+                          "default": false
+                        },
+                        "clientip": {
+                          "key": "clientip",
+                          "type": "ipv4_address",
+                          "default": "0.0.0.0"
+                        },
+                        "port": {
+                          "key": "port",
+                          "type": "number",
+                          "default": "3799"
+                        },
+                        "secret": {
+                          "key": "secret",
+                          "type": "string",
+                          "default": "",
+                          "spec": {
+                            "range": {
+                              "min": 1,
+                              "max": 16
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "eap": {
+                      "key" : "eap",
+                      "type": "object",
+                      "default": {
+                        "method": {
+                          "key" : "method",
+                          "type": "string",
+                          "default": "eap-tls",
+                          "list": ["eap-tls", "eap-ttls", "eap-sim/aka", "eap-peap", "eap-pwd"]
+                        },
+                        "identity": {
+                          "key" : "identity",
+                          "type": "string",
+                          "default": "",
+                          "spec" : {
+                            "range": {
+                              "min": 1,
+                              "max": 16
+                            }
+                          }
+                        },
+                        "password": {
+                          "key" : "password",
+                          "type": "string",
+                          "default": "",
+                          "spec" : {
+                            "range": {
+                              "min": 1,
+                              "max": 16
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+
             }
           }
         ]
@@ -1119,14 +1383,14 @@
                         "default":{
                           "ip4":{
                             "key" : "ip4",
-                            "type": "arrary",
+                            "type": "array",
                             "item_type": "ipv4_address",
                             "maxitems": 64,
                             "default": []
                           },
                           "host":{
                             "key" : "host",
-                            "type": "arrary",
+                            "type": "array",
                             "item_type": "string",
                             "maxitems": 16,
                             "default": []
@@ -1139,7 +1403,7 @@
                         "default":{
                           "ip4":{
                             "key" : "ip4",
-                            "type": "arrary",
+                            "type": "array",
                             "item_type": "ipv4_address",
                             "maxitems": 64,
                             "default": [
@@ -1149,7 +1413,7 @@
                           },
                           "host":{
                             "key" : "host",
-                            "type": "arrary",
+                            "type": "array",
                             "item_type": "string",
                             "maxitems": 16,
                             "default": []
@@ -1399,7 +1663,7 @@
                 },
                 "mac_list":{
                   "key": "mac_list",
-                  "type": "arrary",
+                  "type": "array",
                   "item_type": "mac_address",
                   "maxitems": 64,
                   "default": []
@@ -1408,6 +1672,270 @@
               "spec":{
                 "show":true
               }
+            },
+            "security": {
+              "key": "security",
+              "type": "object",
+              "spec":{
+                "show" : true
+              },
+              "default": {
+                "mode": {
+                  "key": "mode",
+                  "default": "open",
+                  "spec":{
+                    "show" : true
+                  },
+                  "list": [ "open", "wep", "psk", "enterprise" ]
+                },
+                "wpacomb": {
+                  "key": "wpacomb",
+                  "type": "string",
+                  "$parent" : "mode",
+                  "$selector": ["psk", "enterprise"],
+                  "default": "",
+                  "spec":{
+                    "show":true
+                  },
+                  "list":["" , "wpa" , "wpa2" , "mixed" ]
+                },
+                "encryption": {
+                  "key": "encryption",
+                  "type": "string",
+                  "$parent" : "mode",
+                  "$selector": ["psk", "enterprise"],
+                  "default": "",
+                  "spec":{
+                    "show":true
+                  },
+                  "list":["" , "auto" , "tkip" , "aes", "mixed" ]
+                },
+                "wpapsk": {
+                  "key": "wpapsk",
+                  "type": "object",
+                  "$parent" : "mode",
+                  "$selector": "psk",
+                  "default": {
+                    "passphrase": {
+                      "key": "passphrase",
+                      "type": "string",
+                      "default": "",
+                      "spec":{
+                        "range":{
+                          "min": 8,
+                          "max": 63
+                        }
+                      }
+                    }
+                  }
+                },
+                "wep": {
+                  "key": "wep",
+                  "type": "object",
+                  "$parent" : "mode",
+                  "$selector": "wep",
+                  "default": {
+                    "length": {
+                      "key": "length",
+                      "type": "string",
+                      "default": "",
+                      "spec": {
+                        "show": false
+                      }
+                    },
+                    "index": {
+                      "key": "index",
+                      "type": "number",
+                      "default": 1,
+                      "spec": {
+                        "show": false,
+                        "range": {
+                          "min": 1,
+                          "max": 4
+                        }
+                      }
+                    },
+                    "key": {
+                      "key": "key",
+                      "type": "string",
+                      "default": "",
+                      "spec": {
+                        "show": false,
+                        "range": {
+                          "min": 1,
+                          "max": 32
+                        }
+                      }
+                    }
+                  }
+                },
+                "wpaenterprise": {
+                  "key": "wpaenterprise",
+                  "type": "object",
+                  "$parent" : "mode",
+                  "$selector": "enterprise",
+                  "default": {
+                    "authentication": {
+                      "key": "authentication",
+                      "type": "object",
+                      "default": {
+                        "servers": {
+                          "key": "servers",
+                          "type": "array",
+                          "item_type": "object",
+                          "default": {
+                            "secret" : {
+                              "key" : "secret",
+                              "type": "string",
+                              "default": "",
+                              "spec": {
+                                "range":{
+                                  "min": 1,
+                                  "max": 16
+                                }
+                              }
+                            },
+                            "port" : {
+                              "key" : "port",
+                              "type": "number",
+                              "default": 1812,
+                              "spec": {
+                                "range":{
+                                  "min": 1,
+                                  "max": 65535
+                                }
+                              }
+                            },
+                            "address" : {
+                              "key" : "address",
+                              "type": "ipv4_address",
+                              "default": "",
+                              "spec": {
+                                "show": true
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "accounting": {
+                      "key": "accounting",
+                      "type": "object",
+                      "default": {
+                        "servers": {
+                          "key": "servers",
+                          "type": "object",
+                          "item_type": "object",
+                          "default": {
+                            "secret" : {
+                              "key" : "secret",
+                              "type": "string",
+                              "default": "",
+                              "spec": {
+                                "range":{
+                                  "min": 1,
+                                  "max": 16
+                                }
+                              }
+                            },
+                            "port" : {
+                              "key" : "port",
+                              "type": "number",
+                              "default": 1813,
+                              "spec": {
+                                "range":{
+                                  "min": 1,
+                                  "max": 65535
+                                }
+                              }
+                            },
+                            "address" : {
+                              "key" : "address",
+                              "type": "ipv4_address",
+                              "default": "",
+                              "spec": {
+                                "show": true
+                              }
+                            }
+                          }
+                        },
+                        "enabled": {
+                          "key": "enabled",
+                          "type": "bool",
+                          "default": false
+                        }
+                      }
+                    },
+                    "das": {
+                      "key" : "das",
+                      "type": "object",
+                      "default": {
+                        "enabled": {
+                          "key": "enabled",
+                          "type": "boolean",
+                          "default": false
+                        },
+                        "clientip": {
+                          "key": "clientip",
+                          "type": "ipv4_address",
+                          "default": "0.0.0.0"
+                        },
+                        "port": {
+                          "key": "port",
+                          "type": "number",
+                          "default": "3799"
+                        },
+                        "secret": {
+                          "key": "secret",
+                          "type": "string",
+                          "default": "",
+                          "spec": {
+                            "range": {
+                              "min": 1,
+                              "max": 16
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "eap": {
+                      "key" : "eap",
+                      "type": "object",
+                      "default": {
+                        "method": {
+                          "key" : "method",
+                          "type": "string",
+                          "default": "eap-tls",
+                          "list": ["eap-tls", "eap-ttls", "eap-sim/aka", "eap-peap", "eap-pwd"]
+                        },
+                        "identity": {
+                          "key" : "identity",
+                          "type": "string",
+                          "default": "",
+                          "spec" : {
+                            "range": {
+                              "min": 1,
+                              "max": 16
+                            }
+                          }
+                        },
+                        "password": {
+                          "key" : "password",
+                          "type": "string",
+                          "default": "",
+                          "spec" : {
+                            "range": {
+                              "min": 1,
+                              "max": 16
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+
             }
           }
         ]
@@ -1640,14 +2168,14 @@
                   "default":{
                     "ip4":{
                       "key" : "ip4",
-                      "type": "arrary",
+                      "type": "array",
                       "item_type": "ipv4_address",
                       "maxitems": 64,
                       "default": []
                     },
                     "host":{
                       "key" : "host",
-                      "type": "arrary",
+                      "type": "array",
                       "item_type": "string",
                       "maxitems": 16,
                       "default": []
@@ -1660,7 +2188,7 @@
                   "default":{
                     "ip4":{
                       "key" : "ip4",
-                      "type": "arrary",
+                      "type": "array",
                       "item_type": "ipv4_address",
                       "maxitems": 64,
                       "default": [
@@ -1670,7 +2198,7 @@
                     },
                     "host":{
                       "key" : "host",
-                      "type": "arrary",
+                      "type": "array",
                       "item_type": "string",
                       "maxitems": 16,
                       "default": []
