@@ -64,7 +64,73 @@ Vue.component('ns-accfg-ssid', {
             </div>
           </a>
           <br>
-          <!-- @@wacl 流量控制-->
+          <div class="row-fluid" v-show="visible.bandwidth">
+
+            <div class="span12">
+              <!-- @@trafficcontrol.enabled -->
+              <div class="row-fluid" v-if="nodeExist(templ_obj.trafficcontrol)" v-show="nodeShow(templ_obj.trafficcontrol)">
+                <div class="span6 cbi-value">
+                  <label class="cbi-value-title" >{{$t("message.trafficcontrol")}}</label>
+                  <div class="cbi-value-field">
+                    <select class="cbi-input-select" v-model="cur_obj.trafficcontrol.enabled">
+                      <option v-bind:value="true">{{$t("message.startUsing")}}</option>
+                      <option v-bind:value="false">{{$t("message.endUsing")}}</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="span6"></div>
+              </div>
+
+              <!-- @@trafficcontrol.egress -->
+              <div class="row-fluid" v-if="nodeExist(templ_obj.trafficcontrol)" v-show="nodeShow(templ_obj.trafficcontrol) && cur_obj.trafficcontrol.enabled">
+                <div class="span6 cbi-value">
+                  <label class="cbi-value-title" >{{$t("message.trafficcontrolEgress")}}{{$t("message.whetherEnable")}}</label>
+                  <div class="cbi-value-field">
+                    <select class="cbi-input-select" v-model="cur_obj.trafficcontrol.egress.enabled">
+                      <option v-bind:value="true">{{$t("message.startUsing")}}</option>
+                      <option v-bind:value="false">{{$t("message.endUsing")}}</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="span6 cbi-value"  v-if="nodeExist(templ_obj.trafficcontrol)" v-show="nodeShow(templ_obj.trafficcontrol) && cur_obj.trafficcontrol.egress.enabled">
+                  <label class="cbi-value-title" >{{$t("message.trafficcontrolEgress")}}</label>
+                  <div class="cbi-value-field">
+                    <input type="text"  class="cbi-input-text" name="templ_tc_egress_speed"
+                      v-model="cur_obj.trafficcontrol.egress.speed" />
+                    <div class="text-error" v-show="errors.has('templ_tc_egress_speed')">
+                       {{ errors.first('templ_tc_egress_speed') }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- @@trafficcontrol.ingress -->
+              <div class="row-fluid" v-if="nodeExist(templ_obj.trafficcontrol)" v-show="nodeShow(templ_obj.trafficcontrol) && cur_obj.trafficcontrol.enabled">
+                <div class="span6 cbi-value">
+                  <label class="cbi-value-title" >{{$t("message.trafficcontrolIngress")}}{{$t("message.whetherEnable")}}</label>
+                  <div class="cbi-value-field">
+                    <select class="cbi-input-select" v-model="cur_obj.trafficcontrol.ingress.enabled">
+                      <option v-bind:value="true">{{$t("message.startUsing")}}</option>
+                      <option v-bind:value="false">{{$t("message.endUsing")}}</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="span6 cbi-value"  v-if="nodeExist(templ_obj.trafficcontrol)" v-show="nodeShow(templ_obj.trafficcontrol) && cur_obj.trafficcontrol.ingress.enabled">
+                  <label class="cbi-value-title" >{{$t("message.trafficcontrolIngress")}}</label>
+                  <div class="cbi-value-field">
+                    <input type="text"  class="cbi-input-text" name="templ_tc_ingress_speed"
+                      v-model="cur_obj.trafficcontrol.ingress.speed" />
+                    <div class="text-error" v-show="errors.has('templ_tc_ingress_speed')">
+                       {{ errors.first('templ_tc_ingress_speed') }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div><!-- @@end of class='span12'-->
+
+          </div>
+
 
           <!-- @@WACL settings  -->
           <a href="javascript:void(0);" v-on:click="changeVisible('wacl')">
@@ -109,7 +175,6 @@ Vue.component('ns-accfg-ssid', {
                 <div class="span6"></div>
               </div>
 
-
               <!-- @@wmm -->
               <div class="row-fluid" v-if="nodeExist(templ_obj.wmm)" v-show="nodeShow(templ_obj.wmm)">
                 <div class="span6 cbi-value" v-if="nodeExist(templ_obj.wmm)" v-show="nodeShow(templ_obj.wmm)">
@@ -127,15 +192,64 @@ Vue.component('ns-accfg-ssid', {
                 <div class="span6"></div>
               </div>
 
+              <!-- @@ssid2vlan -->
+              <div class="row-fluid" v-if="nodeExist(templ_obj.ssid2vlan)" v-show="nodeShow(templ_obj.ssid2vlan)">
+                <div class="span6 cbi-value">
+                  <label class="cbi-value-title">ssid2vlan</label>
+                  <div class="cbi-value-field">
+                    <select  class="cbi-input-select"
+                    v-model="cur_obj.ssid2vlan.enabled" >
+                       <option v-bind:value="true">{{$t("message.startUsing")}}</option>
+                       <option v-bind:value="false">{{$t("message.endUsing")}}</option>
+                    </select>
+
+                  </div>
+                </div>
+                <div class="span6 cbi-value" v-show="cur_obj.ssid2vlan.enabled">
+                  <label class="cbi-value-title" >{{$t("message.vlanId")}}</label>
+                  <input style="width:10%" type="text" class="cbi-input-text"
+                      name="templ_ssdi2vlan_vlanid"
+                      v-model.number="cur_obj.ssid2vlan.id" />
+                   <span class="text-error" v-show="errors.has('templ_ssdi2vlan_vlanid')">
+                       {{ errors.first('templ_ssdi2vlan_vlanid') }}
+                   </span>
+                </div>
+              </div>
+
+              <!-- @@maxclients -->
+              <div class="row-fluid" v-if="nodeExist(templ_obj.maxclients)" v-show="nodeShow(templ_obj.maxclients)">
+                <div class="span6 cbi-value" v-if="nodeExist(templ_obj.maxclients)" v-show="nodeShow(templ_obj.maxclients)">
+                  <label class="cbi-value-title" >{{$t("message.maxclients")}}</label>
+                  <div class="cbi-value-field">
+                    <input type="text"  class="cbi-input-text" name="templ_maxclients"
+                      v-model="cur_obj.maxclients" />
+                    <div class="text-error" v-show="errors.has('templ_maxclients')">
+                       {{ errors.first('templ_maxclients') }}
+                    </div>
+                  </div>
+                </div>
+                <div class="span6"></div>
+              </div>
+
+              <!-- @@minsignal -->
+              <div class="row-fluid" v-if="nodeExist(templ_obj.minsignal)" v-show="nodeShow(templ_obj.minsignal)">
+                <div class="span6 cbi-value" v-if="nodeExist(templ_obj.minsignal)" v-show="nodeShow(templ_obj.minsignal)">
+                  <label class="cbi-value-title" >{{$t("message.minsignal")}}</label>
+                  <div class="cbi-value-field">
+                    <input type="text"  class="cbi-input-text" name="templ_minsignal"
+                      v-model="cur_obj.minsignal" />
+                    <div class="text-error" v-show="errors.has('templ_minsignal')">
+                       {{ errors.first('templ_minsignal') }}
+                    </div>
+                  </div>
+                </div>
+                <div class="span6"></div>
+              </div>
 
             </div><!--@@end of class='span12' -->
           </div>
 
-          <!-- @@client isolate -->
 
-          <!-- @@client maxssoc -->
-          <!-- @@client signal -->
-          <!-- @@client multicast -->
 
 
           <!-- @@portal agentargs -->
@@ -149,7 +263,7 @@ Vue.component('ns-accfg-ssid', {
             </div>
           </a>
           <br>
-          <transition name="custom-classes-transition"
+          <transition name="fade"
             enter-active-class="animated fadeInUp"
             leave-active-class="animated fadeOutDown"
           >

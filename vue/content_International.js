@@ -47,6 +47,11 @@ var content_International = {
             maxTxpower:'The current largest txpower should be.',
             wmm: 'wmm',
             isolate: 'Client isolation',
+            maxclients: 'Max connected clients',
+            minsignal: 'Min client signal, dBm',
+            trafficcontrol: 'Bandwidth limit',
+            trafficcontrolEgress: 'Bandwidth egress',
+            trafficcontrolIngress: 'Bandwidth ingress',
             //table2
             total:'Article ',
             pageNum:'  the record  ',
@@ -211,6 +216,11 @@ var content_International = {
             maxTxpower:'当前最大txpower应该为',
             wmm: '多媒体加速',
             isolate: '客户端隔离',
+            maxclients: '最大关联数',
+            minsignal: '最小接入信号强度(dBm)',
+            trafficcontrol: '流控限速',
+            trafficcontrolEgress: '流控download',
+            trafficcontrolIngress: '流控upload',
             //table2
             total:'共 ',
             pageNum:'页',

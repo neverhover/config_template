@@ -478,6 +478,200 @@
                 "spec":{
                   "show" : true
                 }
+            },
+            "ssid2vlan": {
+              "key": "ssid2vlan",
+              "type": "object",
+              "default": {
+                "enabled": {
+                  "key": "enabled",
+                  "type": "boolean",
+                  "default": false
+                },
+                "id": {
+                  "key": "id",
+                  "type": "number",
+                  "range": {
+                    "min": 0,
+                    "max": 4095
+                  },
+                  "default": 10
+                }
+              },
+              "spec":{
+                "show":true,
+                "required":false
+              }
+            },
+            "maxclients": {
+              "key": "maxclients",
+              "type": "number",
+              "default": 0,
+              "spec": {
+                "range": {
+                  "min": 0,
+                  "max": 64
+                }
+              }
+            },
+            "minsignal": {
+              "key": "minsignal",
+              "type": "number",
+              "default": 0,
+              "spec": {
+                "range": {
+                  "min": -100,
+                  "max": -50
+                }
+              }
+            },
+            "rate": {
+              "key": "rate",
+              "type": "object",
+              "default": {
+                "legacy": {
+                  "type": "string",
+                  "default": "auto",
+                  "key": "legacy",
+                  "list": [
+                    "auto",
+                    "1", "2", "5.5", "6", "9", "11",
+                    "12", "18", "24", "36", "48", "54"
+                  ]
+                },
+                "mcs": {
+                  "type": "string",
+                  "default": "auto",
+                  "key": "mcs",
+                  "list": [
+                    "auto",
+                    "0", "1", "2", "5", "6", "7",
+                    "8", "9", "10", "11", "13", "14",
+                    "15", "16", "17", "18", "19"
+                  ]
+                }
+              },
+              "spec":{
+                "show":false
+              }
+            },
+            "management": {
+              "key": "management",
+              "type": "object",
+              "default": {
+                "enabled": {
+                  "key": "enabled",
+                  "default": false,
+                    "spec":{
+                      "show" : true
+                    }
+                },
+                "tagged": {
+                  "key": "tagged",
+                  "default": true,
+                    "spec":{
+                      "show" : true
+                    }
+                },
+                "id": {
+                  "key": "id",
+                  "range": {
+                    "min": 0,
+                    "max": 4095
+                  },
+                  "default": 0
+                }
+              },
+              "spec":{
+                "show":false,
+                "required":false
+              }
+            },
+            "cwm": {
+              "key": "cwm",
+              "default": false,
+                "spec":{
+                  "show" : false
+                }
+            },
+            "shortgi": {
+              "key": "shortgi",
+              "default": false,
+                "spec":{
+                  "show" : false
+                }
+            },
+            "mcastenhance": {
+              "key": "mcastenhance",
+              "default": false,
+                "spec":{
+                  "show" : false
+                }
+            },
+            "trafficcontrol": {
+              "key": "trafficcontrol",
+              "type": "object",
+              "default": {
+                "enabled": {
+                  "key": "enabled",
+                  "default": false,
+                  "spec":{
+                    "show" : true
+                  }
+                },
+                "egress": {
+                  "key": "egress",
+                  "type": "object",
+                  "default": {
+                    "enabled": {
+                      "key": "enabled",
+                      "default": false,
+                      "spec":{
+                        "show" : true
+                      }
+                    },
+                    "speed": {
+                      "key": "speed",
+                      "range": {
+                        "min": 0,
+                        "max": 1024000
+                      },
+                      "default": 0
+                    }
+                  },
+                  "spec":{
+                      "show" : true
+                  }
+                },
+                "ingress": {
+                  "key": "egress",
+                  "type": "object",
+                  "default": {
+                    "enabled": {
+                      "key": "enabled",
+                      "default": false,
+                      "spec":{
+                        "show" : true
+                      }
+                    },
+                    "speed": {
+                      "key": "speed",
+                      "range": {
+                        "min": 0,
+                        "max": 1024000
+                      },
+                      "default": 0
+                    }
+                  },
+                  "spec":{
+                      "show" : true
+                  }
+                }
+              },
+              "spec":{
+                "show":true,
+                "required":false
+              }
             }
           }
         ]
@@ -946,8 +1140,201 @@
                 "spec":{
                   "show" : true
                 }
+            },
+            "ssid2vlan": {
+              "key": "ssid2vlan",
+              "type": "object",
+              "default": {
+                "enabled": {
+                  "key": "enabled",
+                  "type": "boolean",
+                  "default": false
+                },
+                "id": {
+                  "key": "id",
+                  "type": "number",
+                  "range": {
+                    "min": 0,
+                    "max": 4095
+                  },
+                  "default": 10
+                }
+              },
+              "spec":{
+                "show":true,
+                "required":false
+              }
+            },
+            "maxclients": {
+              "key": "maxclients",
+              "type": "number",
+              "default": 0,
+              "spec": {
+                "range": {
+                  "min": 0,
+                  "max": 64
+                }
+              }
+            },
+            "minsignal": {
+              "key": "minsignal",
+              "type": "number",
+              "default": 0,
+              "spec": {
+                "range": {
+                  "min": -100,
+                  "max": -50
+                }
+              }
+            },
+            "rate": {
+              "key": "rate",
+              "type": "object",
+              "default": {
+                "legacy": {
+                  "type": "string",
+                  "key": "legacy",
+                  "default": "auto",
+                  "list": [
+                    "auto",
+                    "1", "2", "5.5", "6", "9", "11",
+                    "12", "18", "24", "36", "48", "54"
+                  ]
+                },
+                "mcs": {
+                  "type": "string",
+                  "default": "auto",
+                  "key": "mcs",
+                  "list": [
+                    "auto",
+                    "0", "1", "2", "5", "6", "7",
+                    "8", "9", "10", "11", "13", "14",
+                    "15", "16", "17", "18", "19"
+                  ]
+                }
+              },
+              "spec":{
+                "show":false
+              }
+            },
+            "management": {
+              "key": "management",
+              "type": "object",
+              "default": {
+                "enabled": {
+                  "key": "enabled",
+                  "default": false,
+                    "spec":{
+                      "show" : true
+                    }
+                },
+                "tagged": {
+                  "key": "tagged",
+                  "default": true,
+                    "spec":{
+                      "show" : true
+                    }
+                },
+                "id": {
+                  "key": "id",
+                  "range": {
+                    "min": 0,
+                    "max": 4095
+                  },
+                  "default": 0
+                }
+              },
+              "spec":{
+                "show":false,
+                "required":false
+              }
+            },
+            "cwm": {
+              "key": "cwm",
+              "default": false,
+                "spec":{
+                  "show" : false
+                }
+            },
+            "shortgi": {
+              "key": "shortgi",
+              "default": false,
+                "spec":{
+                  "show" : false
+                }
+            },
+            "mcastenhance": {
+              "key": "mcastenhance",
+              "default": false,
+                "spec":{
+                  "show" : false
+                }
+            },
+            "trafficcontrol": {
+              "key": "trafficcontrol",
+              "type": "object",
+              "default": {
+                "enabled": {
+                  "key": "enabled",
+                  "default": false,
+                  "spec":{
+                    "show" : true
+                  }
+                },
+                "egress": {
+                  "key": "egress",
+                  "type": "object",
+                  "default": {
+                    "enabled": {
+                      "key": "enabled",
+                      "default": true,
+                      "spec":{
+                        "show" : true
+                      }
+                    },
+                    "speed": {
+                      "key": "speed",
+                      "range": {
+                        "min": 0,
+                        "max": 1024000
+                      },
+                      "default": 0
+                    }
+                  },
+                  "spec":{
+                      "show" : true
+                  }
+                },
+                "ingress": {
+                  "key": "egress",
+                  "type": "object",
+                  "default": {
+                    "enabled": {
+                      "key": "enabled",
+                      "default": true,
+                      "spec":{
+                        "show" : true
+                      }
+                    },
+                    "speed": {
+                      "key": "speed",
+                      "range": {
+                        "min": 0,
+                        "max": 1024000
+                      },
+                      "default": 0
+                    }
+                  },
+                  "spec":{
+                      "show" : true
+                  }
+                }
+              },
+              "spec":{
+                "show":true,
+                "required":false
+              }
             }
-
           }
         ]
       }
