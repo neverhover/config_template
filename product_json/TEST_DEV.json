@@ -8,8 +8,25 @@
       "default": "US"
     },
     "bandsteering":{
-      "enabled": false,
-      "mode": "balanced"
+      "key": "bandsteering",
+      "type": "object",
+      "default":{
+        "enabled": {
+          "default": false,
+          "type": "boolean",
+          "key": "enabled"
+        },
+        "mode": {
+          "key": "mode",
+          "type": "string",
+          "list":["balanced", "prefer5g"],
+          "default": "balanced"
+        }
+      },
+      "spec":{
+        "show": true,
+        "required": true
+      }
      },
     "radio": [
       {

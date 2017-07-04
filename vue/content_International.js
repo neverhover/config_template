@@ -25,6 +25,8 @@ var content_International = {
             serverPortNum:'serverPortNumber ',
             logLevel:'logLevel:',
             //无线--无线-2.4G(Radio0)/无线-5.8G(Radio1)
+            prefer5g: "Prefer 5G",
+            balanced: "Balanced",
             fragmentationSize: 'fragmentation size',
             wireless:'wreless',
             wrelessTit:'wreless',
@@ -195,7 +197,9 @@ var content_International = {
             serverPortNum:'服务器端口号 ',
             logLevel:'日志等级 :',
             //无线--无线-2.4G(Radio0)/无线-5.8G(Radio1)
-            fragmentationSize: 'fragmentation size',
+            prefer5g: "5G优先",
+            balanced: "负载均衡",
+            fragmentationSize: '分段大小',
             wireless:'无线',
             wrelessTit:'无线',
             startUsingRadio:'启用Radio：',

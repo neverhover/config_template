@@ -2,6 +2,36 @@ Vue.component('ns-accfg-wireless',{
 	template: heredoc(function () {
 		/*
 		<div v-bind:class="[cur_active ? 'tab-pane active' : 'tab-pane']" v-if="isRender">
+      <!-- @@bandsteering -->
+      <div class="row-fluid" v-if="nodeExist(data_obj.bandsteering)" v-show="nodeShow(data_obj.bandsteering)">
+        <div class="span6 cbi-value">
+          <label class="cbi-value-title" >5G优先<!--:TODO --></label>
+          <div class="cbi-value-field">
+            <select class="cbi-input-select" v-model="data_obj.bandsteering.value.enabled.value">
+              <option v-bind:value="true">{{$t("message.startUsing")}}</option>
+              <option v-bind:value="false">{{$t("message.endUsing")}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="span6 cbi-value">
+        </div>
+      </div>
+
+      <div class="row-fluid" v-if="nodeExist(data_obj.bandsteering)"
+        v-show="nodeShow(data_obj.bandsteering) && data_obj.bandsteering.value.enabled.value">
+        <div class="span6 cbi-value"  >
+          <label class="cbi-value-title" >模式<!--:TODO --></label>
+          <div class="cbi-value-field">
+            <select class="cbi-input-select" v-model="data_obj.bandsteering.value.mode.value">
+              <option  v-for="etext in data_obj.bandsteering.default.mode.list" v-bind:value="etext">{{transMsg(etext)}}</option>
+            </select>
+
+          </div>
+        </div>
+        <div class="span6">
+        </div>
+      </div>
+
 			<!-- @@创建tabs的button -->
 			<ul class="cbi-tabmenu" >
 
@@ -423,6 +453,9 @@ Vue.component('ns-accfg-wireless',{
     }
 	},
 	methods: {
+    transMsg: function(str){
+      return Vue.t('message.'+str)
+    },
     vapDel: function(tableId, param, row, index){
       console.info("deeeeeeeeee")
       console.info(row)
