@@ -52,6 +52,7 @@ var content_International = {
             trafficcontrol: 'Bandwidth limit',
             trafficcontrolEgress: 'Bandwidth egress',
             trafficcontrolIngress: 'Bandwidth ingress',
+            wacl: "WACL",
             //table2
             total:'Article ',
             pageNum:'  the record  ',
@@ -221,6 +222,7 @@ var content_International = {
             trafficcontrol: '流控限速',
             trafficcontrolEgress: '流控download',
             trafficcontrolIngress: '流控upload',
+            wacl: "WACL",
             //table2
             total:'共 ',
             pageNum:'页',

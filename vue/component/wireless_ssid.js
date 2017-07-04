@@ -52,7 +52,7 @@ Vue.component('ns-accfg-ssid', {
             </div>
           </a>
           <br>
-           <!-- @@wacl 安全选项-->
+           <!-- @@ 安全选项-->
 
           <!-- @@带宽 settings  -->
           <a href="javascript:void(0);" v-on:click="changeVisible('bandwidth')">
@@ -142,7 +142,84 @@ Vue.component('ns-accfg-ssid', {
             </div>
           </a>
           <br>
-          <!-- @@wacl list-->
+
+          <!-- @@macacl.enabled -->
+          <div class="row-fluid" v-if="nodeExist(templ_obj.macacl)" v-show="nodeShow(templ_obj.macacl) && visible.wacl">
+            <div class="span6 cbi-value">
+              <label class="cbi-value-title" >{{$t("message.macacl")}}</label>
+              <div class="cbi-value-field">
+                <select class="cbi-input-select" v-model="cur_obj.macacl.enabled">
+                  <option v-bind:value="true">{{$t("message.startUsing")}}</option>
+                  <option v-bind:value="false">{{$t("message.endUsing")}}</option>
+                </select>
+              </div>
+            </div>
+            <div class="span6"></div>
+          </div>
+
+          <!-- @@macacl.policy -->
+          <div class="row-fluid" v-if="nodeExist(templ_obj.macacl)" v-show="nodeShow(templ_obj.macacl) && visible.wacl && cur_obj.macacl.enabled">
+            <div class="span6 cbi-value">
+              <label class="cbi-value-title" >{{$t("message.macacl")}}</label>
+              <div class="cbi-value-field">
+                <select class="cbi-input-select" v-model="cur_obj.macacl.policy">
+                  <option v-for="etext in templ_obj.macacl.default.policy.list" >{{etext}}</option>
+                </select>
+              </div>
+            </div>
+            <div class="span6"></div>
+          </div>
+
+          <!-- @@macacl.mac_list -->
+          <div class="row-fluid" v-if="nodeExist(templ_obj.macacl)" v-show="nodeShow(templ_obj.macacl) && visible.wacl && cur_obj.macacl.enabled">
+
+            <div class="span10 cbi-value">
+              <label class="cbi-value-title" >{{$t("message.wacl")}}</label>
+              <div class="cbi-value-field">
+                <input type="text"  class="cbi-input-text"
+                  name="templ_agentargs_portal_prturl"
+                  v-model="tmp_obj.mac_list" />
+                <a class="btn btn-info" v-on:click="acl_add_one(tmp_obj.mac_list, 'mac_list')">
+                  <i class="icon icon-plus"></i>
+                  {{$t("message.commonAdd")}}
+                </a>
+                <a class="btn btn-warning" v-on:click="acl_rm_all('mac_list')">
+                  <i class="icon icon-remove"></i>
+                  {{$t("message.commonFlush")}}
+                </a>
+                <div class="text-error" v-show="errors.has('templ_mac_list')">
+                   {{ errors.first('templ_mac_list') }}
+                </div>
+                <table class="cbi-section-table">
+                  <thead class="cbi-section-table-titles">
+                    <tr>
+                      <th style="text-align: left; width=5%" class="cbi-section-table-cell">id</th>
+                      <th style="text-align: left;" class="cbi-section-table-cell">content</th>
+                      <th style="text-align: left;width=5%" class="cbi-section-table-cell">action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="obj,index in cur_obj.macacl.mac_list">
+                      <td>
+                        {{index}}
+                      </td>
+                      <td>
+                        <input v-model="obj" />
+                      </td>
+                      <td>
+                        <a class="btn btn-danger" v-on:click="acl_rm_one(obj, 'mac_list')">
+                          <i class="icon icon-remove"></i>
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="span2">
+            </div>
+          </div>
+
 
           <!-- @@SSID高级 settings  -->
           <a href="javascript:void(0);" v-on:click="changeVisible('advanced')">
@@ -684,23 +761,27 @@ Vue.component('ns-accfg-ssid', {
       "cur_config_intf" : {},
       "cur_config_idx" : -1,
       "visible": {
-          "security": true,
-          "bandwidth": false,
-          "wacl": false,
-          "advanced": false,
-          "portal": true,
-          "rad_auth_account" : false,
-          "mac_auth": false
+        "security": true,
+        "bandwidth": false,
+        "wacl": false,
+        "advanced": false,
+        "portal": true,
+        "rad_auth_account" : false,
+        "mac_auth": false
       },
       "tmp_obj": {
-          "deny": {
-            "host": "",
-            "ip4": ""
-          },
-          "free": {
-            "host": "",
-            "ip4": ""
-          }
+        "deny": {
+          "host": "",
+          "ip4": ""
+        },
+        "free": {
+          "host": "",
+          "ip4": ""
+        },
+        "mac_list" : "",
+        "always_portal":{
+          "ip4": ""
+        }
       }
     }
   },
@@ -812,6 +893,7 @@ Vue.component('ns-accfg-ssid', {
       tmp_row.agentargs.acl.deny.host = convertArray(tmp_row.agentargs.acl.deny.host)
       tmp_row.agentargs.acl.free.ip4 = convertArray(tmp_row.agentargs.acl.free.ip4)
       tmp_row.agentargs.acl.free.host = convertArray(tmp_row.agentargs.acl.free.host)
+      tmp_row.macacl.mac_list = convertArray(tmp_row.macacl.mac_list)
       //从list中查找
       this.search_config_intf(tmp_row)
 
@@ -958,6 +1040,30 @@ Vue.component('ns-accfg-ssid', {
             //remove all
             this.cur_obj.agentargs.acl.free.host = []
           }
+        }else if(arr_name == "mac_list"){
+          if(act == "add"){
+            let len = 0
+            arrayEach(this.cur_obj.macacl.mac_list, function(idx, obj){
+              if(obj == item){
+                alert(item + Vue.t('message.commonExists'))
+                len = -1
+                return false
+              }
+              len += 1
+            })
+            if(len >= 0){
+              this.$set(this.cur_obj.macacl.mac_list, len , item)
+              // this.cur_obj.agentargs.acl.deny.ip4.push(item)
+            }
+          }else if(act == "rm"){
+            let index = this.cur_obj.macacl.mac_list.indexOf(item)
+            if (index !== -1) {
+                this.cur_obj.macacl.mac_list.splice(index, 1)
+            }
+          }else {
+            //remove all
+            this.cur_obj.macacl.mac_list = []
+          }
         }
       },
       acl_rm_one: function(item, arr_name){
@@ -993,7 +1099,7 @@ Vue.component('ns-accfg-ssid', {
     },
     // 验证
     nodeValidate: function(cur_obj){
-      console.warn(cur_obj)
+
       var myRule= "required";
       // console.log("cur_obj.type:"+cur_obj.type);
       var is_first = false;

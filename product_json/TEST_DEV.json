@@ -632,6 +632,7 @@
                     },
                     "speed": {
                       "key": "speed",
+                      "type": "number",
                       "range": {
                         "min": 0,
                         "max": 1024000
@@ -644,18 +645,19 @@
                   }
                 },
                 "ingress": {
-                  "key": "egress",
+                  "key": "ingress",
                   "type": "object",
                   "default": {
                     "enabled": {
                       "key": "enabled",
-                      "default": false,
+                      "default": true,
                       "spec":{
                         "show" : true
                       }
                     },
                     "speed": {
                       "key": "speed",
+                      "type": "number",
                       "range": {
                         "min": 0,
                         "max": 1024000
@@ -671,6 +673,41 @@
               "spec":{
                 "show":true,
                 "required":false
+              }
+            },
+            "macacl":{
+              "key":"macacl",
+              "type":"object",
+              "default":{
+                "enabled": {
+                  "key": "enabled",
+                  "default": false,
+                  "spec":{
+                    "show" : true
+                  }
+                },
+                "policy": {
+                  "key": "policy",
+                  "default": "open",
+                  "spec":{
+                    "show" : true
+                  },
+                  "list": [
+                    "open",
+                    "allow",
+                    "deny"
+                  ]
+                },
+                "mac_list":{
+                  "key": "mac_list",
+                  "type": "arrary",
+                  "item_type": "mac_address",
+                  "maxitems": 64,
+                  "default": []
+                }
+              },
+              "spec":{
+                "show":true
               }
             }
           }
@@ -1294,6 +1331,7 @@
                     },
                     "speed": {
                       "key": "speed",
+                      "type": "number",
                       "range": {
                         "min": 0,
                         "max": 1024000
@@ -1306,7 +1344,7 @@
                   }
                 },
                 "ingress": {
-                  "key": "egress",
+                  "key": "ingress",
                   "type": "object",
                   "default": {
                     "enabled": {
@@ -1318,6 +1356,7 @@
                     },
                     "speed": {
                       "key": "speed",
+                      "type": "number",
                       "range": {
                         "min": 0,
                         "max": 1024000
@@ -1333,6 +1372,41 @@
               "spec":{
                 "show":true,
                 "required":false
+              }
+            },
+            "macacl":{
+              "key":"macacl",
+              "type":"object",
+              "default":{
+                "enabled": {
+                  "key": "enabled",
+                  "default": false,
+                  "spec":{
+                    "show" : true
+                  }
+                },
+                "policy": {
+                  "key": "policy",
+                  "default": "open",
+                  "spec":{
+                    "show" : true
+                  },
+                  "list": [
+                    "open",
+                    "allow",
+                    "deny"
+                  ]
+                },
+                "mac_list":{
+                  "key": "mac_list",
+                  "type": "arrary",
+                  "item_type": "mac_address",
+                  "maxitems": 64,
+                  "default": []
+                }
+              },
+              "spec":{
+                "show":true
               }
             }
           }
