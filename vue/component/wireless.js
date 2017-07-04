@@ -516,7 +516,7 @@ Vue.component('ns-accfg-wireless',{
         this.$refs.modal_ssid_list.modalOpen({
           'title': '',
           'action': 'new',
-          'vap_idx': this.curVaps_arr.length -1,
+          'vap_idx': this.curVaps_arr.length,
           'vap_obj': null
         })
       }else{

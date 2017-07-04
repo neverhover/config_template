@@ -45,6 +45,8 @@ var content_International = {
             right:'right',
             deny:'deny',
             maxTxpower:'The current largest txpower should be.',
+            wmm: 'wmm',
+            isolate: 'Client isolation',
             //table2
             total:'Article ',
             pageNum:'  the record  ',
@@ -207,6 +209,8 @@ var content_International = {
             right:'是',
             deny:'否',
             maxTxpower:'当前最大txpower应该为',
+            wmm: '多媒体加速',
+            isolate: '客户端隔离',
             //table2
             total:'共 ',
             pageNum:'页',
