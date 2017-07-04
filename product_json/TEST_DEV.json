@@ -642,7 +642,7 @@
                   "default": {
                     "enabled": {
                       "key": "enabled",
-                      "default": false,
+                      "default": true,
                       "spec":{
                         "show" : true
                       }

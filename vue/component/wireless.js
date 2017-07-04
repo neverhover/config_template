@@ -16,7 +16,7 @@ Vue.component('ns-accfg-wireless',{
         <div class="span6 cbi-value">
         </div>
       </div>
-
+      <!-- @@bandsteering.mode -->
       <div class="row-fluid" v-if="nodeExist(data_obj.bandsteering)"
         v-show="nodeShow(data_obj.bandsteering) && data_obj.bandsteering.value.enabled.value">
         <div class="span6 cbi-value"  >
@@ -31,6 +31,8 @@ Vue.component('ns-accfg-wireless',{
         <div class="span6">
         </div>
       </div>
+
+
 
 			<!-- @@创建tabs的button -->
 			<ul class="cbi-tabmenu" >

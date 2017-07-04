@@ -48,7 +48,7 @@ Vue.component('ns-accfg-ssid', {
               <span class="icon">
                 <i v-bind:class="[visible.security ? 'icon-minus-sign' :'icon-plus-sign']"></i>
               </span>
-              {{$t("message.radAuthAccount")}} 安全设置项
+               安全设置项<!--:TODO-->
             </div>
           </a>
           <br>
@@ -117,7 +117,7 @@ Vue.component('ns-accfg-ssid', {
               <span class="icon">
                 <i v-bind:class="[visible.bandwidth ? 'icon-minus-sign' :'icon-plus-sign']"></i>
               </span>
-              {{$t("message.radAuthAccount")}} 带宽设置项
+              带宽设置项<!--:TODO-->
             </div>
           </a>
           <br>
@@ -152,8 +152,10 @@ Vue.component('ns-accfg-ssid', {
                 <div class="span6 cbi-value"  v-if="nodeExist(templ_obj.trafficcontrol)" v-show="nodeShow(templ_obj.trafficcontrol) && cur_obj.trafficcontrol.egress.enabled">
                   <label class="cbi-value-title" >{{$t("message.trafficcontrolEgress")}}</label>
                   <div class="cbi-value-field">
-                    <input type="text"  class="cbi-input-text" name="templ_tc_egress_speed"
-                      v-model="cur_obj.trafficcontrol.egress.speed" />
+                    <input type="text"  class="cbi-input-text"
+                    v-validate.initial :data-vv-rules="nodeValidate(templ_obj.trafficcontrol.default.egress.default.speed)"
+                    :data-vv-as="$t('message.trafficcontrolEgress')" name="templ_tc_egress_speed"
+                      v-model.number="cur_obj.trafficcontrol.egress.speed" />
                     <div class="text-error" v-show="errors.has('templ_tc_egress_speed')">
                        {{ errors.first('templ_tc_egress_speed') }}
                     </div>
@@ -195,7 +197,7 @@ Vue.component('ns-accfg-ssid', {
               <span class="icon">
                 <i v-bind:class="[visible.wacl ? 'icon-minus-sign' :'icon-plus-sign']"></i>
               </span>
-              {{$t("message.radAuthAccount")}} WACL设置
+              WACL设置 <!--:TODO-->
             </div>
           </a>
           <br>
@@ -284,7 +286,7 @@ Vue.component('ns-accfg-ssid', {
               <span class="icon">
                 <i v-bind:class="[visible.advanced ? 'icon-minus-sign' :'icon-plus-sign']"></i>
               </span>
-              {{$t("message.radAuthAccount")}} 高级设置项
+              高级设置项<!--:TODO-->
             </div>
           </a>
           <br>
@@ -895,6 +897,13 @@ Vue.component('ns-accfg-ssid', {
     },
     modalSave(info) {
       if(this.isOpen){
+        let noErrors=true
+        this.$validator.validateAll()
+        noErrors = noErrors && (!this.errors.any())
+        if(!noErrors){
+          alert( Vue.t('message.haveError') );
+          return false
+        }
         //执行业务
 
         //生成new_vap 对象，并发送事件到父组件
@@ -1173,9 +1182,6 @@ Vue.component('ns-accfg-ssid', {
       //返回上一层的值,逻辑存在,非物理上下级.用树的关系来描述if-else关系
       var p_key = obj["$parent"]
       var p_value = ""
-      console.warn(p_key)
-      console.warn(parent)
-      console.warn("KKKKKKKKKKKKKKKKKKK")
       if(parent[p_key]){
 
       }else{
@@ -1230,7 +1236,7 @@ Vue.component('ns-accfg-ssid', {
     },
     // 验证
     nodeValidate: function(cur_obj){
-
+      console.warn(cur_obj)
       var myRule= "required";
       // console.log("cur_obj.type:"+cur_obj.type);
       var is_first = false;
