@@ -2,3 +2,4 @@ server.exe
 *.sublime-project
 *.sublime-workspace
 bin
+.idea

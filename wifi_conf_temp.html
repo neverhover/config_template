@@ -905,10 +905,7 @@
             this.selProduct = cur_selected
           },
           methods: {
-            gogogo () {
-              this.$modal.show('hello-world');
-            },
-            openModal() {
+            openModal: function() {
               vuedal_bus.$emit('new', {
                 title: 'New modal window',
                 component: ModalComponent1,
