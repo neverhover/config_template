@@ -2,7 +2,7 @@ var network_templ = function() {
 	var ether_main = Vue.component("ether_main",{
 		template: `
 			<div>
-				
+
 				<div>
 					<ns-accfg-grid
 						:table-id=tableId
@@ -14,7 +14,7 @@ var network_templ = function() {
 						ref="ref_grid_ether_list"
 					>
 					<ns-accfg-pager
-						slot="pager" 
+						slot="pager"
 						:show-pager=true
 						:total-page=pTotal
 						:show-items=4
@@ -44,10 +44,10 @@ var network_templ = function() {
 					]
 				},
 				colCallbacks: {
-					
+
 					"enable.value":{
 						cb:function(key,obj,val){
-							
+
 			        		if(val == true){
 			        			return Vue.t('message.startUsing')
 			        		}else{
@@ -57,7 +57,7 @@ var network_templ = function() {
 					},
 					"uplink.value":{
 						cb:function(key,obj,val){
-							
+
 			        		if( val == true){
 			        			return Vue.t('message.alliedMouth')
 			        		}else{
@@ -80,8 +80,8 @@ var network_templ = function() {
 		created: function(){
 			this.pTotal = Math.ceil(this.rows.length / this.pLimit)
 		}
-	
-		
+
+
 	})
 	//关心整体个数
 	var tc_main = Vue.component("tc_main",{
@@ -90,7 +90,7 @@ var network_templ = function() {
 				<router-link :to="{name : 'net_tc_new'}" tag="a" class="btn btn-primary">
 					<i class="icon icon-plus">{{$t("message.newRules")}}</i>
 				</router-link>
-				
+
 				<div>
 					<ns-accfg-grid
 						:table-id=tableId
@@ -102,7 +102,7 @@ var network_templ = function() {
 						ref="ref_grid_tc_list"
 					>
 					<ns-accfg-pager
-						slot="pager" 
+						slot="pager"
 						:show-pager=true
 						:total-page=pTotal
 						:show-items=4
@@ -152,10 +152,10 @@ var network_templ = function() {
 				opsText: Vue.t('message.handle')
 			},
 			colCallbacks: {
-				
+
 				"enabled":{
 					cb:function(key,obj,val){
-						
+
 		        		if(obj[key] == 1){
 		        			return Vue.t('message.startUsing')
 		        		}else{
@@ -183,7 +183,7 @@ var network_templ = function() {
 		},
 		methods:{
 			delRow: function(tid,param,row,index){
-				
+
 				if(tid == this.tableId){
 					var this_idx = (parseInt(index)+1).toString()
 					//触发state删除数据,index一定记得+1,因为0被忽略了
@@ -196,31 +196,31 @@ var network_templ = function() {
 			},
 		},
 		beforeRouteEnter : function(to, from, next){
-			
-			
+
+
 			next(function(vm){
-				
+
 				if(vm.$store.getters.network && vm.$store.getters.network.trafficcontrol){
 					vm.cur_obj= vm.$store.getters.network.trafficcontrol
 				}
-				
+
 				return true
 			})
 		}
-	
-		
+
+
 	})
 	var tc_form = Vue.component("tc_form",{
 		template: `
-			<transition name="custom-classes-transition" 
+			<transition name="custom-classes-transition"
 				    enter-active-class="animated fadeInUp"
 	    			leave-active-class="animated fadeOutDown"
 				>
 				<div>
 					{{cur_mode}}{{title}}
-				
+
 					<br>
-					
+
 					<div class="row-fluid" v-if="nodeExist(cur_obj.enabled)" v-show="nodeShow(cur_obj.enabled)">
 						<div class="span6 cbi-value">
 							<label class="cbi-value-title" >{{$t("message.whetherEnable")}}:</label>
@@ -231,19 +231,19 @@ var network_templ = function() {
 									<option v-bind:value="false">{{$t("message.endUsing")}}</option>
 								</select>
 							</div>
-							
+
 
 						</div>
 						<div class="span6"></div>
 					</div>
-					
+
 					<div class="row-fluid" v-if="nodeExist(cur_obj.interface)" v-show="nodeShow(cur_obj.interface)">
 						<div class="span6 cbi-value">
 							<label class="cbi-value-title" >{{$t("message.interfaceName")}}:</label>
 							<div class="cbi-value-field">
 								<input type="text"  class="cbi-input-text"
 								v-validate.initial :data-vv-rules="nodeValidate(cur_obj.interface)"
-								:data-vv-as="$t('message.interfaceName')" name="interfaceName" 
+								:data-vv-as="$t('message.interfaceName')" name="interfaceName"
 								v-model="cur_obj.interface.value" v-bind:readonly="mode == 'new'? false: true"
 								/>
 								<div class="text-error" v-show="errors.has('interfaceName')">
@@ -253,15 +253,15 @@ var network_templ = function() {
 						</div>
 						<div class="span6"></div>
 					</div>
-					
+
 					<div class="row-fluid" v-if="nodeExist(cur_obj.egress)" v-show="nodeShow(cur_obj.egress)">
 						<div class="span6 cbi-value">
 							<label class="cbi-value-title">{{$t("message.egress")}}</label>
 							<div class="cbi-value-field">
-								<input type="text" class="cbi-input-text" 
+								<input type="text" class="cbi-input-text"
 								v-validate.initial :data-vv-rules="nodeValidate(cur_obj.egress)"
 					          	:data-vv-as="$t('message.egress')" name="egress"
-								v-model="cur_obj.egress.value.speed.value" 
+								v-model="cur_obj.egress.value.speed.value"
 								/>
 								<div class="text-error" v-show="errors.has('egress')">
 									{{ errors.first('egress') }}
@@ -270,15 +270,15 @@ var network_templ = function() {
 						</div>
 						<div class="span6"></div>
 					</div>
-					
+
 					<div class="row-fluid" v-if="nodeExist(cur_obj.ingress)" v-show="nodeShow(cur_obj.ingress)">
 						<div class="span6 cbi-value">
 							<label class="cbi-value-title" >{{$t("message.ingress")}}</label>
 							<div class="cbi-value-field">
-								<input type="text"  class="cbi-input-text" 
+								<input type="text"  class="cbi-input-text"
 								v-validate.initial :data-vv-rules="nodeValidate(cur_obj.ingress)"
 								:data-vv-as="$t('message.ingress')" name="ingress"
-								v-model="cur_obj.ingress.value.speed.value" 
+								v-model="cur_obj.ingress.value.speed.value"
 								/>
 								<div class="text-error" v-show="errors.has('ingress')">
 									{{ errors.first('ingress') }}
@@ -287,11 +287,11 @@ var network_templ = function() {
 						</div>
 						<div class="span6"></div>
 					</div>
-				
-					
-					
+
+
+
 					<input type="button" v-bind:value="saveText" class="btn btn-info" v-on:click="subFromSave('net_tc_list')"/>
-					
+
 					<router-link :to="{name : 'net_tc_list'}" tag="button" class="btn btn-info">
 						{{cacelText}}
 					</router-link>
@@ -316,18 +316,18 @@ var network_templ = function() {
 				var idx=(parseInt(this.$route.params.index)+1).toString()
 				var trow=this.$store.getters.network.trafficcontrol[idx]
 				var row={}
-				
+
 				if(trow){
 					row = myclone(trow)
 				}else{
 					row = null
 				}
-				
+
 				return row
 			},
 			templ_obj: function(){
 				var tmp = myclone(this.$store.getters.network.trafficcontrol[0])
-				
+
 				return tmp
 			},
 			cur_mode: function(){
@@ -344,24 +344,24 @@ var network_templ = function() {
 				var idx=(parseInt(this.$route.params.index)+1).toString()
 				var trow=this.$store.getters.network.trafficcontrol[idx]
 				var row={}
-				
+
 				if(trow){
 					row = myclone(trow)
 				}else{
 					row = null
 				}
-				
-				
+
+
 				delete tmp.$template
-				
+
 				return mix_object(tmp, row, {})
-				
+
 			}
 		},
 		methods:{
 			subFromSave: function(url){
 				//保存前无论是新建还是编辑,需要唯一判断
-				
+
 				var test={"interface": this.cur_obj.interface.value}
 				var pass=uniqueTest(mystore.getters.network.trafficcontrol, test, this.mode)
 				if(!pass){
@@ -374,7 +374,7 @@ var network_templ = function() {
 				}else{
 					idx=(parseInt(this.$route.params.index)+1).toString()
 				}
-				
+
 				console.log(idx)
 				console.log(this.cur_obj)
 				//触发state删除数据,index一定记得+1,因为0被忽略了
@@ -383,7 +383,7 @@ var network_templ = function() {
 					"action": this.mode,
 					"value": this.createRow(this.cur_obj)
 				})
-				
+
 				this.$router.push({name : 'net_tc_list'})
 //				console.log("----> "+ url)
 
@@ -500,7 +500,7 @@ var network_templ = function() {
 			}
 		}
 	})
-	
+
 	//关心整体个数
 	var route_main = Vue.component("route_main",{
 		template: `
@@ -508,7 +508,7 @@ var network_templ = function() {
 				<router-link :to="{name : 'net_route_new'}" tag="a" class="btn btn-primary">
 					<i class="icon icon-plus">{{$t("message.newRules")}}</i>
 				</router-link>
-				
+
 				<div>
 					<ns-accfg-grid
 						:table-id=tableId
@@ -520,7 +520,7 @@ var network_templ = function() {
 						ref="ref_grid_route_list"
 					>
 					<ns-accfg-pager
-						slot="pager" 
+						slot="pager"
 						:show-pager=true
 						:total-page=pTotal
 						:show-items=4
@@ -578,10 +578,10 @@ var network_templ = function() {
 				opsText: Vue.t('message.handle')
 			},
 			colCallbacks: {
-				
+
 				"enabled":{
 					cb:function(key,obj,val){
-						
+
 		        		if(obj[key] == true){
 		        			return Vue.t('message.startUsing')
 		        		}else{
@@ -611,7 +611,7 @@ var network_templ = function() {
 		},
 		methods:{
 			delRow: function(tid,param,row,index){
-				
+
 				if(tid == this.tableId){
 					var this_idx = (parseInt(index)+1).toString()
 					//触发state删除数据,index一定记得+1,因为0被忽略了
@@ -624,31 +624,31 @@ var network_templ = function() {
 			},
 		},
 		beforeRouteEnter : function(to, from, next){
-			
-			
+
+
 			next(function(vm){
-				
+
 				if(vm.$store.getters.network && vm.$store.getters.network.route){
 					vm.cur_obj= vm.$store.getters.network.route
 				}
-				
+
 				return true
 			})
 		}
-	
-		
+
+
 	})
 	var route_form = Vue.component("route_form",{
 		template: `
-			<transition name="custom-classes-transition" 
+			<transition name="custom-classes-transition"
 				    enter-active-class="animated fadeInUp"
 	    			leave-active-class="animated fadeOutDown"
 				>
 				<div>
 					{{cur_mode}}{{title}}
-				
+
 					<br>
-					
+
 					<div class="row-fluid" v-if="nodeExist(cur_obj.enabled)" v-show="nodeShow(cur_obj.enabled)">
 						<div class="span6 cbi-value">
 							<label class="cbi-value-title" >{{$t("message.whetherEnable")}}</label>
@@ -663,15 +663,15 @@ var network_templ = function() {
 						</div>
 						<div class="span6"></div>
 					</div>
-					
+
 					<div class="row-fluid" v-if="nodeExist(cur_obj.name)" v-show="nodeShow(cur_obj.name)">
 						<div class="span6 cbi-value">
 							<label class="cbi-value-title" >{{$t("message.rulesOfName")}}</label>
 							<div class="cbi-value-field">
-								<input type="text"  class="cbi-input-text" 
+								<input type="text"  class="cbi-input-text"
 								v-validate.initial :data-vv-rules="nodeValidate(cur_obj.name)"
-								:data-vv-as="$t('message.rulesOfName')" name="name" 
-								v-model="cur_obj.name.value" 
+								:data-vv-as="$t('message.rulesOfName')" name="name"
+								v-model="cur_obj.name.value"
 								/>
 								<div class="text-error" v-show="errors.has('name')">
 									 {{ errors.first('name') }}
@@ -681,15 +681,15 @@ var network_templ = function() {
 						</div>
 						<div class="span6"></div>
 					</div>
-					
+
 					<div class="row-fluid" v-if="nodeExist(cur_obj.interface)" v-show="nodeShow(cur_obj.interface)">
 						<div class="span6 cbi-value">
 							<label class="cbi-value-title" >{{$t("message.interfaceName")}}</label>
 							<div class="cbi-value-field">
-								<input type="text"  class="cbi-input-text" 
+								<input type="text"  class="cbi-input-text"
 								v-validate.initial :data-vv-rules="nodeValidate(cur_obj.interface)"
 								:data-vv-as="$t('message.interfaceName')" name="interface"
-								v-model="cur_obj.interface.value" 
+								v-model="cur_obj.interface.value"
 								/>
 								<div class="text-error" v-show="errors.has('interface')">
 									 {{ errors.first('interface') }}
@@ -698,15 +698,15 @@ var network_templ = function() {
 						</div>
 						<div class="span6"></div>
 					</div>
-					
+
 					<div class="row-fluid" v-if="nodeExist(cur_obj.dstnet)" v-show="nodeShow(cur_obj.dstnet)">
 						<div class="span6 cbi-value">
 							<label class="cbi-value-title" >{{$t("message.purposeNetwork")}}</label>
 							<div class="cbi-value-field">
-								<input type="text"  class="cbi-input-text" 
+								<input type="text"  class="cbi-input-text"
 								v-validate.initial :data-vv-rules="nodeValidate(cur_obj.dstnet)"
 								:data-vv-as="$t('message.purposeNetwork')" name="dstnet"
-								v-model="cur_obj.dstnet.value" 
+								v-model="cur_obj.dstnet.value"
 								/>
 								<div class="text-error" v-show="errors.has('dstnet')">
 									 {{ errors.first('dstnet') }}
@@ -715,15 +715,15 @@ var network_templ = function() {
 						</div>
 						<div class="span6"></div>
 					</div>
-					
+
 					<div class="row-fluid" v-if="nodeExist(cur_obj.netmask)" v-show="nodeShow(cur_obj.netmask)">
 						<div class="span6 cbi-value">
 							<label class="cbi-value-title" >{{$t("message.objectiveMask")}}</label>
 							<div class="cbi-value-field">
-								<input type="text"  class="cbi-input-text" 
+								<input type="text"  class="cbi-input-text"
 								v-validate.initial :data-vv-rules="nodeValidate(cur_obj.netmask)"
 								:data-vv-as="$t('message.objectiveMask')" name="netmask"
-								v-model="cur_obj.netmask.value" 
+								v-model="cur_obj.netmask.value"
 								/>
 								<div class="text-error" v-show="errors.has('netmask')">
 									 {{ errors.first('netmask') }}
@@ -732,15 +732,15 @@ var network_templ = function() {
 						</div>
 						<div class="span6"></div>
 					</div>
-					
+
 					<div class="row-fluid"  v-if="nodeExist(cur_obj.gateway)" v-show="nodeShow(cur_obj.gateway)">
 						<div class="span6 cbi-value">
 							<label class="cbi-value-title" >{{$t("message.nextHop")}}</label>
 							<div class="cbi-value-field">
-								<input type="text"  class="cbi-input-text" 
+								<input type="text"  class="cbi-input-text"
 								v-validate.initial :data-vv-rules="nodeValidate(cur_obj.gateway)"
 								:data-vv-as="$t('message.nextHop')" name="gateway"
-								v-model="cur_obj.gateway.value" 
+								v-model="cur_obj.gateway.value"
 								/>
 								<div class="text-error" v-show="errors.has('gateway')">
 									 {{ errors.first('gateway') }}
@@ -749,15 +749,15 @@ var network_templ = function() {
 						</div>
 						<div class="span6"></div>
 					</div>
-					
+
 					<div class="row-fluid" v-if="nodeExist(cur_obj.metric)" v-show="nodeShow(cur_obj.metric)">
 						<div class="span6 cbi-value">
 							<label class="cbi-value-title" >metric</label>
 							<div class="cbi-value-field">
-								<input type="text"  class="cbi-input-text" 
+								<input type="text"  class="cbi-input-text"
 								v-validate.initial :data-vv-rules="nodeValidate(cur_obj.metric)"
-								:data-vv-as="cur_obj.metric.key" name="metric" 
-								v-model="cur_obj.metric.value" 
+								:data-vv-as="cur_obj.metric.key" name="metric"
+								v-model="cur_obj.metric.value"
 								/>
 								<div class="text-error" v-show="errors.has('metric')">
 									 {{ errors.first('metric') }}
@@ -766,15 +766,15 @@ var network_templ = function() {
 						</div>
 						<div class="span6"></div>
 					</div>
-					
+
 					<div class="row-fluid" v-if="nodeExist(cur_obj.mtu)" v-show="nodeShow(cur_obj.mtu)">
 						<div class="span6 cbi-value">
 							<label class="cbi-value-title" >mtu:</label>
 							<div class="cbi-value-field">
-								<input type="text"  class="cbi-input-text" 
+								<input type="text"  class="cbi-input-text"
 								v-validate.initial :data-vv-rules="nodeValidate(cur_obj.mtu)"
 								:data-vv-as="cur_obj.mtu.key" name="mtu"
-								v-model="cur_obj.mtu.value" 
+								v-model="cur_obj.mtu.value"
 								/>
 								<div class="text-error" v-show="errors.has('mtu')">
 									 {{ errors.first('mtu') }}
@@ -783,13 +783,13 @@ var network_templ = function() {
 						</div>
 						<div class="span6"></div>
 					</div>
-					
-					
-				
-					
-					
+
+
+
+
+
 					<input type="button" v-bind:value="saveText" class="btn btn-info" v-on:click="subFromSave('net_route_list')"/>
-					
+
 					<router-link :to="{name : 'net_route_list'}" tag="button" class="btn btn-info">
 						{{cacelText}}
 					</router-link>
@@ -814,13 +814,13 @@ var network_templ = function() {
 				var idx=(parseInt(this.$route.params.index)+1).toString()
 				var trow=this.$store.getters.network.route[idx]
 				var row={}
-				
+
 				if(trow){
 					row = myclone(trow)
 				}else{
 					row = null
 				}
-				
+
 				return row
 			},
 			templ_obj: function(){
@@ -841,15 +841,15 @@ var network_templ = function() {
 				var idx=(parseInt(this.$route.params.index)+1).toString()
 				var trow=this.$store.getters.network.route[idx]
 				var row={}
-				
+
 				if(trow){
 					row = myclone(trow)
 				}else{
 					row = null
 				}
-				
+
 				delete tmp.$template
-				
+
 				return mix_object(tmp, row, {})
 			}
 		},
@@ -874,7 +874,7 @@ var network_templ = function() {
 				}else{
 					idx=(parseInt(this.$route.params.index)+1).toString()
 				}
-				
+
 				// console.log(idx)
 				// console.log(this.cur_obj)
 				//触发state删除数据,index一定记得+1,因为0被忽略了
@@ -883,7 +883,7 @@ var network_templ = function() {
 					"action": this.mode,
 					"value": this.createRow(this.cur_obj)
 				})
-				
+
 				this.$router.push({name : url})
 //				console.log("----> "+ url)
 
@@ -928,7 +928,7 @@ var network_templ = function() {
 			// 验证
 			nodeValidate: function(cur_obj){
 				var myRule= "";
-				
+
 				var is_first = true;
 				// return 'required'
 				if( typeof(cur_obj.type) == 'undefined' ){
@@ -1010,15 +1010,15 @@ var network_templ = function() {
 					}
 
 				}
-				
+
 				//其他判断
 				return myRule
-				
+
 			}
 		}
 	})
-	
-	
+
+
 	return {
 		ether_main: ether_main,
 		tc_main: tc_main,
@@ -1095,19 +1095,19 @@ Vue.component('ns-accfg-network', {
 		/*
 		<div v-bind:class="[cur_active ? 'tab-pane active' : 'tab-pane']" v-if="isRender">
 			<ul class="cbi-tabmenu">
-			
-				<router-link 
-					:to="{name : 'net_ether_list'}" 
+
+				<router-link
+					:to="{name : 'net_ether_list'}"
 					tag="li" active-class='cbi-tab'
 					v-if="data_obj.ethernet">
 					<a href="javascript:void(0);">{{$t("message.ethPortInfo")}}</a>
 				</router-link>
-				
-				
-				
-				
-				<router-link 
-					:to="{name : 'net_tc_list' }" 
+
+
+
+
+				<router-link
+					:to="{name : 'net_tc_list' }"
 					tag="li" active-class='cbi-tab'
 					v-if="data_obj.trafficcontrol"
 					>
@@ -1115,50 +1115,50 @@ Vue.component('ns-accfg-network', {
 				</router-link>
 
 
-				<router-link 
-					:to="{name : 'net_interface_list'}" 
+				<router-link
+					:to="{name : 'net_interface_list'}"
 					tag="li" active-class='cbi-tab'
 					v-if="data_obj.interface"
 					>
 					<a href="javascript:void(0);">{{$t("message.interface")}}</a>
 				</router-link>
-    			
-				<router-link 
-					:to="{name : 'net_tc_list'}" 
+
+				<router-link
+					:to="{name : 'net_tc_list'}"
 					tag="li" active-class='cbi-tab'
 					v-if="data_obj.l2tp_client"
 					>
 					<a href="javascript:void(0);">{{$t("message.L2TPClient")}}</a>
 				</router-link>
-				
-				<router-link 
-					:to="{name : 'net_route_list'}" 
+
+				<router-link
+					:to="{name : 'net_route_list'}"
 					tag="li" active-class='cbi-tab'
 					v-if="data_obj.route"
 					>
 					<a href="javascript:void(0);">{{$t("message.routeConf")}}</a>
 				</router-link>
-				
-				<router-link 
-					:to="{name : 'net_switch_list'}" 
+
+				<router-link
+					:to="{name : 'net_switch_list'}"
 					tag="li" active-class='cbi-tab'
 					v-if="data_obj.switch"
 					>
 					<a href="javascript:void(0);">{{$t("message.switchConf")}}</a>
 				</router-link>
 
-				
+
 			</ul>
-			<transition name="custom-classes-transition" 
+			<transition name="custom-classes-transition"
 			    enter-active-class="animated fadeInUp"
     			leave-active-class="animated fadeOutDown"
 			>
 				<router-view></router-view>
-			</transaction>
+			</transition>
 		</div>
 		<div v-else v-bind:class="[cur_active ? 'tab-pane active' : 'tab-pane']">
 			{{null_msg}}
-			
+
 		</div>
 		*/
 	}),
@@ -1175,7 +1175,7 @@ Vue.component('ns-accfg-network', {
 	},
 	created: function(){
 //		this.$router.push({name : 'net_tc_list'})
-		
+
 	},
 	computed: {
 		isRender: function() {
