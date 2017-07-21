@@ -6,6 +6,7 @@
     <title>NatShell</title>
     <!--[if lt IE 9]><script src="/luci-static/bootstrap/html5.js"></script><![endif]-->
     <meta name="viewport" content="initial-scale=1.0">
+    <link rel="stylesheet" href="/vue/iview.css"></style>
     <link rel="stylesheet" href="/luci-static/bootstrap/cascade.css">
     <link rel="stylesheet" media="only screen and (max-device-width: 854px)" href="/luci-static/bootstrap/mobile.css" type="text/css" />
     <link rel="shortcut icon" href="/luci-static/bootstrap/favicon.ico">
@@ -20,6 +21,7 @@
     <link rel="stylesheet" href="/luci-static/bootstrap/font-awesome/css/font-awesome.css" />
     <link rel="stylesheet" href="/luci-static/bootstrap/nsdef.css" />
     <link rel="stylesheet" href="/luci-static/bootstrap/css/animate.min.css" />
+
     <script src="/luci-static/bootstrap/js/jquery.min.js"></script>
     <script type="text/javascript" src="/vue/vue.js"></script>
     <script type="text/javascript" src="/vue/vue-i18n.min.js"></script>
@@ -28,6 +30,7 @@
     <script type="text/javascript" src="/vue/vue-router.min.js"></script>
     <script src="/vue/vuex.min.js"></script>
     <script type="text/javascript" src="/vue/vee-validate.min.js"></script>
+    <script type="text/javascript" src="/vue/iview.min.js"></script>
   </head>
 
   <body>
@@ -39,7 +42,6 @@
       </div>
 
       <div class="container-fluid">
-
         <div class="row-fluid">
           <div class="span12">
 
@@ -212,7 +214,11 @@
             "sta_quota_input_rate": 0,
             "sta_quota_output_rate": 0,
             "sta_quota_input_burst": 0,
-            "sta_quota_output_burst": 0
+            "sta_quota_output_burst": 0,
+            "srcIPBlock": [],
+            "srcMACBlock": [],
+            "srcIPAccept": [],
+            "srcMACAccept": [],
         }
 
         var portal_server_list = [
@@ -269,6 +275,34 @@
             }
         ]
 
+        var src_ip_list = [
+            {
+                "value": "5",
+                "label": "ip1"
+            },
+            {
+                "value": "10",
+                "label": "ip2"
+            },
+            {
+                "value": "100",
+                "label": "ip3",
+            }
+        ]
+        var src_mac_list = [
+            {
+                "value": "5",
+                "label": "mac1"
+            },
+            {
+                "value": "10",
+                "label": "mac2"
+            },
+            {
+                "value": "100",
+                "label": "mac3",
+            }
+        ]
 
 
         //所有产品的索引列表
@@ -748,7 +782,9 @@
             server_list: {
               "portal": portal_server_list,
               "rad_acct": rad_account_server_list,
-              "rad_auth": rad_account_server_list
+              "rad_auth": rad_account_server_list,
+              "src_ip_list": src_ip_list,
+              "src_mac_list": src_mac_list
             }
           },
           mutations: {
@@ -899,6 +935,12 @@
             },
             acct_list: function(state) {
               return state.server_list.rad_acct
+            },
+            src_ip_list: function(state) {
+              return state.server_list.src_ip_list
+            },
+            src_mac_list: function(state) {
+              return state.server_list.src_mac_list
             }
           }
         })

@@ -128,8 +128,7 @@ var interface_templ = function() {
               <label class="cbi-value-title" >{{$t("message.iftype")}}</label>
               <div class="cbi-value-field">
                 <input type="text"  class="cbi-input-text"
-                  v-model="cur_obj.iftype" v-bind:readonly="templ_obj.iftype.spec.readonly"
-                />
+                  v-model="cur_obj.iftype" v-bind:readonly="templ_obj.iftype.spec.readonly"/>
               </div>
             </div>
 
@@ -140,8 +139,7 @@ var interface_templ = function() {
                 <input type="text"  class="cbi-input-text"
                   v-validate.initial :data-vv-rules="nodeValidate(templ_obj.ifname)"
                   :data-vv-as="$t('message.ifname')" name="templ_ifname"
-                  v-model="cur_obj.ifname"
-                />
+                  v-model="cur_obj.ifname"/>
                 <div class="text-error" v-show="errors.has('templ_ifname')">
                    {{ errors.first('templ_ifname') }}
                 </div>
@@ -172,8 +170,7 @@ var interface_templ = function() {
                 <input type="text"  class="cbi-input-text"
                   v-validate.initial :data-vv-rules="nodeValidate(templ_obj.phy_index)"
                   :data-vv-as="$t('message.interfaceIndex')" name="templ_phy_index"
-                  v-model="cur_obj.phy_index"
-                />
+                  v-model="cur_obj.phy_index" />
                 <div class="text-error" v-show="errors.has('templ_phy_index')">
                    {{ errors.first('templ_phy_index') }}
                 </div>
@@ -186,8 +183,7 @@ var interface_templ = function() {
                 <input type="text"  class="cbi-input-text"
                   v-validate.initial :data-vv-rules="nodeValidate(templ_obj.vlanid)"
                   :data-vv-as="$t('message.vlanId')" name="templ_vlanid"
-                  v-model="cur_obj.vlanid"
-                />
+                  v-model="cur_obj.vlanid"/>
                 <div class="text-error" v-show="errors.has('templ_vlanid')">
                    {{ errors.first('templ_vlanid') }}
                 </div>
@@ -203,8 +199,7 @@ var interface_templ = function() {
                 <input type="text"  class="cbi-input-text"
                   v-validate.initial :data-vv-rules="nodeValidate(templ_obj.ssid_name)"
                   :data-vv-as="$t('message.SSIDName')" name="templ_ssid_name"
-                  v-model="cur_obj.ssid_name"
-                />
+                  v-model="cur_obj.ssid_name"/>
                 <div class="text-error" v-show="errors.has('templ_ssid_name')">
                    {{ errors.first('templ_ssid_name') }}
                 </div>
@@ -315,341 +310,336 @@ var interface_templ = function() {
             </div>
           </a>
           <br>
-          <transition name="custom-classes-transition"
-            enter-active-class="animated fadeInUp"
-            leave-active-class="animated fadeOutDown"
-          >
-            <div key="view_portal">
-              <div class="row-fluid" v-if="nodeExist(templ_obj.agentargs)" v-show="nodeShow(templ_obj.agentargs) && visible.portal">
+
+          <div class="row-fluid" v-if="nodeExist(templ_obj.agentargs)" v-show="nodeShow(templ_obj.agentargs) && visible.portal">
+            <div class="span6 cbi-value">
+              <label class="cbi-value-title" >{{$t("message.whetherEnable")}}Portal</label>
+              <div class="cbi-value-field">
+                <select class="cbi-input-select" v-model="cur_obj.agentargs.enabled"
+                >
+                  <option v-bind:value="true">{{$t("message.startUsing")}}</option>
+                  <option v-bind:value="false">{{$t("message.endUsing")}}</option>
+                </select>
+              </div>
+            </div>
+            <div class="span6"></div>
+          </div>
+          <div class="row-fluid" v-show="cur_obj.agentargs.enabled && visible.portal">
+
+            <div class="span12">
+              <!--@@接口类型 -->
+              <div class="row-fluid" v-if="nodeExist(templ_obj.agentargs.default.iftype)" v-show="nodeShow(templ_obj.agentargs.default.iftype)">
                 <div class="span6 cbi-value">
-                  <label class="cbi-value-title" >{{$t("message.whetherEnable")}}Portal</label>
+                  <label class="cbi-value-title" >{{$t("message.iftype")}}</label>
                   <div class="cbi-value-field">
-                    <select class="cbi-input-select" v-model="cur_obj.agentargs.enabled"
-                    >
-                      <option v-bind:value="true">{{$t("message.startUsing")}}</option>
-                      <option v-bind:value="false">{{$t("message.endUsing")}}</option>
-                    </select>
+                    <input type="text"  class="cbi-input-text"
+                      v-model="cur_obj.agentargs.iftype" v-bind:readonly="templ_obj.agentargs.default.iftype.spec.readonly"
+                    />
                   </div>
                 </div>
                 <div class="span6"></div>
               </div>
-              <div class="row-fluid" v-show="cur_obj.agentargs.enabled && visible.portal">
 
-                <div class="span12">
-                  <!--@@接口类型 -->
-                  <div class="row-fluid" v-if="nodeExist(templ_obj.agentargs.default.iftype)" v-show="nodeShow(templ_obj.agentargs.default.iftype)">
-                    <div class="span6 cbi-value">
-                      <label class="cbi-value-title" >{{$t("message.iftype")}}</label>
-                      <div class="cbi-value-field">
-                        <input type="text"  class="cbi-input-text"
-                          v-model="cur_obj.agentargs.iftype" v-bind:readonly="templ_obj.agentargs.default.iftype.spec.readonly"
-                        />
-                      </div>
-                    </div>
-                    <div class="span6"></div>
-                  </div>
-
-                  <!-- @@idletimeout -->
-                  <div class="row-fluid" v-if="nodeExist(templ_obj.agentargs.default.idletimeout)" v-show="nodeShow(templ_obj.agentargs.default.idletimeout)">
-                    <div class="span6 cbi-value">
-                      <label class="cbi-value-title" >{{$t("message.idletimeout")}}</label>
-                      <div class="cbi-value-field">
-                        <input type="text"  class="cbi-input-text"
-                          v-validate.initial :data-vv-rules="nodeValidate(templ_obj.agentargs.default.idletimeout)"
-                          :data-vv-as="$t('message.idletimeout')" name="templ_agentargs_idletimeout"
-                          v-model="cur_obj.agentargs.idletimeout"/>
-                        <div class="text-error" v-show="errors.has('templ_agentargs_idletimeout')">
-                           {{ errors.first('templ_agentargs_idletimeout') }}
-                        </div>
-                      </div>
-                    </div>
-                     <!-- @@accttimeout -->
-                    <div class="span6 cbi-value" v-if="nodeExist(templ_obj.agentargs.default.accttimeout)" v-show="nodeShow(templ_obj.agentargs.default.accttimeout)">
-                      <label class="cbi-value-title" >{{$t("message.accttimeout")}}</label>
-                      <div class="cbi-value-field">
-                        <input type="text"  class="cbi-input-text"
-                          v-validate.initial :data-vv-rules="nodeValidate(templ_obj.agentargs.default.accttimeout)"
-                          :data-vv-as="$t('message.accttimeout')" name="templ_agentargs_accttimeout"
-                          v-model="cur_obj.agentargs.accttimeout"/>
-                        <div class="text-error" v-show="errors.has('templ_agentargs_accttimeout')">
-                           {{ errors.first('templ_agentargs_accttimeout') }}
-                        </div>
-                      </div>
+              <!-- @@idletimeout -->
+              <div class="row-fluid" v-if="nodeExist(templ_obj.agentargs.default.idletimeout)" v-show="nodeShow(templ_obj.agentargs.default.idletimeout)">
+                <div class="span6 cbi-value">
+                  <label class="cbi-value-title" >{{$t("message.idletimeout")}}</label>
+                  <div class="cbi-value-field">
+                    <input type="text"  class="cbi-input-text"
+                      v-validate.initial :data-vv-rules="nodeValidate(templ_obj.agentargs.default.idletimeout)"
+                      :data-vv-as="$t('message.idletimeout')" name="templ_agentargs_idletimeout"
+                      v-model="cur_obj.agentargs.idletimeout"/>
+                    <div class="text-error" v-show="errors.has('templ_agentargs_idletimeout')">
+                       {{ errors.first('templ_agentargs_idletimeout') }}
                     </div>
                   </div>
-
-
-
-
-                  <!-- @@portal.nasaddr -->
-                  <div class="row-fluid" v-if="nodeExist(templ_obj.agentargs.default.portal)" v-show="nodeShow(templ_obj.agentargs.default.portal.default.nasaddr)">
-                    <div class="span6 cbi-value">
-                      <label class="cbi-value-title" >{{$t("message.nasAddr")}}</label>
-                      <div class="cbi-value-field">
-                        <input type="text"  class="cbi-input-text"
-                          v-validate.initial :data-vv-rules="nodeValidate(templ_obj.agentargs.default.portal.default.nasaddr)"
-                          :data-vv-as="$t('message.nasAddr')" name="templ_agentargs_portal_nasaddr"
-                          v-model="cur_obj.agentargs.portal.nasaddr" />
-                        <div class="text-error" v-show="errors.has('templ_agentargs_portal_nasaddr')">
-                           {{ errors.first('templ_agentargs_portal_nasaddr') }}
-                        </div>
-                      </div>
-                    </div>
-                    <div class="span6"></div>
-                  </div>
-
-                  <!-- @@portal.prtipaddr -->
-                  <div class="row-fluid" v-if="nodeExist(templ_obj.agentargs.default.portal)" v-show="nodeShow(templ_obj.agentargs.default.portal.default.prtipaddr)">
-                    <div class="span6 cbi-value">
-                      <label class="cbi-value-title" >{{$t("message.prtIpaddr")}}</label>
-                      <div class="cbi-value-field">
-                        <input type="hidden"  class="cbi-input-text"
-                          v-validate.initial :data-vv-rules="nodeValidate(templ_obj.agentargs.default.portal.default.prtipaddr)"
-                          :data-vv-as="$t('message.prtIpaddr')" name="templ_agentargs_portal_prtipaddr"
-                          v-model="cur_obj.agentargs.portal.prtipaddr" />
-
-                        <select class="cbi-input-select" v-model="cur_config_intf.portal_id" >
-                          <option
-                            v-for="obj in get_server_list('portal_list')"
-                            v-bind:value="obj.id" >
-                            {{obj.descr}} (ip: {{obj.ip}})
-                          </option>
-                        </select>
-
-                        <div class="text-error" v-show="errors.has('templ_agentargs_portal_prtipaddr')">
-                           {{ errors.first('templ_agentargs_portal_prtipaddr') }}
-                        </div>
-                      </div>
-                    </div>
-                    <div class="span6"></div>
-                  </div>
-
-                  <!-- @@portal.prturl -->
-                  <div class="row-fluid" v-if="nodeExist(templ_obj.agentargs.default.portal)" v-show="nodeShow(templ_obj.agentargs.default.portal.default.prturl)">
-                    <div class="span6 cbi-value">
-                      <label class="cbi-value-title" >{{$t("message.prtUrl")}}</label>
-                      <div class="cbi-value-field">
-                        <input type="text"  class="cbi-input-text"
-                          v-validate.initial :data-vv-rules="nodeValidate(templ_obj.agentargs.default.portal.default.prturl)"
-                          :data-vv-as="$t('message.prtUrl')" name="templ_agentargs_portal_prturl"
-                          v-model="cur_obj.agentargs.portal.prturl" />
-                        <div class="text-error" v-show="errors.has('templ_agentargs_portal_prturl')">
-                           {{ errors.first('templ_agentargs_portal_prturl') }}
-                        </div>
-                      </div>
-                    </div>
-                    <div class="span6"></div>
-                  </div>
-
-                  <!-- @@acl.deny.ip4 -->
-                  <div class="row-fluid" v-if="nodeExist(templ_obj.agentargs.default.acl)" v-show="nodeShow(templ_obj.agentargs.default.acl.default.deny)">
-                    <div class="span10 cbi-value">
-                      <label class="cbi-value-title" >{{$t("message.dstDenyIp4")}}</label>
-                      <div class="cbi-value-field">
-                        <input type="text"  class="cbi-input-text"
-                          v-validate.initial :data-vv-rules="nodeValidate(templ_obj.agentargs.default.portal.default.prturl)"
-                          :data-vv-as="$t('message.dstDenyIp4')" name="templ_agentargs_portal_prturl"
-                          v-model="tmp_obj.deny.ip4" />
-                        <a class="btn btn-info" v-on:click="acl_add_one(tmp_obj.deny.ip4, 'deny_ip4')">
-                          <i class="icon icon-plus"></i>
-                          {{$t("message.commonAdd")}}
-                        </a>
-                        <a class="btn btn-warning" v-on:click="acl_rm_all('deny_ip4')">
-                          <i class="icon icon-remove"></i>
-                          {{$t("message.commonFlush")}}
-                        </a>
-                        <div class="text-error" v-show="errors.has('templ_agentargs_acl_deny_ipv4')">
-                           {{ errors.first('templ_agentargs_acl_deny_ipv4') }}
-                        </div>
-                        <table class="cbi-section-table">
-                      <thead class="cbi-section-table-titles">
-                        <tr>
-                          <th style="text-align: left; width=5%" class="cbi-section-table-cell">id</th>
-                          <th style="text-align: left;" class="cbi-section-table-cell">content</th>
-                          <th style="text-align: left;width=5%" class="cbi-section-table-cell">action</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr v-for="obj,index in cur_obj.agentargs.acl.deny.ip4">
-                          <td>
-                              {{index}}
-                          </td>
-                          <td>
-                              <input v-model="obj" />
-                          </td>
-                          <td>
-                              <a class="btn btn-danger" v-on:click="acl_rm_one(obj, 'deny_ip4')">
-                                <i class="icon icon-remove"></i>
-                              </a>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                      </div>
-                    </div>
-                    <div class="span2">
-
+                </div>
+                 <!-- @@accttimeout -->
+                <div class="span6 cbi-value" v-if="nodeExist(templ_obj.agentargs.default.accttimeout)" v-show="nodeShow(templ_obj.agentargs.default.accttimeout)">
+                  <label class="cbi-value-title" >{{$t("message.accttimeout")}}</label>
+                  <div class="cbi-value-field">
+                    <input type="text"  class="cbi-input-text"
+                      v-validate.initial :data-vv-rules="nodeValidate(templ_obj.agentargs.default.accttimeout)"
+                      :data-vv-as="$t('message.accttimeout')" name="templ_agentargs_accttimeout"
+                      v-model="cur_obj.agentargs.accttimeout"/>
+                    <div class="text-error" v-show="errors.has('templ_agentargs_accttimeout')">
+                       {{ errors.first('templ_agentargs_accttimeout') }}
                     </div>
                   </div>
-
-                  <!-- @@acl.deny.host -->
-                  <div class="row-fluid" v-if="nodeExist(templ_obj.agentargs.default.acl)" v-show="nodeShow(templ_obj.agentargs.default.acl.default.deny)">
-                    <div class="span10 cbi-value">
-                      <label class="cbi-value-title" >{{$t("message.dstDenyHost")}}</label>
-                      <div class="cbi-value-field">
-                        <input type="text"  class="cbi-input-text"
-                          v-validate.initial :data-vv-rules="nodeValidate(templ_obj.agentargs.default.portal.default.prturl)"
-                          :data-vv-as="$t('message.dstDenyHost')" name="templ_agentargs_acl_deny_host"
-                          v-model="tmp_obj.deny.host" />
-                        <a class="btn btn-info" v-on:click="acl_add_one(tmp_obj.deny.host, 'deny_host')">
-                          <i class="icon icon-plus"></i>
-                          {{$t("message.commonAdd")}}
-                        </a>
-                        <a class="btn btn-warning" v-on:click="acl_rm_all('deny_host')">
-                          <i class="icon icon-remove"></i>
-                          {{$t("message.commonFlush")}}
-                        </a>
-                        <div class="text-error" v-show="errors.has('templ_agentargs_acl_deny_host')">
-                           {{ errors.first('templ_agentargs_acl_deny_host') }}
-                        </div>
-                        <table class="cbi-section-table">
-                      <thead class="cbi-section-table-titles">
-                        <tr>
-                          <th style="text-align: left; width=5%" class="cbi-section-table-cell">id</th>
-                          <th style="text-align: left;" class="cbi-section-table-cell">content</th>
-                          <th style="text-align: left;width=5%" class="cbi-section-table-cell">action</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr v-for="obj,index in cur_obj.agentargs.acl.deny.host">
-                          <td>
-                              {{index}}
-                          </td>
-                          <td>
-                              <input v-model="obj" />
-                          </td>
-                          <td>
-                              <a class="btn btn-danger" v-on:click="acl_rm_one(obj, 'deny_host')">
-                                <i class="icon icon-remove"></i>
-                              </a>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                      </div>
-                    </div>
-                    <div class="span2">
-
-                    </div>
-                  </div>
-
-                  <!-- @@acl.free.ip4 -->
-                  <div class="row-fluid" v-if="nodeExist(templ_obj.agentargs.default.acl)" v-show="nodeShow(templ_obj.agentargs.default.acl.default.free)">
-                    <div class="span10 cbi-value">
-                      <label class="cbi-value-title" >{{$t("message.dstFreeIp4")}}</label>
-                      <div class="cbi-value-field">
-                        <input type="text"  class="cbi-input-text"
-                          v-validate.initial :data-vv-rules="nodeValidate(templ_obj.agentargs.default.portal.default.prturl)"
-                          :data-vv-as="$t('message.dstFreeIp4')" name="templ_agentargs_acl_free_ip4"
-                          v-model="tmp_obj.free.ip4" />
-                        <a class="btn btn-info" v-on:click="acl_add_one(tmp_obj.free.ip4, 'free_ip4')">
-                          <i class="icon icon-plus"></i>
-                          {{$t("message.commonAdd")}}
-                        </a>
-                        <a class="btn btn-warning" v-on:click="acl_rm_all('free_ip4')">
-                          <i class="icon icon-remove"></i>
-                          {{$t("message.commonFlush")}}
-                        </a>
-                        <div class="text-error" v-show="errors.has('templ_agentargs_acl_free_ipv4')">
-                           {{ errors.first('templ_agentargs_acl_free_ipv4') }}
-                        </div>
-                        <table class="cbi-section-table">
-                      <thead class="cbi-section-table-titles">
-                        <tr>
-                          <th style="text-align: left; width=5%" class="cbi-section-table-cell">id</th>
-                          <th style="text-align: left;" class="cbi-section-table-cell">content</th>
-                          <th style="text-align: left;width=5%" class="cbi-section-table-cell">action</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr v-for="obj,index in cur_obj.agentargs.acl.free.ip4">
-                          <td>
-                              {{index}}
-                          </td>
-                          <td>
-                              <input v-model="obj" />
-                          </td>
-                          <td>
-                              <a class="btn btn-danger" v-on:click="acl_rm_one(obj, 'free_ip4')">
-                                <i class="icon icon-remove"></i>
-                              </a>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                      </div>
-                    </div>
-                    <div class="span2">
-
-                    </div>
-                  </div>
-
-                  <!-- @@acl.free.host -->
-                  <div class="row-fluid" v-if="nodeExist(templ_obj.agentargs.default.acl)" v-show="nodeShow(templ_obj.agentargs.default.acl.default.free)">
-                    <div class="span10 cbi-value">
-                      <label class="cbi-value-title" >{{$t("message.dstFreeHost")}}</label>
-                      <div class="cbi-value-field">
-                        <input type="text"  class="cbi-input-text"
-                          v-validate.initial :data-vv-rules="nodeValidate(templ_obj.agentargs.default.portal.default.prturl)"
-                          :data-vv-as="$t('message.dstFreeHost')" name="templ_agentargs_acl_free_host"
-                          v-model="tmp_obj.free.host" />
-                        <a class="btn btn-info" v-on:click="acl_add_one(tmp_obj.free.host, 'free_host')">
-                          <i class="icon icon-plus"></i>
-                          {{$t("message.commonAdd")}}
-                        </a>
-                        <a class="btn btn-warning" v-on:click="acl_rm_all('free_host')">
-                          <i class="icon icon-remove"></i>
-                          {{$t("message.commonFlush")}}
-                        </a>
-                        <div class="text-error" v-show="errors.has('templ_agentargs_acl_free_host')">
-                           {{ errors.first('templ_agentargs_acl_free_host') }}
-                        </div>
-                        <table class="cbi-section-table">
-                      <thead class="cbi-section-table-titles">
-                        <tr>
-                          <th style="text-align: left; width=5%" class="cbi-section-table-cell">id</th>
-                          <th style="text-align: left;" class="cbi-section-table-cell">content</th>
-                          <th style="text-align: left;width=5%" class="cbi-section-table-cell">action</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr v-for="obj,index in cur_obj.agentargs.acl.free.host">
-                          <td>
-                              {{index}}
-                          </td>
-                          <td>
-                              <input v-model="obj" />
-                          </td>
-                          <td>
-                              <a class="btn btn-danger" v-on:click="acl_rm_one(obj, 'free_host')">
-                                <i class="icon icon-remove"></i>
-                              </a>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                      </div>
-                    </div>
-                    <div class="span2">
-
-                    </div>
-                  </div>
-
-
-                </div><!-- end of div span12 -->
+                </div>
               </div>
 
-          </transition>
+
+
+
+              <!-- @@portal.nasaddr -->
+              <div class="row-fluid" v-if="nodeExist(templ_obj.agentargs.default.portal)" v-show="nodeShow(templ_obj.agentargs.default.portal.default.nasaddr)">
+                <div class="span6 cbi-value">
+                  <label class="cbi-value-title" >{{$t("message.nasAddr")}}</label>
+                  <div class="cbi-value-field">
+                    <input type="text"  class="cbi-input-text"
+                      v-validate.initial :data-vv-rules="nodeValidate(templ_obj.agentargs.default.portal.default.nasaddr)"
+                      :data-vv-as="$t('message.nasAddr')" name="templ_agentargs_portal_nasaddr"
+                      v-model="cur_obj.agentargs.portal.nasaddr" />
+                    <div class="text-error" v-show="errors.has('templ_agentargs_portal_nasaddr')">
+                       {{ errors.first('templ_agentargs_portal_nasaddr') }}
+                    </div>
+                  </div>
+                </div>
+                <div class="span6"></div>
+              </div>
+
+              <!-- @@portal.prtipaddr -->
+              <div class="row-fluid" v-if="nodeExist(templ_obj.agentargs.default.portal)" v-show="nodeShow(templ_obj.agentargs.default.portal.default.prtipaddr)">
+                <div class="span6 cbi-value">
+                  <label class="cbi-value-title" >{{$t("message.prtIpaddr")}}</label>
+                  <div class="cbi-value-field">
+                    <input type="hidden"  class="cbi-input-text"
+                      v-validate.initial :data-vv-rules="nodeValidate(templ_obj.agentargs.default.portal.default.prtipaddr)"
+                      :data-vv-as="$t('message.prtIpaddr')" name="templ_agentargs_portal_prtipaddr"
+                      v-model="cur_obj.agentargs.portal.prtipaddr" />
+
+                    <select class="cbi-input-select" v-model="cur_config_intf.portal_id" >
+                      <option
+                        v-for="obj in get_server_list('portal_list')"
+                        v-bind:value="obj.id" >
+                        {{obj.descr}} (ip: {{obj.ip}})
+                      </option>
+                    </select>
+
+                    <div class="text-error" v-show="errors.has('templ_agentargs_portal_prtipaddr')">
+                       {{ errors.first('templ_agentargs_portal_prtipaddr') }}
+                    </div>
+                  </div>
+                </div>
+                <div class="span6"></div>
+              </div>
+
+              <!-- @@portal.prturl -->
+              <div class="row-fluid" v-if="nodeExist(templ_obj.agentargs.default.portal)" v-show="nodeShow(templ_obj.agentargs.default.portal.default.prturl)">
+                <div class="span6 cbi-value">
+                  <label class="cbi-value-title" >{{$t("message.prtUrl")}}</label>
+                  <div class="cbi-value-field">
+                    <input type="text"  class="cbi-input-text"
+                      v-validate.initial :data-vv-rules="nodeValidate(templ_obj.agentargs.default.portal.default.prturl)"
+                      :data-vv-as="$t('message.prtUrl')" name="templ_agentargs_portal_prturl"
+                      v-model="cur_obj.agentargs.portal.prturl" />
+                    <div class="text-error" v-show="errors.has('templ_agentargs_portal_prturl')">
+                       {{ errors.first('templ_agentargs_portal_prturl') }}
+                    </div>
+                  </div>
+                </div>
+                <div class="span6"></div>
+              </div>
+
+              <!-- @@acl.deny.ip4 -->
+              <div class="row-fluid" v-if="nodeExist(templ_obj.agentargs.default.acl)" v-show="nodeShow(templ_obj.agentargs.default.acl.default.deny)">
+                <div class="span10 cbi-value">
+                  <label class="cbi-value-title" >{{$t("message.dstDenyIp4")}}</label>
+                  <div class="cbi-value-field">
+                    <input type="text"  class="cbi-input-text"
+                      v-validate.initial :data-vv-rules="nodeValidate(templ_obj.agentargs.default.portal.default.prturl)"
+                      :data-vv-as="$t('message.dstDenyIp4')" name="templ_agentargs_portal_prturl"
+                      v-model="tmp_obj.deny.ip4" />
+                    <a class="btn btn-info" v-on:click="acl_add_one(tmp_obj.deny.ip4, 'deny_ip4')">
+                      <i class="icon icon-plus"></i>
+                      {{$t("message.commonAdd")}}
+                    </a>
+                    <a class="btn btn-warning" v-on:click="acl_rm_all('deny_ip4')">
+                      <i class="icon icon-remove"></i>
+                      {{$t("message.commonFlush")}}
+                    </a>
+                    <div class="text-error" v-show="errors.has('templ_agentargs_acl_deny_ipv4')">
+                       {{ errors.first('templ_agentargs_acl_deny_ipv4') }}
+                    </div>
+                    <table class="cbi-section-table">
+                  <thead class="cbi-section-table-titles">
+                    <tr>
+                      <th style="text-align: left; width=5%" class="cbi-section-table-cell">id</th>
+                      <th style="text-align: left;" class="cbi-section-table-cell">content</th>
+                      <th style="text-align: left;width=5%" class="cbi-section-table-cell">action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="obj,index in cur_obj.agentargs.acl.deny.ip4">
+                      <td>
+                          {{index}}
+                      </td>
+                      <td>
+                          <input v-model="obj" />
+                      </td>
+                      <td>
+                          <a class="btn btn-danger" v-on:click="acl_rm_one(obj, 'deny_ip4')">
+                            <i class="icon icon-remove"></i>
+                          </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                  </div>
+                </div>
+                <div class="span2">
+
+                </div>
+              </div>
+
+              <!-- @@acl.deny.host -->
+              <div class="row-fluid" v-if="nodeExist(templ_obj.agentargs.default.acl)" v-show="nodeShow(templ_obj.agentargs.default.acl.default.deny)">
+                <div class="span10 cbi-value">
+                  <label class="cbi-value-title" >{{$t("message.dstDenyHost")}}</label>
+                  <div class="cbi-value-field">
+                    <input type="text"  class="cbi-input-text"
+                      v-validate.initial :data-vv-rules="nodeValidate(templ_obj.agentargs.default.portal.default.prturl)"
+                      :data-vv-as="$t('message.dstDenyHost')" name="templ_agentargs_acl_deny_host"
+                      v-model="tmp_obj.deny.host" />
+                    <a class="btn btn-info" v-on:click="acl_add_one(tmp_obj.deny.host, 'deny_host')">
+                      <i class="icon icon-plus"></i>
+                      {{$t("message.commonAdd")}}
+                    </a>
+                    <a class="btn btn-warning" v-on:click="acl_rm_all('deny_host')">
+                      <i class="icon icon-remove"></i>
+                      {{$t("message.commonFlush")}}
+                    </a>
+                    <div class="text-error" v-show="errors.has('templ_agentargs_acl_deny_host')">
+                       {{ errors.first('templ_agentargs_acl_deny_host') }}
+                    </div>
+                    <table class="cbi-section-table">
+                  <thead class="cbi-section-table-titles">
+                    <tr>
+                      <th style="text-align: left; width=5%" class="cbi-section-table-cell">id</th>
+                      <th style="text-align: left;" class="cbi-section-table-cell">content</th>
+                      <th style="text-align: left;width=5%" class="cbi-section-table-cell">action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="obj,index in cur_obj.agentargs.acl.deny.host">
+                      <td>
+                          {{index}}
+                      </td>
+                      <td>
+                          <input v-model="obj" />
+                      </td>
+                      <td>
+                          <a class="btn btn-danger" v-on:click="acl_rm_one(obj, 'deny_host')">
+                            <i class="icon icon-remove"></i>
+                          </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                  </div>
+                </div>
+                <div class="span2">
+
+                </div>
+              </div>
+
+              <!-- @@acl.free.ip4 -->
+              <div class="row-fluid" v-if="nodeExist(templ_obj.agentargs.default.acl)" v-show="nodeShow(templ_obj.agentargs.default.acl.default.free)">
+                <div class="span10 cbi-value">
+                  <label class="cbi-value-title" >{{$t("message.dstFreeIp4")}}</label>
+                  <div class="cbi-value-field">
+                    <input type="text"  class="cbi-input-text"
+                      v-validate.initial :data-vv-rules="nodeValidate(templ_obj.agentargs.default.portal.default.prturl)"
+                      :data-vv-as="$t('message.dstFreeIp4')" name="templ_agentargs_acl_free_ip4"
+                      v-model="tmp_obj.free.ip4" />
+                    <a class="btn btn-info" v-on:click="acl_add_one(tmp_obj.free.ip4, 'free_ip4')">
+                      <i class="icon icon-plus"></i>
+                      {{$t("message.commonAdd")}}
+                    </a>
+                    <a class="btn btn-warning" v-on:click="acl_rm_all('free_ip4')">
+                      <i class="icon icon-remove"></i>
+                      {{$t("message.commonFlush")}}
+                    </a>
+                    <div class="text-error" v-show="errors.has('templ_agentargs_acl_free_ipv4')">
+                       {{ errors.first('templ_agentargs_acl_free_ipv4') }}
+                    </div>
+                    <table class="cbi-section-table">
+                  <thead class="cbi-section-table-titles">
+                    <tr>
+                      <th style="text-align: left; width=5%" class="cbi-section-table-cell">id</th>
+                      <th style="text-align: left;" class="cbi-section-table-cell">content</th>
+                      <th style="text-align: left;width=5%" class="cbi-section-table-cell">action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="obj,index in cur_obj.agentargs.acl.free.ip4">
+                      <td>
+                          {{index}}
+                      </td>
+                      <td>
+                          <input v-model="obj" />
+                      </td>
+                      <td>
+                          <a class="btn btn-danger" v-on:click="acl_rm_one(obj, 'free_ip4')">
+                            <i class="icon icon-remove"></i>
+                          </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                  </div>
+                </div>
+                <div class="span2">
+
+                </div>
+              </div>
+
+              <!-- @@acl.free.host -->
+              <div class="row-fluid" v-if="nodeExist(templ_obj.agentargs.default.acl)" v-show="nodeShow(templ_obj.agentargs.default.acl.default.free)">
+                <div class="span10 cbi-value">
+                  <label class="cbi-value-title" >{{$t("message.dstFreeHost")}}</label>
+                  <div class="cbi-value-field">
+                    <input type="text"  class="cbi-input-text"
+                      v-validate.initial :data-vv-rules="nodeValidate(templ_obj.agentargs.default.portal.default.prturl)"
+                      :data-vv-as="$t('message.dstFreeHost')" name="templ_agentargs_acl_free_host"
+                      v-model="tmp_obj.free.host" />
+                    <a class="btn btn-info" v-on:click="acl_add_one(tmp_obj.free.host, 'free_host')">
+                      <i class="icon icon-plus"></i>
+                      {{$t("message.commonAdd")}}
+                    </a>
+                    <a class="btn btn-warning" v-on:click="acl_rm_all('free_host')">
+                      <i class="icon icon-remove"></i>
+                      {{$t("message.commonFlush")}}
+                    </a>
+                    <div class="text-error" v-show="errors.has('templ_agentargs_acl_free_host')">
+                       {{ errors.first('templ_agentargs_acl_free_host') }}
+                    </div>
+                    <table class="cbi-section-table">
+                  <thead class="cbi-section-table-titles">
+                    <tr>
+                      <th style="text-align: left; width=5%" class="cbi-section-table-cell">id</th>
+                      <th style="text-align: left;" class="cbi-section-table-cell">content</th>
+                      <th style="text-align: left;width=5%" class="cbi-section-table-cell">action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="obj,index in cur_obj.agentargs.acl.free.host">
+                      <td>
+                          {{index}}
+                      </td>
+                      <td>
+                          <input v-model="obj" />
+                      </td>
+                      <td>
+                          <a class="btn btn-danger" v-on:click="acl_rm_one(obj, 'free_host')">
+                            <i class="icon icon-remove"></i>
+                          </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                  </div>
+                </div>
+                <div class="span2">
+
+                </div>
+              </div>
+
+
+            </div><!-- end of div span12 -->
+          </div>
+
 
 
           <!-- @@rad_auth_account settings  -->
