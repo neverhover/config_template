@@ -158,6 +158,7 @@ var content_International = {
             srcMACBlock: 'Source MAC block list',
             srcIPAccept: 'Source IP accept list',
             srcMACAccept: 'Source MAC accept list',
+            portalRedirectMethod: 'Portal redirect method',
             //外部事件-内部事件
             externalEvent:'externalEvent',
             internalEvent:'internalEvent',
@@ -326,6 +327,7 @@ var content_International = {
             srcMACBlock: '源MAC黑名单',
             srcIPAccept: '源IP白名单',
             srcMACAccept: '源MAC白名单',
+            portalRedirectMethod: 'Portal重定向方法',
             //外部事件-内部事件
             externalEvent:'外部事件',
             internalEvent:'内部事件',

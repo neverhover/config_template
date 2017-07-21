@@ -369,7 +369,24 @@ var interface_templ = function() {
                 </div>
               </div>
 
+              <!-- @@portal_method -->
+              <div class="row-fluid" v-if="nodeExist(templ_obj.agentargs.default.portal_method)" v-show="nodeShow(templ_obj.agentargs.default.portal_method)">
+                <div class="span6 cbi-value">
+                  <label class="cbi-value-title" >{{$t("message.portalRedirectMethod")}}</label>
+                  <div class="cbi-value-field">
 
+                    <select class="cbi-input-select" v-model="cur_obj.agentargs.portal_method" >
+                      <option
+                        v-for="pmode in templ_obj.agentargs.default.portal_method.list"
+                        v-bind:value="pmode" >
+                        {{pmode}}
+                      </option>
+
+                    </select>
+                  </div>
+                </div>
+                <div class="span6"></div>
+              </div>
 
 
               <!-- @@portal.nasaddr -->
@@ -684,7 +701,6 @@ var interface_templ = function() {
             <div class="span6 cbi-value" v-show="cur_config_intf.is_acct">
               <label class="cbi-value-title" >{{$t("message.radAccountServer")}} id</label>
               <div class="cbi-value-field">
-
 
                 <select class="cbi-input-select" v-model="cur_config_intf.radacct_id" >
                   <option

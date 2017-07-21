@@ -638,6 +638,23 @@
               }
 
             },
+            "portal_method":{
+              "$parent": "enabled",
+              "$selector": true,
+              "key": "portal_method",
+              "type": "string",
+              "default": "302",
+              "list": [
+                "302",
+                "200_meta",
+                "200_js",
+                "302_1.0",
+                "302_1.1"
+              ],
+              "spec" : {
+                "show": true
+              }
+            },
             "portal":{
               "$parent": "enabled",
               "$selector": true,
