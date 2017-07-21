@@ -3,14 +3,14 @@ Vue.component('ns-accfg-system',{
 		/*
 		<div v-bind:class="[cur_active ? 'tab-pane active' : 'tab-pane']" v-if="isRender">
 			<ul class="cbi-tabmenu">
-			
+
 				<li  	v-if="nodeExist(data_obj.tun_syslog)"
-					v-bind:class="[isShowSubTab('tun_syslog')? 'cbi-tab' : 'cbi-tab-disabled']" 
+					v-bind:class="[isShowSubTab('tun_syslog')? 'cbi-tab' : 'cbi-tab-disabled']"
 					v-on:click="changeSubTab('tun_syslog')">
 					<a href="javascript:void(0);">{{$t("message.tunnelProxyLog")}}</a>
 				</li>
 				<li  	v-if="nodeExist(data_obj.sys_syslog)"
-					v-bind:class="[isShowSubTab('sys_syslog')? 'cbi-tab' : 'cbi-tab-disabled']" 
+					v-bind:class="[isShowSubTab('sys_syslog')? 'cbi-tab' : 'cbi-tab-disabled']"
 					v-on:click="changeSubTab('sys_syslog')">
 					<a href="javascript:void(0);">{{$t("message.systemLog")}}</a>
 				</li>
@@ -20,13 +20,13 @@ Vue.component('ns-accfg-system',{
 					<!-- @@tun_syslog.enabled -->
 				    <div class="row-fluid" v-if="nodeExist(data_obj.tun_syslog.enabled)" v-show="nodeShow(data_obj.tun_syslog.enabled)">
 				        <div class="span6 cbi-value">
-				            <label class="cbi-value-title" 
-				                v-bind:for="'tun_syslog-'+ data_obj.tun_syslog.enabled.key"> 
+				            <label class="cbi-value-title"
+				                v-bind:for="'tun_syslog-'+ data_obj.tun_syslog.enabled.key">
 				                {{$t("message.enableTunnelLog")}}
 				            </label>
 				            <div class="cbi-value-field">
-				                <select class="cbi-input-select" 
-				                	v-model="data_obj.tun_syslog.enabled.value"  
+				                <select class="cbi-input-select"
+				                	v-model="data_obj.tun_syslog.enabled.value"
 				                	v-bind:id="'tun_syslog-'+ data_obj.tun_syslog.enabled.key"
 				                >
 				                    <option v-bind:value="true">{{$t("message.startUsing")}}</option>
@@ -35,22 +35,22 @@ Vue.component('ns-accfg-system',{
 				            </div>
 				        </div>
 				        <div class="span6">
-				            
+
 				        </div>
 				    </div>
 				    <!-- @@tun_syslog.ipaddr -->
 				    <div class="row-fluid" v-if="nodeExist(data_obj.tun_syslog.ipaddr)" v-show="nodeShow(data_obj.tun_syslog.ipaddr)">
 				        <div class="span6 cbi-value">
-				            <label class="cbi-value-title" 
-				                v-bind:for="'tun_syslog-'+ data_obj.tun_syslog.ipaddr.key"> 
+				            <label class="cbi-value-title"
+				                v-bind:for="'tun_syslog-'+ data_obj.tun_syslog.ipaddr.key">
 				                {{$t("message.listenOnAddress")}}
 				            </label>
 				            <div class="cbi-value-field">
-				                <input type="text" class="cbi-input-text" 
+				                <input type="text" class="cbi-input-text"
 							v-validate.initial :data-vv-rules="nodeValidate(data_obj.tun_syslog.ipaddr)"
 		 					:data-vv-as="$t('message.listenOnAdd')" name="ipaddress"
 				                	v-bind:id="'tun_syslog-'+ data_obj.tun_syslog.ipaddr.key"
-				                	v-model="data_obj.tun_syslog.ipaddr.value"  
+				                	v-model="data_obj.tun_syslog.ipaddr.value"
 				                />
 				                <div class="text-error" v-show="errors.has('ipaddress')">
 		 							{{ errors.first('ipaddress') }}
@@ -58,32 +58,32 @@ Vue.component('ns-accfg-system',{
 				            </div>
 				        </div>
 				        <div class="span6">
-				            
+
 				        </div>
 				    </div>
 				    <!-- @@tun_syslog.port -->
 				    <div class="row-fluid" v-if="nodeExist(data_obj.tun_syslog.port)" v-show="nodeShow(data_obj.tun_syslog.port)">
 				        <div class="span6 cbi-value">
-				            <label class="cbi-value-title" 
+				            <label class="cbi-value-title"
 				            	v-bind:for="'tun_syslog-'+ data_obj.tun_syslog.port.key"
-				            > 
+				            >
 				                {{$t("message.portNumber")}}
 				            </label>
 				            <div class="cbi-value-field">
-				            	<input type="text" class="cbi-input-text" 
+				            	<input type="text" class="cbi-input-text"
 								    v-validate.initial :data-vv-rules="nodeValidate(data_obj.tun_syslog.port)"
 		 								:data-vv-as="$t('message.portNumb')" name="portNum"
 				                	v-bind:id="'tun_syslog-'+ data_obj.tun_syslog.port.key"
-				                	v-model.number="data_obj.tun_syslog.port.value"  
+				                	v-model.number="data_obj.tun_syslog.port.value"
 				                />
 					            <div class="text-error" v-show="errors.has('portNum')">
 		 							{{ errors.first('portNum') }}
 					            </div>
-				               
+
 				            </div>
 				        </div>
 				        <div class="span6">
-				            
+
 				        </div>
 				    </div>
 				</div>
@@ -91,13 +91,13 @@ Vue.component('ns-accfg-system',{
 					<!-- @@sys_syslog.enabled -->
 				    <div class="row-fluid" v-if="nodeExist(data_obj.sys_syslog.enabled)" v-show="nodeShow(data_obj.sys_syslog.enabled)">
 				        <div class="span6 cbi-value">
-				            <label class="cbi-value-title" 
-				                v-bind:for="'sys_syslog-'+ data_obj.sys_syslog.enabled.key"> 
+				            <label class="cbi-value-title"
+				                v-bind:for="'sys_syslog-'+ data_obj.sys_syslog.enabled.key">
 				                {{$t("message.enableSystemLog")}}
 				            </label>
 				            <div class="cbi-value-field">
-				                <select class="cbi-input-select" 
-				                	v-model="data_obj.sys_syslog.enabled.value"  
+				                <select class="cbi-input-select"
+				                	v-model="data_obj.sys_syslog.enabled.value"
 				                	v-bind:id="'sys_syslog-'+ data_obj.sys_syslog.enabled.key"
 				                >
 				                    <option v-bind:value="true">{{$t("message.startUsing")}}</option>
@@ -106,22 +106,22 @@ Vue.component('ns-accfg-system',{
 				            </div>
 				        </div>
 				        <div class="span6">
-				            
+
 				        </div>
 				    </div>
 				    <!-- @@sys_syslog.ipaddr -->
 				    <div class="row-fluid" v-if="nodeExist(data_obj.sys_syslog.ipaddr)" v-show="nodeShow(data_obj.sys_syslog.ipaddr)">
 				        <div class="span6 cbi-value">
-				            <label class="cbi-value-title" 
-				                v-bind:for="'sys_syslog-'+ data_obj.sys_syslog.ipaddr.key"> 
+				            <label class="cbi-value-title"
+				                v-bind:for="'sys_syslog-'+ data_obj.sys_syslog.ipaddr.key">
 				                {{$t("message.listenOnAddress")}}
 				            </label>
 				            <div class="cbi-value-field">
-				                <input type="text" class="cbi-input-text" 
+				                <input type="text" class="cbi-input-text"
 							v-validate.initial :data-vv-rules="nodeValidate(data_obj.sys_syslog.ipaddr)"
 							:data-vv-as="$t('message.listenOnAdd')" name="ipaddr"
 				                	v-bind:id="'sys_syslog-'+ data_obj.sys_syslog.ipaddr.key"
-				                	v-model="data_obj.sys_syslog.ipaddr.value"  
+				                	v-model="data_obj.sys_syslog.ipaddr.value"
 				                />
 				                <div class="text-error" v-show="errors.has('ipaddr')">
 								 	{{ errors.first('ipaddr') }}
@@ -129,44 +129,44 @@ Vue.component('ns-accfg-system',{
 				            </div>
 				        </div>
 				        <div class="span6">
-				            
+
 				        </div>
 				    </div>
 				    <!-- @@sys_syslog.port -->
 				    <div class="row-fluid" v-if="nodeExist(data_obj.sys_syslog.port)" v-show="nodeShow(data_obj.sys_syslog.port)">
 				        <div class="span6 cbi-value">
-				            <label class="cbi-value-title" 
+				            <label class="cbi-value-title"
 				            	v-bind:for="'sys_syslog-'+ data_obj.sys_syslog.port.key"
-				            > 
+				            >
 				                {{$t("message.serverPortNumber")}}
 				            </label>
 				            <div class="cbi-value-field">
-				            	<input type="text" class="cbi-input-text" 
+				            	<input type="text" class="cbi-input-text"
 							v-validate.initial :data-vv-rules="nodeValidate(data_obj.sys_syslog.port)"
 							:data-vv-as="$t('message.serverPortNum')" name="portNums"
 				                	v-bind:id="'sys_syslog-'+ data_obj.sys_syslog.port.key"
-				                	v-model.number="data_obj.sys_syslog.port.value"  
+				                	v-model.number="data_obj.sys_syslog.port.value"
 				                />
 					           	<div class="text-error" v-show="errors.has('portNums')">
 								 	{{ errors.first('portNums') }}
 								</div>
-				               
+
 				            </div>
 				        </div>
 				        <div class="span6">
-				            
+
 				        </div>
 				    </div>
 				    <!-- @@sys_syslog.level -->
 					<div class="row-fluid" v-if="nodeExist(data_obj.sys_syslog.level)" v-show="nodeShow(data_obj.sys_syslog.level)">
 						<div class="span6 cbi-value">
-							<label class="cbi-value-title" 
+							<label class="cbi-value-title"
 								v-bind:for="'sys_syslog-'+ data_obj.sys_syslog.level.key"
-							> 
+							>
 							{{$t("message.logLevel")}} :
 							</label>
 							<div class="cbi-value-field">
-							<select class="cbi-input-select" 
+							<select class="cbi-input-select"
 								v-model="data_obj.sys_syslog.level.value"
 								v-bind:id="'sys_syslog-'+ data_obj.sys_syslog.level.key"
 							>
@@ -178,10 +178,10 @@ Vue.component('ns-accfg-system',{
 						</div>
 
 					</div>
-				   
+
 				</div>
 			</div>
-			
+
 		</div>
 		<div v-else v-bind:class="[cur_active ? 'tab-pane active' : 'tab-pane']">
 			{{null_msg}}
@@ -191,13 +191,14 @@ Vue.component('ns-accfg-system',{
 	props: {
 		data_obj : Object,
 		cur_active : Boolean
-
 	},
 	data:function () {
-		
+
 		return {
 			null_msg: Vue.t('message.nullMsg'),
-			sub_tab_sel: "tun_syslog"
+			sub_tab_sel: "tun_syslog",
+      abc:null,
+      options: ['foo','bar','baz']
 		}
 	},
 	computed: {

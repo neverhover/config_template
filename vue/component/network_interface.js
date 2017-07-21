@@ -132,6 +132,7 @@ var interface_templ = function() {
                 />
               </div>
             </div>
+
              <!-- @@接口名 -->
             <div class="span6 cbi-value" v-if="nodeExist(templ_obj.ifname)" v-show="nodeShow(templ_obj.ifname)">
               <label class="cbi-value-title" >{{$t("message.ifname")}}</label>
@@ -235,6 +236,74 @@ var interface_templ = function() {
                </span>
             </div>
           </div>
+           <!-- @@源地址黑白名单 hr -->
+          <a href="javascript:void(0);" v-on:click="changeVisible('src_policy')">
+            <div style="border-bottom:1px solid ;">
+              <span class="icon">
+                <i v-bind:class="[visible.src_policy ? 'icon-minus-sign' :'icon-plus-sign']"></i>
+              </span>
+             {{$t("message.srcPolicy")}}
+            </div>
+          </a>
+          <br>
+          <!-- @@源地址黑白名单 div -->
+          <div v-show="visible.src_policy">
+            <!-- srcIPBlock -->
+            <div class="row-fluid">
+              <div class="span6 cbi-value">
+                  <label class="cbi-value-title" >{{$t("message.srcIPBlock")}}</label>
+                  <div class="cbi-value-field">
+                  <Select v-model="cur_config_intf.srcIPBlock" multiple>
+                      <Option v-for="item in get_server_list('src_ip_list')" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                  </Select>
+                  </div>
+                </div>
+                <div class="span6"></div>
+            </div>
+
+            <!-- srcMACBlock -->
+            <div class="row-fluid">
+              <div class="span6 cbi-value">
+                  <label class="cbi-value-title" >{{$t("message.srcMACBlock")}}</label>
+                  <div class="cbi-value-field">
+
+                    <Select v-model="cur_config_intf.srcMACBlock" multiple>
+                      <Option v-for="item in get_server_list('src_mac_list')" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                    </Select>
+                  </div>
+                </div>
+                <div class="span6"></div>
+            </div>
+
+            <!-- srcIPAccept -->
+            <div class="row-fluid">
+              <div class="span6 cbi-value">
+                  <label class="cbi-value-title" >{{$t("message.srcIPAccept")}}</label>
+                  <div class="cbi-value-field">
+
+                   <Select v-model="cur_config_intf.srcIPAccept" multiple>
+                      <Option v-for="item in get_server_list('src_ip_list')" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                  </Select>
+                  </div>
+                </div>
+                <div class="span6"></div>
+            </div>
+
+            <!-- srcMACAccept -->
+            <div class="row-fluid">
+              <div class="span6 cbi-value">
+                  <label class="cbi-value-title" >{{$t("message.srcMACAccept")}}</label>
+                  <div class="cbi-value-field">
+
+                    <Select v-model="cur_config_intf.srcMACAccept" multiple>
+                      <Option v-for="item in get_server_list('src_mac_list')" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                    </Select>
+                  </div>
+                </div>
+                <div class="span6"></div>
+            </div>
+          </div>
+
           <!-- @@portal agentargs -->
           <!-- @@是否启用portal -->
           <a href="javascript:void(0);" v-on:click="changeVisible('portal')">
@@ -665,17 +734,13 @@ var interface_templ = function() {
 
 
 
-
-
-
-
-
           <!-- @@buttons -->
 					<input type="button" v-bind:value="saveText" class="btn btn-info" v-on:click="subFromSave('net_interface_list')"/>
 					<router-link :to="{name : 'net_interface_list'}" tag="button" class="btn btn-info">
 						{{cacelText}}
 					</router-link>
         </div>
+      </div>
 			</transition>
 		`,
 		data: function(){
@@ -689,7 +754,8 @@ var interface_templ = function() {
         "visible": {
           "portal": true,
           "rad_auth_account" : false,
-          "mac_auth": false
+          "mac_auth": false,
+          "src_policy": false
         },
         "cur_obj": {},
         "cur_config_intf" : {},
@@ -794,6 +860,10 @@ var interface_templ = function() {
           return this.$store.getters.auth_list
         }else if( name == "acct_list") {
           return this.$store.getters.acct_list
+        }else if( name == "src_ip_list") {
+          return this.$store.getters.src_ip_list
+        }else if( name == "src_mac_list") {
+          return this.$store.getters.src_mac_list
         }
 
       },

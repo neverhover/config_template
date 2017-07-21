@@ -153,6 +153,11 @@ var content_International = {
             radAuthServer: 'Radius auth server',
             radAccountServer: 'Radius account server',
             macAuthSession:'Pre release time',
+            srcPolicy: 'Source address policy settings',
+            srcIPBlock: 'Source IP block list',
+            srcMACBlock: 'Source MAC block list',
+            srcIPAccept: 'Source IP accept list',
+            srcMACAccept: 'Source MAC accept list',
             //外部事件-内部事件
             externalEvent:'externalEvent',
             internalEvent:'internalEvent',
@@ -316,6 +321,11 @@ var content_International = {
             radAuthServer: 'Radius认证服务器',
             radAccountServer: 'Radius记账服务器',
             macAuthSession:'预放行时长',
+            srcPolicy: '源地址策略设置',
+            srcIPBlock: '源IP黑名单',
+            srcMACBlock: '源MAC黑名单',
+            srcIPAccept: '源IP白名单',
+            srcMACAccept: '源MAC白名单',
             //外部事件-内部事件
             externalEvent:'外部事件',
             internalEvent:'内部事件',
